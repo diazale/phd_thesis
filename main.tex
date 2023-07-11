@@ -26,6 +26,20 @@
 \renewcommand{\baselinestretch}{2} 
 \usepackage{fancyhdr}
 \usepackage{lmodern}
+\usepackage{titlesec}
+
+%\titlespacing*{<command>}{<left>}{<before-sep>}{<after-sep>}
+
+% Reduce gap between chapter header and chapter title
+\titleformat{\chapter}
+            [hang] %shape 
+            {\vspace{-2cm}\bfseries\Large}
+            {\thechapter}
+            {20pt} % distance between number and title
+            {} 
+            []
+
+%\titleformat{\subsection}{}{}{1ex}
 
 % Command to prevent \chapter from numbering chapters
 % Otherwise you get stuff like "CHAPTER 3: Chapter one"
@@ -44,24 +58,6 @@
 \renewcommand{\listfigurename}{List of figures}
 \renewcommand{\listtablename}{List of tables}
 
-%\setglossarystyle{long}
-%\renewcommand{\glsnamefont}[1]{\textbf{#1}}
-%
-%\newglossarystyle{mystyle}{%
-%	\renewenvironment{theglossary}%
-%	{\begin{longtabu} to \linewidth {p{0.15\linewidth}p{0.85\linewidth}}}%
-%		{\end{longtabu}}%
-%	\renewcommand*{\glossaryheader}{}%
-%	% indicate what to do at the start of each logical group
-%	\renewcommand*{\glsgroupheading}{}
-%	\renewcommand*{\glsgroupskip}{}%
-%	\renewcommand*{\glossaryentryfield}[5]{%
-%		\glstarget{##1}{##2}% Name
-%		& ##3% Description
-%		\\% end of row
-%	}
-%}
-
 % Overwrite the plain page style with a red line and page numbering
 \fancypagestyle{plain}{%
 	\fancyhf{} % clear all header and footer fields
@@ -79,10 +75,10 @@
 \xpretocmd\headrule{\color{red}}{}{\PatchFailed}
 
 % Get rid of all dashed words
-\tolerance=1
-\emergencystretch=\maxdimen
-\hyphenpenalty=10000
-\hbadness=10000
+%\tolerance=1
+%\emergencystretch=\maxdimen
+%\hyphenpenalty=10000
+%\hbadness=10000
 
 % Create glossary
 %\input{glossary.tex}
@@ -102,7 +98,7 @@
 
 \input{content/FirstPage.tex}
 
- % Start of ToC, LoT, gls
+ % Start of table of contents
 \tableofcontents\thispagestyle{plain}
 
 % Set page numbering to roman
@@ -170,9 +166,9 @@
 %
 %%%%%%%%%%%%%%%%%%%
 
-\chapter*{List of acronyms}\markboth{List of acronyms}{}
-	\label{chap:acronyms}
-			\addcontentsline{toc}{chapter}{List of acronyms}  
+\chapter*{List of abbreviations}\markboth{List of abbreviations}{}
+	\label{chap:abbrevs}
+			\addcontentsline{toc}{chapter}{List of abbreviations}  
 	\input{content/acronyms.tex}
 
 %%%%%%%%%%%%%%%%%%%
@@ -195,12 +191,6 @@
 \listoftables
 \addcontentsline{toc}{chapter}{\listtablename}
 
-%%%%%%%%%%%%%%%%%%%
-%
-% LISTS OF ACRONYMS
-%
-%%%%%%%%%%%%%%%%%%%
-
 \cleardoublepage
 
 % Pre-amble done, time for Actual Content
@@ -214,7 +204,9 @@
 %%%%%%%%%%%%%%%%%%%
 
 \part{Introduction and literature review}
-\label{part:part0}
+\label{part:intro}
+\unchapter{Introduction}
+\chapter*{Introduction}
 \input{base/intro/intro.tex}
 
 %%%%%%%%%%%%%%%%%%%
@@ -224,20 +216,20 @@
 %%%%%%%%%%%%%%%%%%%
 
 \part{Original contributions to knowledge}
-\label{part:part1}
+\label{part:manuscripts}
 
-\unchapter{Chapter 1}
-\chapter*{Chapter 1}
+\unchapter{UMAP reveals cryptic population structure and phenotype heterogeneity in large genomic cohorts}
+\chapter*{UMAP reveals cryptic population structure and phenotype heterogeneity in large genomic cohorts}
 \label{ch:chapter1}
 \input{base/chapter1/chapter1.tex}
 
-\unchapter{Chapter 2}
-\chapter*{Chapter 2}
+\unchapter{A review of UMAP in population genetics}
+\chapter*{A review of UMAP in population genetics}
 \label{ch:chapter2}
 \input{base/chapter2/chapter2.tex}
 
-\unchapter{Chapter 3}
-\chapter*{Chapter 3}
+\unchapter{Topological stratification of continuous genetic variation in large biobanks}
+\chapter*{Topological stratification of continuous genetic variation in large biobanks}
 \label{ch:chapter3}
 \input{base/chapter3/chapter3.tex}
 
@@ -253,9 +245,9 @@
 \input{base/conclusion/conclusion.tex}
 
 
-\begin{onehalfspacing}
-\input{content/publications.tex}
-\end{onehalfspacing}
+%\begin{onehalfspacing}
+%\input{content/publications.tex}
+%\end{onehalfspacing}
 
 \newpage
 
@@ -272,13 +264,13 @@
 \bibliographystyle{alpha}
 \bibliography{Thesis}
 
-%\addcontentsline{toc}{chapter}{\numberline{}\rm\bfseries{Bibliography}}
+\addcontentsline{toc}{chapter}{\numberline{}\rm\bfseries{Bibliography}}
 
-\begin{onehalfspacing}
-\input{content/acronyms.tex}
-\end{onehalfspacing}
+%\begin{onehalfspacing}
+%\input{content/acronyms.tex}
+%\end{onehalfspacing}
 
-\normalsize
+%\normalsize
 %\printindex
 
 %%%%%%%%%%%%%%%%%%%
