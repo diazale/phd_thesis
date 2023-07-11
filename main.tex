@@ -27,6 +27,8 @@
 \usepackage{fancyhdr}
 \usepackage{lmodern}
 
+% Command to prevent \chapter from numbering chapters
+% Otherwise you get stuff like "CHAPTER 3: Chapter one"
 \makeatletter
 \newcommand{\unchapter}[1]{%
   \begingroup
@@ -38,23 +40,27 @@
 
 \renewcommand{\chaptermark}[1]{\markboth{#1}{}} % Ensure List of Figs, ToC, and glossary are named in the header
 
-\setglossarystyle{long}
-\renewcommand{\glsnamefont}[1]{\textbf{#1}}
+% Custom headers for List of figures/tables (removes capitalization)
+\renewcommand{\listfigurename}{List of figures}
+\renewcommand{\listtablename}{List of tables}
 
-\newglossarystyle{mystyle}{%
-	\renewenvironment{theglossary}%
-	{\begin{longtabu} to \linewidth {p{0.15\linewidth}p{0.85\linewidth}}}%
-		{\end{longtabu}}%
-	\renewcommand*{\glossaryheader}{}%
-	% indicate what to do at the start of each logical group
-	\renewcommand*{\glsgroupheading}{}
-	\renewcommand*{\glsgroupskip}{}%
-	\renewcommand*{\glossaryentryfield}[5]{%
-		\glstarget{##1}{##2}% Name
-		& ##3% Description
-		\\% end of row
-	}
-}
+%\setglossarystyle{long}
+%\renewcommand{\glsnamefont}[1]{\textbf{#1}}
+%
+%\newglossarystyle{mystyle}{%
+%	\renewenvironment{theglossary}%
+%	{\begin{longtabu} to \linewidth {p{0.15\linewidth}p{0.85\linewidth}}}%
+%		{\end{longtabu}}%
+%	\renewcommand*{\glossaryheader}{}%
+%	% indicate what to do at the start of each logical group
+%	\renewcommand*{\glsgroupheading}{}
+%	\renewcommand*{\glsgroupskip}{}%
+%	\renewcommand*{\glossaryentryfield}[5]{%
+%		\glstarget{##1}{##2}% Name
+%		& ##3% Description
+%		\\% end of row
+%	}
+%}
 
 % Overwrite the plain page style with a red line and page numbering
 \fancypagestyle{plain}{%
@@ -69,7 +75,6 @@
 \chead{}
 \rhead{\textbf{\thepage}}
 
-
 \usepackage{xpatch}
 \xpretocmd\headrule{\color{red}}{}{\PatchFailed}
 
@@ -80,53 +85,25 @@
 \hbadness=10000
 
 % Create glossary
-\input{glossary}
-\makeindex
-\makeglossaries
+%\input{glossary.tex}
+%\makeindex
+%\makeglossaries
 
-% Set page numbering to roman
-%\setcounter{page}{2}\renewcommand{\thepage}{\roman{page}}
-
-\author{\textcopyright Author, August, 2020}
-\date{}
+%\author{\textcopyright Author, August, 2020}
+%\date{}
 
 \begin{document}
-	
-\input{content/FirstPage.tex}
 
+%%%%%%%%%%%%%%%%%%%
+%
+% TITLE PAGE
+%
+%%%%%%%%%%%%%%%%%%%
+
+\input{content/FirstPage.tex}
 
  % Start of ToC, LoT, gls
 \tableofcontents\thispagestyle{plain}
-
-%% Set page numbering to roman
-%\cleardoublepage
-%\setcounter{page}{1}\renewcommand{\thepage}{\roman{page}}	
-%
-%%	\listoffigures\thispagestyle{plain}
-%\cleardoublepage
-%\addcontentsline{toc}{chapter}{\listfigurename}
-%\listoffigures\thispagestyle{plain}
-%
-%
-%\cleardoublepage	
-%\listoftables
-%\addcontentsline{toc}{chapter}{\listtablename}
-%	
-%	
-%\glsaddall
-%\setlength\LTleft{0pt}
-%\setlength\LTright{0pt}
-%\setlength\glsdescwidth{0.8\hsize}
-%\printglossary[title={List of Acronyms}]
-%\markright{List of Acronyms} 
-%
-% \clearpage
-%	%\pagenumbering{arabic} % restart page numbers at one, now in arabic style
-%	
-%\glsresetall
-
-%\addcontentsline{toc}{chapter}{\listoffigures}
-%\addcontentsline{toc}{chapter}{\listoftables}
 
 % Set page numbering to roman
 \cleardoublepage
@@ -141,6 +118,7 @@
 \chapter*{Abstract}\markboth{Abstract}{}
 	\label{chap:engAbstract}
 	\addcontentsline{toc}{chapter}{Abstract}  
+	\input{content/en_Abstract.tex}
 
 %%%%%%%%%%%%%%%%%%%
 %
@@ -151,6 +129,7 @@
 \chapter*{Abrégé}\markboth{Abrégé}{}
 	\label{chap:frAbstract}
 		\addcontentsline{toc}{chapter}{Abrégé}  
+		\input{content/fr_Abstract.tex}
 
 %%%%%%%%%%%%%%%%%%%
 %
@@ -161,41 +140,90 @@
 \chapter*{Acknowledgements}\markboth{Acknowledgements}{}
 	\label{chap:acknowledgments}
 			\addcontentsline{toc}{chapter}{Acknowledgements}  
+	\input{content/Acknowledgements.tex}
 
-%	\listoffigures\thispagestyle{plain}
+%%%%%%%%%%%%%%%%%%%
+%
+% CONTRIBUTION TO KNOWLEDGE
+%
+%%%%%%%%%%%%%%%%%%%
+
+\chapter*{Contribution to original knowledge}\markboth{Contribution to original knowledge}{}
+	\label{chap:knowledge}
+			\addcontentsline{toc}{chapter}{Contribution to original knowledge}  
+	\input{content/contribution_knowledge.tex}
+
+%%%%%%%%%%%%%%%%%%%
+%
+% CONTRIBUTIONS OF AUTHORS
+%
+%%%%%%%%%%%%%%%%%%%
+
+\chapter*{Contributions of authors}\markboth{Contributions of authors}{}
+	\label{chap:authors}
+			\addcontentsline{toc}{chapter}{Contributions of authors}  
+	\input{content/contribution_authors.tex}
+
+%%%%%%%%%%%%%%%%%%%
+%
+% LIST OF ACRONYMS
+%
+%%%%%%%%%%%%%%%%%%%
+
+\chapter*{List of acronyms}\markboth{List of acronyms}{}
+	\label{chap:acronyms}
+			\addcontentsline{toc}{chapter}{List of acronyms}  
+	\input{content/acronyms.tex}
+
+%%%%%%%%%%%%%%%%%%%
+%
+% LIST OF FIGURES
+%
+%%%%%%%%%%%%%%%%%%%
+
 \cleardoublepage
+\listoffigures
 \addcontentsline{toc}{chapter}{\listfigurename}
-\listoffigures\thispagestyle{plain}
 
+%%%%%%%%%%%%%%%%%%%
+%
+% LIST OF TABLES
+%
+%%%%%%%%%%%%%%%%%%%
 
 \cleardoublepage	
 \listoftables
 \addcontentsline{toc}{chapter}{\listtablename}
-	
-	
-\glsaddall
-\setlength\LTleft{0pt}
-\setlength\LTright{0pt}
-\setlength\glsdescwidth{0.8\hsize}
-\printglossary[title={List of Acronyms}]
-\markright{List of Acronyms} 
 
- \clearpage
-	%\pagenumbering{arabic} % restart page numbers at one, now in arabic style
-	
-\glsresetall
+%%%%%%%%%%%%%%%%%%%
+%
+% LISTS OF ACRONYMS
+%
+%%%%%%%%%%%%%%%%%%%
 
-%\pagenumbering{arabic} % restart page numbers at one, now in arabic style
 \cleardoublepage
+
+% Pre-amble done, time for Actual Content
+% restart page numbers at one, now in arabic style
 \setcounter{page}{1}\renewcommand{\thepage}{\arabic{page}}	
+
+%%%%%%%%%%%%%%%%%%%
+%
+% INTRO AND LIT REVIEW
+%
+%%%%%%%%%%%%%%%%%%%
 
 \part{Introduction and literature review}
 \label{part:part0}
-
 \input{base/intro/intro.tex}
-%\addcontentsline{toc}{chapter}{Introduction}  
 
-\part{Original contributions to research}
+%%%%%%%%%%%%%%%%%%%
+%
+% MANUSCRIPT CHAPTERS
+%
+%%%%%%%%%%%%%%%%%%%
+
+\part{Original contributions to knowledge}
 \label{part:part1}
 
 \unchapter{Chapter 1}
@@ -213,8 +241,13 @@
 \label{ch:chapter3}
 \input{base/chapter3/chapter3.tex}
 
+%%%%%%%%%%%%%%%%%%%
+%
+% CONCLUSION
+%
+%%%%%%%%%%%%%%%%%%%
 
-\part{Final Conclusion \& Future Work}
+\part{Conclusion}
 \label{part:conclusion}
 \chapter*{Conclusion}
 \input{base/conclusion/conclusion.tex}
@@ -255,30 +288,5 @@
 %%%%%%%%%%%%%%%%%%%
 
 % \appendix
-
-
-% \input{content/ConsADExamples.tex}
-
-%\chapter{Introduction}
-%
-%	
-%\chapter{Chapter Two}
-%\section{Section 1}
-%\subsection{Subsection 1}
-%\subsubsection{Subsubsection 1}
-%
-%\chapter{A Third Chapter}
-%
-%\chapter{Another Chapter}
-%	
-%\chapter{Conclusion}
-
-	% Begin Bibliography
-%	{
-%	
-%	\bibliography{references}
-%	\bibliographystyle{ieeetr}
-%	
-%	}
 	
 \end{document}
