@@ -14,20 +14,22 @@
 \captionsetup[table]{font = {stretch=1.35}}
 \captionsetup[figure]{font = {stretch=1.35}}
 \usepackage[margin=1in, headsep=1cm, bottom=5cm]{geometry}
-\usepackage[hidelinks]{hyperref}
-\newcommand{\MYhref}[3][blue]{\href{#2}{\color{#1}{#3}}}%
+%\usepackage[hidelinks]{hyperref}
+%\usepackage[colorlinks=true]{hyperref}
+\usepackage{hyperref}
+%\newcommand{\MYhref}[3][blue]{\href{#2}{\color{#1}{#3}}}%
 \usepackage{tabu}
-\usepackage{cite}
+%\usepackage{cite}
 \usepackage[table]{xcolor}
-\usepackage{nomencl}
-\usepackage[nonumberlist,nogroupskip,xindy]{glossaries}
+%\usepackage{nomencl}
+%\usepackage[nonumberlist,nogroupskip,xindy]{glossaries}
 \usepackage{floatrow}
 \usepackage{wrapfig}
 \renewcommand{\baselinestretch}{2} 
 \usepackage{fancyhdr}
 \usepackage{lmodern}
 \usepackage{titlesec}
-
+%\usepackage{}
 
 % Format spacing around headers
 
@@ -39,6 +41,14 @@
             [hang] %shape 
             {\vspace{-2cm}\bfseries\Large}
             {\thechapter}
+            {20pt} % distance between number and title
+            {} 
+            []
+            
+\titleformat{\section}
+            [hang] %shape 
+            {\bfseries\large}
+            {\thesection}
             {20pt} % distance between number and title
             {} 
             []
@@ -62,7 +72,7 @@
 }
 \makeatother
 
-\renewcommand{\chaptermark}[1]{\markboth{#1}{}} % Ensure List of Figs, ToC, and glossary are named in the header
+%\renewcommand{\chaptermark}[1]{\markboth{#1}{}} % Ensure List of Figs, ToC, and glossary are named in the header
 
 % Custom headers for List of figures/tables (removes capitalization)
 \renewcommand{\listfigurename}{List of figures}
@@ -98,7 +108,13 @@
 %\author{\textcopyright Author, August, 2020}
 %\date{}
 
+\setcounter{chapter}{-1}
+
 \begin{document}
+
+% trying to get chapters to stop appearing as roman numerals in \ref
+% jfc why is htis so hard
+% \renewcommand{\thechapter}{\arabic{chapter}}
 
 %%%%%%%%%%%%%%%%%%%
 %
@@ -230,17 +246,17 @@
 
 \unchapter{UMAP reveals cryptic population structure and phenotype heterogeneity in large genomic cohorts}
 \chapter*{UMAP reveals cryptic population structure and phenotype heterogeneity in large genomic cohorts}
-\label{ch:chapter1}
+\label{chap:chapter1}
 \input{base/chapter1/chapter1.tex}
 
 \unchapter{A review of UMAP in population genetics}
 \chapter*{A review of UMAP in population genetics}
-\label{ch:chapter2}
+\label{chap:chapter2}
 \input{base/chapter2/chapter2.tex}
 
 \unchapter{Topological stratification of continuous genetic variation in large biobanks}
 \chapter*{Topological stratification of continuous genetic variation in large biobanks}
-\label{ch:chapter3}
+\label{chap:chapter3}
 \input{base/chapter3/chapter3.tex}
 
 %%%%%%%%%%%%%%%%%%%
@@ -252,6 +268,7 @@
 \part{Conclusion}
 \label{part:conclusion}
 \chapter*{Conclusion}
+\label{chap:conclusion}
 \input{base/conclusion/conclusion.tex}
 
 
@@ -271,8 +288,9 @@
 \chaptermark{{\rm\bfseries Bibliography}}
 \addcontentsline{toc}{chapter}{Bibliography}
 
-\bibliographystyle{alpha}
-\bibliography{Thesis}
+%\bibliographystyle{Science}
+\bibliographystyle{unsrt}
+\bibliography{phd_thesis}
 
 \addcontentsline{toc}{chapter}{\numberline{}\rm\bfseries{Bibliography}}
 
