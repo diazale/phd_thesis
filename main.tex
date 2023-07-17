@@ -29,7 +29,15 @@
 \usepackage{fancyhdr}
 \usepackage{lmodern}
 \usepackage{titlesec}
-%\usepackage{}
+\usepackage[natbib,style=numeric-comp,backend=biber,sorting=none]{biblatex}
+
+\addbibresource{phd_thesis.bib}
+
+%%%%%%%%%%%%%%%%%%%
+%
+% FORMATTING HEADERS
+%
+%%%%%%%%%%%%%%%%%%%
 
 % Format spacing around headers
 
@@ -45,10 +53,19 @@
             {} 
             []
             
+% Make section titles a bit smaller than chapter titles
 \titleformat{\section}
             [hang] %shape 
             {\bfseries\large}
             {\thesection}
+            {20pt} % distance between number and title
+            {} 
+            []
+            
+\titleformat{\subsection}
+            [hang] %shape 
+            {\bfseries\normalsize}
+            {\thesubsection}
             {20pt} % distance between number and title
             {} 
             []
@@ -93,17 +110,6 @@
 
 \usepackage{xpatch}
 \xpretocmd\headrule{\color{red}}{}{\PatchFailed}
-
-% Get rid of all dashed words
-%\tolerance=1
-%\emergencystretch=\maxdimen
-%\hyphenpenalty=10000
-%\hbadness=10000
-
-% Create glossary
-%\input{glossary.tex}
-%\makeindex
-%\makeglossaries
 
 %\author{\textcopyright Author, August, 2020}
 %\date{}
@@ -229,11 +235,14 @@
 %
 %%%%%%%%%%%%%%%%%%%
 
+\begin{refsection}
 \part{Introduction and literature review}
 \label{part:intro}
 \unchapter{Introduction}
 \chapter*{Introduction}
 \input{base/intro/intro.tex}
+\printbibliography[heading=subbibintoc]
+\end{refsection}
 
 %%%%%%%%%%%%%%%%%%%
 %
@@ -244,20 +253,29 @@
 \part{Original contributions to knowledge}
 \label{part:manuscripts}
 
+\begin{refsection}
 \unchapter{UMAP reveals cryptic population structure and phenotype heterogeneity in large genomic cohorts}
 \chapter*{UMAP reveals cryptic population structure and phenotype heterogeneity in large genomic cohorts}
 \label{chap:chapter1}
 \input{base/chapter1/chapter1.tex}
+\printbibliography[heading=subbibintoc]
+\end{refsection}
 
+\begin{refsection}
 \unchapter{A review of UMAP in population genetics}
 \chapter*{A review of UMAP in population genetics}
 \label{chap:chapter2}
 \input{base/chapter2/chapter2.tex}
+\printbibliography[heading=subbibintoc]
+\end{refsection}
 
+\begin{refsection}
 \unchapter{Topological stratification of continuous genetic variation in large biobanks}
 \chapter*{Topological stratification of continuous genetic variation in large biobanks}
 \label{chap:chapter3}
 \input{base/chapter3/chapter3.tex}
+\printbibliography[heading=subbibintoc]
+\end{refsection}
 
 %%%%%%%%%%%%%%%%%%%
 %
@@ -289,8 +307,8 @@
 \addcontentsline{toc}{chapter}{Bibliography}
 
 %\bibliographystyle{Science}
-\bibliographystyle{unsrt}
-\bibliography{phd_thesis}
+%\bibliographystyle{unsrt}
+%\bibliography{phd_thesis}
 
 \addcontentsline{toc}{chapter}{\numberline{}\rm\bfseries{Bibliography}}
 
