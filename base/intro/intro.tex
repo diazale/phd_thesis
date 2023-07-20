@@ -41,13 +41,9 @@ Why is genetic variation not fully random? How do we measure it? What are the pr
 
 \subsubsection{Fixation index}
 
-\subsubsection{Dimensionality reduction}
-
 \section{Exploratory data analysis}
 
-Though population structure
-
-Exploratory data analysis emphasizes 
+Traditional statistical analyses of biological data follow the recommendations of R.A. Fisher in the 1930s\citep{holmes_modern_2019}. They have a linear structure: beginning with a biological question, an investigator forms a hypothesis and an associated null ($H_0$), designs an experiment, collects data, tests $H_0$ with a p-value, and formulates a conclusion. Beginning in the 1970s, statistician John W. Tukey proposed the alternative framework of exploratory data analysis (EDA)\citep{tukey_1977,hoaglin_john_2003}. This approach is iterative and instead begins with the data: we visualize it, understand it, and use it to inform what sort of analysis to use in an accompanying confirmatory data analysis. The two contrasting approaches are schematized in Figure~\ref{fig:paradigms}.
 
 \begin{figure}[h!]
 \centering
@@ -65,6 +61,41 @@ Exploratory data analysis emphasizes
 \caption{\textbf{Contrasting Fisher's paradigm with Tukey's paradigm in biology.} Fisher's paradigm (left) takes a sequential approach to data analysis, beginning with a well-defined question and strong assumptions. Tukey's paradigm (right) is iterative, beginning with the data, emphasizing exploratory analysis through visualization, and complemented by confirmatory analyses that are robust and do not rely on complex assumptions\citep{holmes_modern_2019}.}
 \label{fig:paradigms}
 \end{figure}
+
+Writing in 1980, Tukey emphasized that science neither begins with a tidy question nor ends with a tidy answer\citep{tukey_we_1980}. This is especially true in modern biology. Statistical questions from the 1930s typically had a few parameters $p$ with a manageable sample size $N$ (where $N > p$), and the people posing questions were involved in data collection. Today we sit at the opposite extreme; it is not unusual for data to have $p >> N$ with the two values differing by orders of magnitude. When studying a biobank, we may have several thousand individuals and several hundred thousand genetic markers. Generally, the people investigating data have not collected it. These factors make Tukey's paradigm much better suited to our analytical needs\citep{holmes_modern_2019}. 
+
+\subsection{Dimensionality reduction}
+
+In Figure~\ref{fig:tukey}, the iterative process includes presentation choices, graphics, and form recognition. This provokes a natural question: what approaches ought we use here? With genomic data comes the ``curse of dimensionality'': though we have many dimensions to our data, the signal is sparse and many methods are computationally intractable. This motivates dimensionality reduction---we wish to reduce our data to a relatively low number of dimensions, ideally preserving important characteristics of the data. Given a satisfactory representation of the data set, we can visualize it.
+
+\subsubsection{Principal component analysis}
+Principal components analysis (PCA) is a non-parametric linear transformation that projects data onto a series of orthogonal axes based on a linear combination of the original data. The axes are generated and ordered according to their eigenvalues, and the ratio of each axis' corresponding eigenvalue to the sum of all eigenvalues represents the variance explained by that axis. PCA fits an ellipsoid around the data in high dimensions and the axes of that ellipsoid are the principal components. By only selecting the largest axes---corresponding to the most explained variance --- we can reduce the dimensionality of our data while preserving significant explanatory value.
+
+Assuming a set of $n$ haploid individuals and $L$ SNPs, we define $Z_{si}\in\{0,1\}$ as the allelic state of individual $i$ in locus $s$ with the ancestral and derived alleles defined as $0$ and $1$, respectively. $Z_{si}$ can also be the number of non-reference alleles, i.e. $Z_{si} \in \{0,1,2\}$. We create the mean-centred matrix $\mathbf{X}$ as:
+
+\[ X_{si} = Z_{si} - \frac{1}{n}\sum_{j=1}^{n}Z_{sj} \]
+
+PCA is defined by the transformation $\mathbf{Y}=\mathbf{PX}$ where the $i$th row of $\mathbf{P}$ is the $i$th principal component. The $i$th principal component can be obtained directly as the $i$th eigenvector of the covariance matrix:
+
+\[ \mathbf{C} = \frac{1}{n-1}\mathbf{XX}^T \]
+
+Singular value decomposition (SVD) is commonly used to derive the eigenvalues and eigenvectors. We may rewrite the original data as:
+
+\[ \mathbf{X} = \mathbf{U} \mathbf{\Sigma} \mathbf{V}^\intercal \]
+
+Here $\mathbf{\Sigma} = \diag(\sigma_{i})$ is a diagonal matrix of of the square roots of the eigenvalues.
+
+\begin{align*}
+ \mathbf{C} &= \frac{1}{n-1}\mathbf{XX}^T \\
+&=  \frac{1}{n-1} \mathbf{U} \mathbf{\Sigma} \mathbf{V}^\intercal \mathbf{V} \mathbf{\Sigma} \mathbf{U}^\intercal  \\
+&= \mathbf{V}\frac{\mathbf{\Sigma^2}}{n-1}\mathbf{V}^\intercal
+\end{align*}
+
+%There are many algorithms to calculate $\mathbf{P}$; the selection of the largest $i$ is more pertinent for us as it determines the dimensionality of the transformed data.
+
+The principal components have a possible genealogical interpretation\cite{mcvean_genealogical_2009}, reflect geographic patterns across populations\citep{novembre2008europe}, and are effective to correct for population structure in genome wide association studies (GWAS)\cite{price_principal_2006}. PCA is commonly used for visualization, but this requires researchers to specify which two or three dimensions to examine at one time, necessarily excluding much of the data.
+
+% What are PCA's strengths and weaknesses? Not addressed in the QLS comps
 
 %\begin{figure}[h!]
 %\centering
@@ -87,6 +118,8 @@ Exploratory data analysis emphasizes
 \subsection{Topology and the shape of data}
 
 \subsection{Visualization}
+
+% some principles of visualization?
 
 \section{Data}
 
