@@ -83,19 +83,19 @@ Singular value decomposition (SVD) is commonly used to derive the eigenvalues an
 
 \[ \mathbf{X} = \mathbf{U} \mathbf{\Sigma} \mathbf{V}^\intercal \]
 
-Here $\mathbf{\Sigma} = \diag(\sigma_{i})$ is a diagonal matrix of of the square roots of the eigenvalues.
-
+where $\mathbf{U}$ is an orthogonal matrix, $\mathbf{\Sigma} = \diag(\sigma_{i})$ is a diagonal matrix of of the square roots of the eigenvalues, and the columns of $\mathbf{v_{i}}$ of $\mathbf{V}$ are the eigenvectors. Then:
 \begin{align*}
  \mathbf{C} &= \frac{1}{n-1}\mathbf{XX}^T \\
 &=  \frac{1}{n-1} \mathbf{U} \mathbf{\Sigma} \mathbf{V}^\intercal \mathbf{V} \mathbf{\Sigma} \mathbf{U}^\intercal  \\
 &= \mathbf{V}\frac{\mathbf{\Sigma^2}}{n-1}\mathbf{V}^\intercal
 \end{align*}
 
-%There are many algorithms to calculate $\mathbf{P}$; the selection of the largest $i$ is more pertinent for us as it determines the dimensionality of the transformed data.
+The eigenvalues are given by $\lambda_{i} = \frac{\sigma_{i}^{2}}{n-1}$, where $\lambda_{1} \ge \lambda_{2} \ge \dots \ge \lambda_{p}$. The variance explained by the first $I$ principal components is given by $\sum_{i}^{I}\lambda_{i}/\sum_{j}\lambda_{j}$. A detailed examination of PCA in the context of population genetics can be found in\citep{mcvean_genealogical_2009}.
 
-The principal components have a possible genealogical interpretation\cite{mcvean_genealogical_2009}, reflect geographic patterns across populations\citep{novembre2008europe}, and are effective to correct for population structure in genome wide association studies (GWAS)\cite{price_principal_2006}. PCA is commonly used for visualization, but this requires researchers to specify which two or three dimensions to examine at one time, necessarily excluding much of the data.
+PCA has seen wide application in population genetics. The top PCs often reflect isolation-by-distance and are used for visualization (e.g. within Europe\citep{novembre2008europe}). However, using them for visualization requires selecting which components to examine and is limited to $2$ or $3$ dimensions; if there is signal beyond the first few PCs, it may go unnoticed. We expand on this in \hyperref[chap:chapter1]{Chapter~1}.
 
-% What are PCA's strengths and weaknesses? Not addressed in the QLS comps
+They are also used to correct for population structure in genome-wide association studies (GWAS) by their inclusion as covariates in models\cite{price_principal_2006}. There are varying rules-of-thumb on how many PCs to include in a model, such as using the top $10$, looking for an ``elbow'' in the scree plot, or testing for eigenvalue significance in the Wishart distribution; however, these are merely conventions. We explore the impact of PC adjustment for phenotypes in biobanks in \hyperref[chap:chapter3]{Chapter~3}. 
+
 
 %\begin{figure}[h!]
 %\centering
@@ -125,15 +125,15 @@ The principal components have a possible genealogical interpretation\cite{mcvean
 
 This research makes use of data from four biobanks. We focus on genotype data coded as the number of non-reference alleles. Given a set of $L$ SNPs for $N$ individuals, the genotype matrix $G$ is:
 
-$$
-G = \begin{bmatrix} 
-    g_{11} & g_{12} & \dots g_{1L} \\
-    \vdots & \ddots & \\
-    g_{N1} &        & g_{NL} 
-    \end{bmatrix}
-    
-\text{ where } g_{ij}\text{ is the number of non-reference alleles for individual } i \text{ at locus } j.
-$$
+%$$
+%G = \begin{bmatrix} 
+%    g_{11} & g_{12} & \dots g_{1L} \\
+%    \vdots & \ddots & \\
+%    g_{N1} &        & g_{NL} 
+%    \end{bmatrix}
+%    
+%\text{ where } g_{ij}\text{ is the number of non-reference alleles for individual } i \text{ at locus } j.
+%$$
 
 \subsection{The 1000 Genomes Project}
 
