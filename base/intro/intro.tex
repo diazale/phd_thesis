@@ -69,57 +69,37 @@ Writing in 1980, Tukey emphasized that science neither begins with a tidy questi
 In Figure~\ref{fig:tukey}, the iterative process includes presentation choices, graphics, and form recognition. This provokes a natural question: what approaches ought we use here? With genomic data comes the ``curse of dimensionality'': though we have many dimensions to our data, the signal is sparse and many methods are computationally intractable. This motivates dimensionality reduction---we wish to reduce our data to a relatively low number of dimensions, ideally preserving important characteristics of the data. Given a satisfactory representation of the data set, we can visualize it.
 
 \subsubsection{Principal component analysis}
-Principal components analysis (PCA) is a non-parametric linear transformation that projects data onto a series of orthogonal axes based on a linear combination of the original data. The axes are generated and ordered according to their eigenvalues, and the ratio of each axis' corresponding eigenvalue to the sum of all eigenvalues represents the variance explained by that axis. PCA fits an ellipsoid around the data in high dimensions and the axes of that ellipsoid are the principal components. By only selecting the largest axes---corresponding to the most explained variance --- we can reduce the dimensionality of our data while preserving significant explanatory value.
-
-Assuming a set of $n$ haploid individuals and $L$ SNPs, we define $Z_{si}\in\{0,1\}$ as the allelic state of individual $i$ in locus $s$ with the ancestral and derived alleles defined as $0$ and $1$, respectively. $Z_{si}$ can also be the number of non-reference alleles, i.e. $Z_{si} \in \{0,1,2\}$. We create the mean-centred matrix $\mathbf{X}$ as:
-
-\[ X_{si} = Z_{si} - \frac{1}{n}\sum_{j=1}^{n}Z_{sj} \]
-
-PCA is defined by the transformation $\mathbf{Y}=\mathbf{PX}$ where the $i$th row of $\mathbf{P}$ is the $i$th principal component. The $i$th principal component can be obtained directly as the $i$th eigenvector of the covariance matrix:
-
-\[ \mathbf{C} = \frac{1}{n-1}\mathbf{XX}^T \]
-
-Singular value decomposition (SVD) is commonly used to derive the eigenvalues and eigenvectors. We may rewrite the original data as:
-
-\[ \mathbf{X} = \mathbf{U} \mathbf{\Sigma} \mathbf{V}^\intercal \]
-
-where $\mathbf{U}$ is an orthogonal matrix, $\mathbf{\Sigma} = \diag(\sigma_{i})$ is a diagonal matrix of of the square roots of the eigenvalues, and the columns of $\mathbf{v_{i}}$ of $\mathbf{V}$ are the eigenvectors. Then:
-\begin{align*}
- \mathbf{C} &= \frac{1}{n-1}\mathbf{XX}^T \\
-&=  \frac{1}{n-1} \mathbf{U} \mathbf{\Sigma} \mathbf{V}^\intercal \mathbf{V} \mathbf{\Sigma} \mathbf{U}^\intercal  \\
-&= \mathbf{V}\frac{\mathbf{\Sigma^2}}{n-1}\mathbf{V}^\intercal
-\end{align*}
-
-The eigenvalues are given by $\lambda_{i} = \frac{\sigma_{i}^{2}}{n-1}$, where $\lambda_{1} \ge \lambda_{2} \ge \dots \ge \lambda_{p}$. The variance explained by the first $I$ principal components is given by $\sum_{i}^{I}\lambda_{i}/\sum_{j}\lambda_{j}$. A detailed examination of PCA in the context of population genetics can be found in\citep{mcvean_genealogical_2009}.
+Principal components analysis (PCA) is a non-parametric linear transformation that projects data onto a series of orthogonal axes based on a linear combination of the original data. The axes are generated and ordered according to their eigenvalues, and the ratio of each axis' corresponding eigenvalue to the sum of all eigenvalues represents the variance explained by that axis. PCA fits an ellipsoid around the data in high dimensions and the axes of that ellipsoid are the principal components. By only selecting the largest axes---corresponding to the most explained variance --- we can reduce the dimensionality of our data while preserving significant explanatory value. We can also interpret our dimensionally reduced data in terms of how much of the overall variance it explains. Principal components are calculated through eigendecomposition of the covariance matrix; a derivation for genotype data is given in \hyperref[appendix:AppendixA]{Appendix~A}. A detailed examination of PCA in the context of population genetics can be found in \citep{mcvean_genealogical_2009}. 
 
 PCA has seen wide application in population genetics. The top PCs often reflect isolation-by-distance and are used for visualization (e.g. within Europe\citep{novembre2008europe}). However, using them for visualization requires selecting which components to examine and is limited to $2$ or $3$ dimensions; if there is signal beyond the first few PCs, it may go unnoticed. We expand on this in \hyperref[chap:chapter1]{Chapter~1}.
 
 They are also used to correct for population structure in genome-wide association studies (GWAS) by their inclusion as covariates in models\cite{price_principal_2006}. There are varying rules-of-thumb on how many PCs to include in a model, such as using the top $10$, looking for an ``elbow'' in the scree plot, or testing for eigenvalue significance in the Wishart distribution; however, these are merely conventions. We explore the impact of PC adjustment for phenotypes in biobanks in \hyperref[chap:chapter3]{Chapter~3}. 
 
+\subsection{Topological data analysis}
 
-%\begin{figure}[h!]
-%\centering
-%\begin{subfigure}{0.3\textwidth}
-%    \includegraphics[width=\textwidth]{main_figures/intro/fisher_paradigm.png}
-%    \caption{First subfigure.}
-%    \label{fig:first}
-%\end{subfigure}
-%\hfill
-%\begin{subfigure}{0.65\textwidth}
-%    \includegraphics[width=\textwidth]{main_figures/intro/tukey_paradigm.png}
-%    \caption{Second subfigure.}
-%    \label{fig:second}
-%\end{subfigure}
-%        
-%\caption{Subreferences in \LaTeX.}
-%\label{fig:figures}
-%\end{figure}
+% Note to self: Rewrite this in terms of popgen challenges
+% can maybe get philosophical here
+We are often interested in learning about our data in to understand its large-scale structure, e.g., identifying different cell types or related individuals. Though we have some definitions of distances, we are interested in notions of \textit{similarity} or \textit{nearness}. Topology provides the mathematical machinery for ideas rooted in qualitative geometry\citep{carlsson_topology_2009}. Topological data analysis (TDA) is a set of statistical methods that uses ideas of shape and connectivity to study data\citep{wasserman_topological_2018}. We will focus on applications of manifold learning, non-linear dimensionality reduction, and density clustering.
 
-\subsection{Topology and the shape of data}
+In TDA, we assume that we observe a sample $X_1, \dots, X_n \sim P$ with $P$ supported on some set $\supp(P) = \mathcal{X} \subseteq \mathbb{R}^d$. Suppose that $P$ is actually supported on some set $S$ with dimension $r$, where $r < d$ and $S$ is a smooth and compact manifold. Through manifold learning, we may estimate $S$; PCA can be considered a special case of manifold learning where data are assumed to lie on or near an affine subspace\citep{wasserman_topological_2018}. In population genetics, we observe samples from, e.g., the distributions of genotypes.
+
+\subsubsection{t-distributed stochastic neighbour embedding}
+
+
+
+\citep{maaten_visualizing_2008}
+
+\subsection{Uniform manifold approximation and projection}
 
 \subsection{Visualization}
 
 % some principles of visualization?
+
+% unsupervised learning?
+
+\subsection{Clustering}
+
+\citep{mcinnes_accelerated_2017}
 
 \section{Data}
 

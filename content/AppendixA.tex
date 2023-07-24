@@ -1,0 +1,20 @@
+Assuming a set of $n$ haploid individuals and $L$ SNPs, we define $Z_{si}\in\{0,1\}$ as the allelic state of individual $i$ in locus $s$ with the ancestral and derived alleles defined as $0$ and $1$, respectively. $Z_{si}$ can also be the number of non-reference alleles, i.e. $Z_{si} \in \{0,1,2\}$. We create the mean-centred matrix $\mathbf{X}$ as:
+
+\[ X_{si} = Z_{si} - \frac{1}{n}\sum_{j=1}^{n}Z_{sj} \]
+
+PCA is defined by the transformation $\mathbf{Y}=\mathbf{PX}$ where the $i$th row of $\mathbf{P}$ is the $i$th principal component. The $i$th principal component can be obtained directly as the $i$th eigenvector of the sample covariance matrix:
+
+\[ \mathbf{C} = \frac{1}{n-1}\mathbf{XX}^T \]
+
+Singular value decomposition (SVD) is commonly used to derive the eigenvalues and eigenvectors. We may rewrite the original data as:
+
+\[ \mathbf{X} = \mathbf{U} \mathbf{\Sigma} \mathbf{V}^\intercal \]
+
+where $\mathbf{U}$ is an orthogonal matrix, $\mathbf{\Sigma} = \diag(\sigma_{i})$ is a diagonal matrix of of the square roots of the eigenvalues, and the columns of $\mathbf{v_{i}}$ of $\mathbf{V}$ are the eigenvectors. Then:
+\begin{align*}
+ \mathbf{C} &= \frac{1}{n-1}\mathbf{XX}^T \\
+&=  \frac{1}{n-1} \mathbf{U} \mathbf{\Sigma} \mathbf{V}^\intercal \mathbf{V} \mathbf{\Sigma} \mathbf{U}^\intercal  \\
+&= \mathbf{V}\frac{\mathbf{\Sigma^2}}{n-1}\mathbf{V}^\intercal
+\end{align*}
+
+The eigenvalues are given by $\lambda_{i} = \frac{\sigma_{i}^{2}}{n-1}$, where $\lambda_{1} \ge \lambda_{2} \ge \dots \ge \lambda_{p}$. The variance explained by the top $I$ principal components is given by $\sum_{i}^{I}\lambda_{i}/\sum_{j}\lambda_{j}$
