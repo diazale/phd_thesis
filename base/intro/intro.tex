@@ -41,6 +41,8 @@ Why is genetic variation not fully random? How do we measure it? What are the pr
 
 \subsubsection{Fixation index}
 
+\subsection{Ancestry and admixture}
+
 \section{Exploratory data analysis}
 
 Traditional statistical analyses of biological data follow the recommendations of R.A. Fisher in the 1930s\citep{holmes_modern_2019}. They have a linear structure: beginning with a biological question, an investigator forms a hypothesis and an associated null ($H_0$), designs an experiment, collects data, tests $H_0$ with a p-value, and formulates a conclusion. Beginning in the 1970s, statistician John W. Tukey proposed the alternative framework of exploratory data analysis (EDA)\citep{tukey_1977,hoaglin_john_2003}. This approach is iterative and instead begins with the data: we visualize it, understand it, and use it to inform what sort of analysis to use in an accompanying confirmatory data analysis. The two contrasting approaches are schematized in Figure~\ref{fig:paradigms}.
@@ -81,15 +83,35 @@ They are also used to correct for population structure in genome-wide associatio
 % can maybe get philosophical here
 We are often interested in learning about our data in to understand its large-scale structure, e.g., identifying different cell types or related individuals. Though we have some definitions of distances, we are interested in notions of \textit{similarity} or \textit{nearness}. Topology provides the mathematical machinery for ideas rooted in qualitative geometry\citep{carlsson_topology_2009}. Topological data analysis (TDA) is a set of statistical methods that uses ideas of shape and connectivity to study data\citep{wasserman_topological_2018}. We will focus on applications of manifold learning, non-linear dimensionality reduction, and density clustering.
 
-In TDA, we assume that we observe a sample $X_1, \dots, X_n \sim P$ with $P$ supported on some set $\supp(P) = \mathcal{X} \subseteq \mathbb{R}^d$. Suppose that $P$ is actually supported on some set $S$ with dimension $r$, where $r < d$ and $S$ is a smooth and compact manifold. Through manifold learning, we may estimate $S$; PCA can be considered a special case of manifold learning where data are assumed to lie on or near an affine subspace\citep{wasserman_topological_2018}. In population genetics, we observe samples from, e.g., the distributions of genotypes.
+TDA assumes that we observe a sample $X_1, \dots, X_n \sim P$ with $P$ supported on some set $\supp(P) = \mathcal{X} \subseteq \mathbb{R}^d$. 
+In the simplest case of manifold learning, we suppose that $P$ is actually supported on some set $S$ with dimension $r$, where $r < d$ and $S$ is a smooth and compact manifold, and we may estimate $S$. PCA is a special case of linear manifold learning where data are assumed to lie on or near an affine subspace\citep{wasserman_topological_2018}. In cases where there is local nonlinear structure (such as clustering), nonlinear methods of manifold learning are more useful\cite{izenman_introduction_2012}.
 
-\subsubsection{t-distributed stochastic neighbour embedding}
+In population genetics, we observe samples from, e.g., the distributions of genotypes.
 
+\subsection{\texorpdfstring{$\mathbf{t}$}{f}-distributed stochastic neighbour embedding}
+% the {f} here doesn't do anything, but we need a text character for compilation
 
+$t$-distributed stochastic neighbour embedding ($t$-SNE) is a method of manifold learning used for visualization that was developed in 2008\citep{maaten_visualizing_2008}. By then, several methods existed to approximate the local structure of manifolds, but they suffered from the ``crowding problem''---in an attempt to preserve local distances between points, many of them are crunched together, eliminating the gaps between clusters. $t$-SNE addressed this by introducing a repulsion force between points, modelling pairwise distances between points $i$ and $j$ as a $t$-distributed random variable with $1$ degree of freedom (equivalent to a Cauchy distribution). The distances are modelled as probabilities:
 
-\citep{maaten_visualizing_2008}
+$$q_{ij} = \frac{(1 + ||y_{i} - y_{j}||^{2})^{-1}}{\sum_{k \neq l}(1 + ||y_{k} - y_{l}||^{2})^{-1}}$$
+
+This choice was largely ad-hoc and was later found to work because it optimized structure at the local scale (i.e. within clusters) as well as causing points to repel each other (i.e. causing clusters to separate)\citep{carreira-perpinan_elastic_2010}. This repulsion allowed $t$-SNE and related methods to preserve topology\citep{wasserman_topological_2018}. Because $t$-SNE can only reduce data to $2$ or $3$ dimensions, it was not recommended as a general purpose dimensionality reduction algorithm\citep{maaten_visualizing_2008}. It saw considerable use in visualization in single-cell genomics\citep{kobak_art_2019}, but its application in population genetics was limited (e.g. \citep{li_application_2017}). We provide details on $t$-SNE's performance in population genetics in \hyperref[chap:chapter1]{Chapter~1}.
 
 \subsection{Uniform manifold approximation and projection}
+
+Uniform manifold approximation and projection (UMAP) is a general purpose dimensionality reduction method rooted in algebraic topology and Riemannian geometry that was introduced in 2018\citep{mcinnes_umap_2020}. Unlike the more heuristic approach of $t$-SNE, the motivation behind UMAP is to represent the high-dimensional topology of data in low dimensional space. We will briefly outline the intuition underlying UMAP; details on the topology and theoretical justifications are available in \citep{mcinnes_umap_2020}, with a more applied explanation available in online documentation\citep{mcinnes_umapdoc_2018}.
+
+We assume our data $X = \{X_{1}, \dots, X_{n}\}$ lay on some manifold and are uniformly distributed. For this assumption to hold, each point $X_{i}$ has its own custom distance, defined as the normalized distance to its $k\textsuperscript{th}$ nearest neighbour; thus, each $X_{i}$ has its own metric space, and is the centre of a unit ball that extends to the $k\textsuperscript{th}$ nearest neighbour. If we represent this as a graph, each $X_i$ is a point with edges to its $k$ neighbours, where the distances represent the edge weights. If we represent this as a simplicial complex, a point is a $0$-simplex and an edge is a $1$-simplex; according to theory, this simplicial complex forms an open cover of the underlying topological space. As the edge weights are between $0$ and $1$, we may also interpret the values as the belongingness to an open cover rather than a binary ``yes'' or ``no'' value---a fuzzy topological cover. To harmonize the respective edge weights $a, b$ from points $X_{a}$ to $X_{b}$ (since each point has its own local metric), UMAP defines the combined weight as $a + b - a \times b$, interpreted as the probability that an edge weight between $X_{a}$ and $X_{b}$ exists. The final high-dimensional product is a fuzzy simplicial complex, which can be represented as a weighted graph, and is a fuzzy topological representation of the data.
+
+For the low-dimensional representation, we carry out the same process of building a fuzzy topological representation. However, rather than using a locally-varying metric, we assume that our data will lay on a low-dimensional Euclidean space, and we specify a minimum distance we wish to have between our points in this space. The algorithm then minimizes the cross-entropy function between the high- and low-dimensional representations. If $E$ is the set of all possible $1$-simplices, $w_{h}(e)$ is the weight of edge $e$ in the high-dimensional space and $w_{l}(e)$ the low-dimensional space, we minimize:
+
+$$ \sum_{e \in E} w_{h}(e) \log{\left(\frac{w_{h}(e)}{w_{l}(e)}\right)} + (1 - w_{h}(e)) \log{\left(\frac{1 - w_{h}(e)}{1 - w_{l}(e)}\right)} $$
+
+Though the machinery seems roundabout in its derivation, it allows for reduction of data to an arbitrary number of dimensions and for topological interpretations. The value of $k$ defines the scale of the topology we wish to approximate, with lower values being more local and finer-scale and higher values approximating broader manifold structure. Each chapter of this thesis discusses the uses and parametrizations of UMAP in population genetics: briefly, lower values of $k$ approximate closer relationships, e.g., at a structure as fine-scale as families; higher values of minimum distance facilitate visualization, while lower values facilitate algorithmic cluster detection.
+
+UMAP is the core method of this thesis. In \hyperref[chap:chapter1]{Chapter~1}, we use UMAP in population genetics for the first time, exploring its potential applications thoroughly and compare it to PCA and t-SNE. Having been quickly adopted after our publication, in \hyperref[chap:chapter2]{Chapter~2}, we review its uses in the field and discuss different data inputs and parametrizations. In \hyperref[chap:chapter3]{Chapter~3}, we introduce the use of UMAP for topological stratification of complex biobank data by using it to pre-process data for clustering rather than simply visualization.
+
+``Is it possible to derive low dimensional embedding methods that explicitly preserve topological features of the data? This is an interesting open question.''\citep{wasserman_topological_2018}
 
 \subsection{Visualization}
 
@@ -97,7 +119,10 @@ In TDA, we assume that we observe a sample $X_1, \dots, X_n \sim P$ with $P$ sup
 
 % unsupervised learning?
 
-\subsection{Clustering}
+% clustering in popgen?
+
+%\subsection{HDBSCAN(\texorpdfstring{$\hat{\epsilon}$}{f})}
+% the {f} here doesn't do anything, but we need a text character for compilation
 
 \citep{mcinnes_accelerated_2017}
 
@@ -136,8 +161,5 @@ The UK biobank (UKB) is a cohort of individuals living in the United Kingdom who
 %\subsection{PCA}
 
 %\subsection{UMAP}
-
-%\subsection{HDBSCAN(\texorpdfstring{$\hat{\epsilon}$}{f})}
-% the {f} here doesn't do anything, but we need a text character for compilation
 
 %\subsection{Genomic tools}
