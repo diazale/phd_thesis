@@ -113,6 +113,16 @@ UMAP is the core method of this thesis. In \hyperref[chap:chapter1]{Chapter~1}, 
 
 ``Is it possible to derive low dimensional embedding methods that explicitly preserve topological features of the data? This is an interesting open question.''\citep{wasserman_topological_2018}
 
+\subsection{Clustering}
+
+It can be useful to model individuals as belonging to $K$ discrete demes, e.g. when modelling admixture, studying population splits and merges, or testing the transferability of GWAS and PGS. Clustering is a natural approach to this problem. Broadly, clustering is a class of methods that puts similar data points into the same cluster while keeping dissimilar data points in different clusters\citep{ben-david_clustering_2018}. A variety of clustering methods have been used in population genetics, ranging from general-purpose algorithms to those specifically developed for the field. These methods often require specifying $K$; though multiple methods have been proposed to estimate $K$ (e.g. \citep{evanno_detecting_2005,verity_estimating_2016}), it does not have a ``correct'' value as genetic data does not fall into natural discrete groups---the true value of $K$ is in how useful it is in its application\citep{lawson_tutorial_2018}.
+
+One of the most common algorithms is $K$-means clustering. Developed in the 1970s, it works by dividing $M$ points in $N$ dimensions into $K$ groups by minimizing the within-cluster sum of squares\citep{hartigan_algorithm_1979}. $K$-means clustering has been used to define populations by, e.g., using the coordinates of individuals in PCA space and comparing to some known reference population within a cluster. $K$-means assumes that data points form a cloud about some centroid for each cluster. However, genetic data do not naturally present as clouds about some centroid---many individuals, particularly from admixed populations or uncommon genetic ancestries, will never be placed into a population, especially if there is no reference population\citep{ding_polygenic_2023}.
+
+
+
+\subsection{Density clustering}
+
 \subsection{Visualization}
 
 % some principles of visualization?
