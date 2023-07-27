@@ -10,9 +10,9 @@ In 2001, the first analyses of the draft human genome were published in sister p
 
 Every genome carries both the stories of its ancestors and the basic programming of its bearer's physiology. By identifying patterns across many genomes and their associated data, we can infer their histories and study distributions of biomedical traits. The complexities of human history and society, to say nothing of the complexities of biology itself, ensure that this is a non-trivial task.
 
-With each genome spanning $3$~billion base pairs, any mathematical investigation is high-dimensional. This thesis explores applications of dimensionality reduction to population genetic data, focusing on uniform manifold approximation and projection (UMAP), a method of topological data analysis.
+With each genome spanning $3$~billion base pairs, any mathematical investigation is high-dimensional. Within these data, there are patterns, and these patterns form shapes. It is first necessary to reduce the dimensionality of the data, especially when we aim to visualize it. Uniform manifold approximation and projection (UMAP) is a recently-developed method of dimensionality reduction that is rooted in topology---the branch of mathematics dedicated to the study of geometric objects. This thesis explores topological data analysis of population genetics data through UMAP and associated clustering algorithms. We will study how the high-dimensional topology of population genetic data reflects the demographic histories of the individuals we have sequenced, informs us of their biomedical traits, and how to explore this new trove of data.
 
-This thesis is organized into three chapters that have been published as stand-alone manuscripts. In \hyperref[chap:chapter1]{Chapter~1} we apply UMAP to human genetic data for the first time. We use genotype data from three biobanks, generating visualizations and observing patterns in relatedness, demographic histories, geographic distribution, phenotype distributions, and other phenomena. In \hyperref[chap:chapter2]{Chapter~2} we review the applications of UMAP in other human genetic datasets, such as different biobanks or other types of genetic data (e.g. structural variants). Finally, in \hyperref[chap:chapter3]{Chapter~3} we formalize a methodology to use UMAP in higher dimensions ($n \ge 3$) and extract clusters.
+The thesis is organized into three parts: the introduction with literature review and description of relevant methods; the original contributions to the field; and the final conclusions. The original contributions consist of three chapters that have been previously published as stand-alone manuscripts. In \hyperref[chap:chapter1]{Chapter~1} we apply UMAP to human genetic data for the first time. We use genotype data from three biobanks, generate visualizations and observe patterns in relatedness, demographic histories, geographic distribution, phenotype distributions, and other phenomena. In \hyperref[chap:chapter2]{Chapter~2} we review the applications of UMAP in other human genetic datasets, such as different biobanks or other types of genetic data (e.g. structural variants). Finally, in \hyperref[chap:chapter3]{Chapter~3} we formalize a methodology to use UMAP in higher dimensions ($n \ge 3$), extract clusters algorithmically, and apply these abstractions to a variety of problems common in biobank research.
 
 % high-level concepts?
 % shape of data
@@ -21,7 +21,7 @@ This thesis is organized into three chapters that have been published as stand-a
 
 \section{Genetic diversity}
 
-The human genome spans over $3$~billion nucleobase pairs organized across $23$ pairs of chromosomes---$22$ pairs of autosomes and one pair of sex chromosomes---with some DNA present in mitochondria (mtDNA). The human genome is diploid (i.e. paired) with one set of chromosomes coming from each parent via their gametes; these chromosomes are created through the process of meiotic recombination, in which the chromosomes of grandparents are aligned, cross over, and recombine. Along with mutation, recombination generates diversity. Approximately $99.9\%$ of DNA shared between humans is identical, with genetic variants (alleles) arising through mutations. Single nucleotide polymorphisms (SNPs) are relatively common variants, usually defined as having a frequency above $1\%$.
+The human genome spans over $3$~billion nucleobase pairs organized across $23$ pairs of chromosomes---$22$ pairs of autosomes and one pair of sex chromosomes---with some DNA present in mitochondria (mtDNA). The human genome is diploid with one set of chromosomes coming from each parent via their gametes; these chromosomes are created through the process of meiotic recombination, in which the chromosomes of grandparents are aligned, cross over, and recombine. Along with mutation, recombination generates diversity. Approximately $99.9\%$ of DNA shared between humans is identical, with genetic variants (alleles) arising through mutations. Single nucleotide polymorphisms (SNPs) are relatively common variants, usually defined as having a frequency above $1\%$.
 
 Variants that lie along the same chromosome and are not broken up through recombination are co-inherited and are linked. The block of allelic states along a DNA molecule is referred to as a haplotype, and when the same variants exist between two individuals, they are said to be identical by state (IBS). If the shared variant is inherited from a common ancestor without recombination, they are also said to be identical by descent (IBD); alleles that are IBS are typically IBD, with rare exceptions. Alleles that are physically closer are more likely to be inherited together, and those that appear together more often than expected at random are said to be in linkage disequilibrium (LD). Combining two haplotypes gives a diploid genotype, and assuming free recombination, the theoretical maximum number of possible unique haplotypes is $2^L$, where $L$ is the number of SNPs.
 
@@ -34,6 +34,18 @@ Recombination is not uniformly random. DNA that does not lie in the pseudoautoso
 In aggregate, patterns will form in the distributions of alleles; these patterns are known as population structure. Though genetic diversity is random in principle, the distributions of variants are shaped by environments and events. Phenomena like migrations, population bottlenecks, and non-random mating contribute to the distribution of alleles.
 
 Why is genetic variation not fully random? How do we measure it? What are the processes that we know of? What are some historical examples?
+
+* small populations (limited mate pool)
+* geographical barriers
+* geographical closeness
+* isolation-by-distance
+* cultural factors (e.g. more cousin marriage, religious groups, language, etc)
+* island models
+* Crow and Kimura Chapter 9 on classical popgen models of distribution of allele frequencies
+* Definition of population from statcan book
+* language\citep{campbell_evolution_2010}
+
+\citep{hartl2007principles}
 
 \subsection{Measures of population structure}
 
@@ -107,7 +119,7 @@ For the low-dimensional representation, we carry out the same process of buildin
 
 $$ \sum_{e \in E} w_{h}(e) \log{\left(\frac{w_{h}(e)}{w_{l}(e)}\right)} + (1 - w_{h}(e)) \log{\left(\frac{1 - w_{h}(e)}{1 - w_{l}(e)}\right)} $$
 
-Though the machinery seems roundabout in its derivation, it allows for reduction of data to an arbitrary number of dimensions and for topological interpretations. The value of $k$ defines the scale of the topology we wish to approximate, with lower values being more local and finer-scale and higher values approximating broader manifold structure. Each chapter of this thesis discusses the uses and parametrizations of UMAP in population genetics: briefly, lower values of $k$ approximate closer relationships, e.g., at a structure as fine-scale as families; higher values of minimum distance facilitate visualization, while lower values facilitate algorithmic cluster detection.
+Though the machinery seems roundabout in its derivation, it allows for reduction of data to an arbitrary number of dimensions and for topological interpretations. The value of $k$ defines the scale of the topology we wish to approximate, with lower values being more local and finer-scale and higher values approximating broader manifold structure. Each chapter of this thesis discusses the uses and parametrizations of UMAP in population genetics: briefly, lower values of $k$ approximate closer relationships, e.g., at a structure as fine-scale as families; higher values of minimum distance facilitate visualization, while lower values facilitate algorithmic cluster detection. Points that appear near each other in low-dimensional space are closely related to one another.
 
 UMAP is the core method of this thesis. In \hyperref[chap:chapter1]{Chapter~1}, we use UMAP in population genetics for the first time, exploring its potential applications thoroughly and compare it to PCA and t-SNE. Having been quickly adopted after our publication, in \hyperref[chap:chapter2]{Chapter~2}, we review its uses in the field and discuss different data inputs and parametrizations. In \hyperref[chap:chapter3]{Chapter~3}, we introduce the use of UMAP for topological stratification of complex biobank data by using it to pre-process data for clustering rather than simply visualization.
 
@@ -119,13 +131,26 @@ It can be useful to model populations as $K$ discrete demes, e.g. when modelling
 
 Model-based clustering assumes that observations are randomly drawn from some parametric model. The first such method used in population genetics was STRUCTURE, in 2000, which assumed that each cluster was defined by some allele frequency; having observed the genotypes $X$, it infers the populations of origin $Z$ and allele frequencies $P$ through Bayesian modelling of $Pr(Z, P|X)$\citep{pritchard_inference_2000}. Each genome is then modelled as a mixture of some $K$ source populations---often presented in literature as a stacked bar graph where each individual is one bar with split ancestry proportions---and termed ``global ancestry estimation''\citep{alexander_fast_2009}. The idea has since evolved into many other methods (e.g. ADMIXTURE\citep{alexander_fast_2009}, FRAPPE\citep{tang_estimation_2005}, sparse non-negative matrix factorization\citep{frichot_fast_2014}, archetypal analysis\citep{gimbernat-mayol_archetypal_2022}) and is an active area of research to handle more complex model assumptions and larger data sets.
 
-One of the most common distance-based algorithms is $K$-means clustering. Developed in the 1970s, it works by dividing $M$ points in $N$ dimensions into $K$ groups by minimizing the within-cluster sum of squares\citep{hartigan_algorithm_1979}. $K$-means clustering has been used to define populations by, e.g., using the coordinates of individuals in PCA space and comparing to some known reference population within a cluster. $K$-means implicitly assumes that data points form a Gaussian cloud around some centroid\citep{mcinnes_accelerated_2017}. However, genetic data do not naturally present as clouds about some centroid---many individuals, particularly from admixed populations or uncommon genetic ancestries, will never be placed into a population, especially if there is no reference population\citep{ding_polygenic_2023}.
+One of the most common distance-based algorithms is $K$-means clustering. Developed in the 1970s, it works by dividing $M$ points in $N$ dimensions into $K$ groups by minimizing the within-cluster sum of squares\citep{hartigan_algorithm_1979}. $K$-means clustering has been used to define populations by, e.g., using the coordinates of individuals in PCA space and comparing to some known reference population within a cluster. $K$-means implicitly assumes that data points form a Gaussian distribution around some centroid\citep{mcinnes_accelerated_2017}. However, genetic data do not naturally present as clouds about some centroid---many individuals, particularly from admixed populations or uncommon genetic ancestries, will never be placed into a population, especially if there is no reference population\citep{ding_polygenic_2023}.
 
-Density clustering 
+Density clustering is defined as finding sets of data with a high density of points; a formal outline can be found in Wasserman's review of TDA\citep{wasserman_topological_2018}. Briefly, assume we observe a sample $X_{1}, \dots , X_{n}$ from some distribution $P$ with density $p$ where $X_{i} \in \mathcal{X} \subseteq \mathbb{R}^d$. For any $t \ge 0$, we define the upper level set $L_{t}$ as:
 
+$$L_{t} = \{x: p(x) > t \}$$
 
- 
-\subsection{Density clustering}
+The density clusters at level $t$ are denoted by $\mathcal{C}_{t}$ and are the connected components of $L_{t}$. The set of all density clusters is:
+
+$$ \mathcal{C} = \bigcup_{t \ge 0} \mathcal{C}_{t} $$
+
+The set of all density clusters $\mathcal{C}$ has a tree structure. 
+
+Intuitively, imagine our data are 
+
+- we do UMAP to make our data accessible to hdbscan, we use hdbscan because it has properties that are very nice, also it has probabilistic and topological interpretations
+
+\citep{malzer_hybrid_2020}
+
+\cite{mcinnes_accelerated_2017}
+
 
 \subsection{Visualization}
 
