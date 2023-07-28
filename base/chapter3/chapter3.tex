@@ -1,1 +1,15 @@
+\setcounter{section}{-1}
+
+\section{Preface}
+
+One of the chief uses of UMAP in population genetics is to identify clusters and to treat them as populations for downstream analysis. However, there was no effective way to algorithmically extract clusters from UMAP plots. Though it generates clusters visually, it is a dimensionality reduction algorithm and not a clustering algorithm. Centroid- or archetype-based approaches fail to capture many individuals and rely on arbitrary definitions of population groups. Researchers often resorted to hand-delineating clusters, which is limited to $2$D projections and certainly not scalable in the presence of many populations.
+
+We apply HDBSCAN($\hat{\epsilon}$), a hierarchical density-based clustering algorithm to UMAP data. This approach can use UMAP embeddings of arbitrary dimensions---importantly allowing us to work in $3$ or more dimensions. Running on the order of seconds for massive biobanks, it creates topological clusters that reflect the demgraphic histories of populations. We apply the algorithm to three biobanks (the 1KGP, UKB, and CaG cohorts) and demonstrate its effectiveness at capturing population structure, usefulness in analysis of biobank data, potential downstream applications (e.g. for PGS transferability), and its use as a quality control tool.
+
+This manuscript was released as a preprint on \textit{BioRxiv} in 2023.
+
+\section{Abstract}
+
+Biobanks now contain genetic data from millions of individuals. Dimensionality reduction, visualization and stratification are standard when exploring data at these scales; while efficient and tractable methods exist for the first two, stratification remains challenging because of uncertainty about sources of population structure. In practice, stratification is commonly performed by drawing shapes around dimensionally reduced data or assuming populations have a "type" genome. We propose a method of stratifying data with topological analysis that is fast, easy to implement, and integrates with existing pipelines. The approach is robust to the presence of sub-populations of varying sizes and wide ranges of population structure patterns. We demonstrate its effectiveness on genotypes from three biobanks and illustrate how topological genetic strata can help us understand structure within biobanks, evaluate distributions of genotypic and phenotypic data, examine polygenic score transferability, identify potential influential alleles, and perform quality control.
+
 Chapter three. Chaaaapter three.\citep{novembre2008europe}
