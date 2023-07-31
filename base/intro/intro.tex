@@ -62,7 +62,7 @@ Traditional statistical analyses of biological data follow the recommendations o
     \caption{Tukey's paradigm.}
     \label{fig:tukey}
 \end{subfigure}
-\caption{\textbf{Contrasting Fisher's paradigm with Tukey's paradigm in biology.} Fisher's paradigm (left) takes a sequential approach to data analysis, beginning with a well-defined question and strong assumptions. Tukey's paradigm (right) is iterative, beginning with the data, emphasizing exploratory analysis through visualization, and complemented by confirmatory analyses that are robust and do not rely on complex assumptions\citep{holmes_modern_2019}.}
+\caption[Contrasting Fisher's paradigm with Tukey's paradigm in biology]{\textbf{Contrasting Fisher's paradigm with Tukey's paradigm in biology.} Fisher's paradigm (left) takes a sequential approach to data analysis, beginning with a well-defined question and strong assumptions. Tukey's paradigm (right) is iterative, beginning with the data, emphasizing exploratory analysis through visualization, and complemented by confirmatory analyses that are robust and do not rely on complex assumptions\citep{holmes_modern_2019}.}
 \label{fig:paradigms}
 \end{figure}
 
@@ -101,6 +101,8 @@ This choice was largely ad-hoc and was later found to work because it optimized 
 
 \subsection{Uniform manifold approximation and projection}
 
+[get more philosophical here]
+
 Uniform manifold approximation and projection (UMAP) is a general purpose dimensionality reduction method rooted in algebraic topology and Riemannian geometry that was introduced in 2018\citep{mcinnes_umap_2020}. Unlike the more heuristic approach of $t$-SNE, the motivation behind UMAP is to represent the high-dimensional topology of data in low dimensional space. We will briefly outline the intuition underlying UMAP; details on the topology and theoretical justifications are available in \citep{mcinnes_umap_2020}, with a more applied explanation available in online documentation\citep{mcinnes_umapdoc_2018}.
 
 We assume our data $X = \{X_{1}, \dots, X_{n}\}$ lay on some manifold and are uniformly distributed. For this assumption to hold, each point $X_{i}$ has its own custom distance, defined as the normalized distance to its $k\textsuperscript{th}$ nearest neighbour; thus, each $X_{i}$ has its own metric space, and is the centre of a unit ball that extends to the $k\textsuperscript{th}$ nearest neighbour. If we represent this as a graph, each $X_i$ is a point with edges to its $k$ neighbours, where the distances represent the edge weights. If we represent this as a simplicial complex, a point is a $0$-simplex and an edge is a $1$-simplex; according to theory, this simplicial complex forms an open cover of the underlying topological space. As the edge weights are between $0$ and $1$, we may also interpret the values as the belongingness to an open cover rather than a binary ``yes'' or ``no'' value---a fuzzy topological cover. To harmonize the respective edge weights $a, b$ from points $X_{a}$ to $X_{b}$ (since each point has its own local metric), UMAP defines the combined weight as $a + b - a \times b$, interpreted as the probability that an edge weight between $X_{a}$ and $X_{b}$ exists. The final high-dimensional product is a fuzzy simplicial complex, which can be represented as a weighted graph, and is a fuzzy topological representation of the data.
@@ -116,6 +118,8 @@ UMAP is the core method of this thesis. In \hyperref[chap:chapter1]{Chapter~1}, 
 ``Is it possible to derive low dimensional embedding methods that explicitly preserve topological features of the data? This is an interesting open question.''\citep{wasserman_topological_2018}
 
 \subsection{Clustering}
+
+[mention form recognition]
 
 It can be useful to model populations as $K$ discrete demes, e.g. when modelling admixture, studying population splits and merges, or testing the transferability of GWAS and PGS. Clustering is a natural approach to this problem. Broadly, clustering is a class of methods that puts similar data points into the same cluster while keeping dissimilar data points in different clusters\citep{ben-david_clustering_2018}. A variety of clustering methods have been used in population genetics. These methods often require specifying $K$; though multiple methods have been proposed to estimate $K$ (e.g. \citep{evanno_detecting_2005,verity_estimating_2016}), though $K$ may be useful, it does not have a ``correct'' value as genetic data does not fall into natural discrete groups\citep{lawson_tutorial_2018}.
 
