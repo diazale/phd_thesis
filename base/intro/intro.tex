@@ -10,7 +10,7 @@ In 2001, the first analyses of the draft human genome were published in sister p
 
 Every genome carries both the stories of its ancestors and the basic programming of its bearer's physiology. By identifying patterns across many genomes and their associated data, we can infer their histories and study distributions of biomedical traits. The complexities of human history and society, to say nothing of the complexities of biology itself, ensure that this is a non-trivial task.
 
-With each genome spanning $3$~billion base pairs, any mathematical investigation is high-dimensional. Within these data, there are patterns, and these patterns form shapes. It is first necessary to reduce the dimensionality of the data, especially when we aim to visualize it. Uniform manifold approximation and projection (UMAP) is a recently-developed method of dimensionality reduction that is rooted in topology---the branch of mathematics dedicated to the study of geometric objects. This thesis explores topological data analysis of population genetics data through UMAP and associated clustering algorithms. We will study how the high-dimensional topology of population genetic data reflects the demographic histories of the individuals we have sequenced, informs us of their biomedical traits, and how to explore this new trove of data.
+With each genome spanning $3$~billion base pairs, any mathematical investigation is high-dimensional. Within these data, there are patterns---population structure---and these patterns form shapes. It is first necessary to reduce the dimensionality of the data, especially when the goal is visualization. Uniform manifold approximation and projection (UMAP) is a recently-developed method of dimensionality reduction that is rooted in topology---the branch of mathematics dedicated to the study of geometric objects. This thesis explores topological data analysis of population genetics data through UMAP and associated clustering algorithms. We will study how the high-dimensional topology of population genetic data reflects the demographic histories of the individuals we have sequenced, informs us of their biomedical traits, and how to explore this new trove of data.
 
 The thesis is organized into three parts: the introduction with literature review and description of relevant methods; the original contributions to the field; and the final conclusions. The original contributions consist of three chapters that have been previously published as stand-alone manuscripts. In \hyperref[chap:chapter1]{Chapter~1} we apply UMAP to human genetic data for the first time. We use genotype data from three biobanks, generate visualizations and observe patterns in relatedness, demographic histories, geographic distribution, phenotype distributions, and other phenomena. In \hyperref[chap:chapter2]{Chapter~2} we review the applications of UMAP in other human genetic datasets, such as different biobanks or other types of genetic data (e.g. structural variants). Finally, in \hyperref[chap:chapter3]{Chapter~3} we formalize a methodology to use UMAP in higher dimensions ($n \ge 3$), extract clusters algorithmically, and apply these abstractions to a variety of problems common in biobank research.
 
@@ -29,38 +29,21 @@ Recombination is not uniformly random. DNA that does not lie in the pseudoautoso
 
 \subsection{Population structure}
 
-% what does structure *look* like?
+The distribution of genetic variation is not fully random---genetic differentiation in subpopulations is nearly ubiquitous across organisms. Allele frequencies are influenced by factors like natural selection favouring certain genotypes, founder effects, genetic drift, etc\citep{hartl2007principles_6}. The mating range of an individual is usually much more constrained than the range of whole species; this leads to isolation by distance (IBD) where there is local structure because of random drift\citep{wright_isolation_1943}. Positive assortative mating, in which individuals choose mates with similar phenotypes, can increase homozygosity\citep{hartl2007principles_6}. Structure may also arise from population bottlenecks or geographic isolation\citep{crow_kimura_1970_3} or admixture between groups that had been separated\citep{crow_kimura_1970_9}. 
 
-The distribution of genetic variation is not fully random and genetic differentiation in subpopulations is nearly ubiquitous across organisms. Allele frequencies are influenced by factors like natural selection favouring certain genotypes, founder effects, genetic drift, etc\citep{hartl2007principles_6}. Mating within a species is not fully random as the mating range of an individual is usually much more constrained than the range of whole species; this leads to isolation by distance (IBD) where there is local structure because of random drift\citep{wright_isolation_1943}. Positive assortative mating, in which individuals choose mates with similar phenotypes, can increase homozygosity\citep{hartl2007principles_6}. Structure may also arise from population bottlenecks or geographic isolation\citep{crow_kimura_1970_3}, which decrease heterozygosity, or migration between groups that had been relatively structured\citep{crow_kimura_1970_9}. 
+Population structure in humans is universal, complex, and multifactorial, resulting from all of the aforementioned causes, and presents as both continuous and discrete\citep{peter_geometric_2022}. Some phenomena unique to humans, such as language\citep{barbujani_zones_1990}, culture\citep{campbell_evolution_2010}, or assortative mating on (e.g.) educational attainment\citep{robinson_genetic_2017} also contribute to population structure. Inferring deep population structure is challenging because of a lack of data and fossil records and the complexity of the required models. Most present-day population structure is relatively recent, having arisen within the last $100,000$ years; prior structure may be best explained by repeated divergence, isolation, and merger between weakly-differentiated \textit{Homo sapiens} populations, though some combination of multiple populations and archaic introgression is also possible\citep{ragsdale_weakly_2023}.
 
-Population structure in humans is universal, complex, and multifactorial, resulting from all of the aforementioned causes, and presents as both continuous and discrete\citep{peter_geometric_2022}. Some phenomena unique to humans, such as language\citep{barbujani_zones_1990} or assortative mating on educational attainment\citep{robinson_genetic_2017}, also contribute to population structure. Inferring deep population structure is challenging because of a lack of data and fossil records and the complexity of the required models. Most present-day population structure is relatively recent, having arisen within the last $100,000$ years; prior structure may be best explained by repeated divergence, isolation, and merger between weakly-differentiated \textit{Homo sapiens} populations, though some combination of multiple populations and archaic introgression could also be possible\citep{ragsdale_weakly_2023}.
+Structure confounds genetic research. For example, genome-wide association studies (GWAS) are a common family of models that, in their simplest form, estimate the effect of a variant $x$ on some measure $y$ using a linear model:
 
+$$ y_{i} = \beta_0 + \beta_{1}x_{i} + \epsilon_{i} \text{ ,} \epsilon \sim N(0,\sigma^{2})$$
 
-
-
-
-
-Why is genetic variation not fully random? How do we measure it? What are the processes that we know of? What are some historical examples?
-
-* small populations (limited mate pool)
-* geographical barriers
-* geographical closeness
-* isolation-by-distance
-* cultural factors (e.g. more cousin marriage, religious groups, language, etc)
-* island models
-* Crow and Kimura Chapter 9 on classical popgen models of distribution of allele frequencies
-* Definition of population from statcan book
-* language\citep{campbell_evolution_2010}
-
-Inferential statistics requires a definition of ``population''\citep{statcan2003}. To establish the scope of a study, we define the ``target population'' (the group to which research applies) and the ``survey population'' (the group which is covered by the study and, ideally, is very similar to the target population). The survey population is ultimately chosen from the survey frame, which provides the means to sample the individuals from the population. [talk about popgen, biobanks, assumptions, etc---maybe this goes in the disco?]
+If a variant is more common in one population than another, and a measure differs systematically between them for non-genetic reasons (e.g. environmental exposure, cultural differences in diet, etc.), a GWAS would return a spurious correlation\citep{price_principal_2006}. These systematic differences can accrue in downstream applications like polygenic scores (PGS)\citep{zaidi_demographic_2020}. The effects of structure can be pernicious---in 2019 several studies that had found strong selection signals for height were found to likely be the result of structure\citep{berg_reduced_2019}. With applications like PGS becoming more common, understanding population structure in biobanks is critical\citep{kaplan_polygenic_2022}.
 
 \subsection{Measures of population structure}
 
 \subsubsection{Hardy-Weinberg Equilibrium}
 
 \subsubsection{Fixation index}
-
-\subsection{Ancestry and admixture}
 
 \section{Exploratory data analysis}
 
