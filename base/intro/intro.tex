@@ -41,7 +41,12 @@ If a variant is more common in one population than another, and a measure differ
 
 \subsubsection{Hardy-Weinberg Equilibrium}
 
+
+
 \subsubsection{Fixation index}
+
+- geometric interpretation w/ PCA\citep{peter_geometric_2022}
+- not a formal distance\citep{arbisser_fst_2020}
 
 \section{Exploratory data analysis}
 
@@ -119,11 +124,17 @@ UMAP is the core method of this thesis. In \hyperref[chap:chapter1]{Chapter~1}, 
 
 [mention form recognition]
 
+\subsubsection{Model-based clustering}
+
 It can be useful to model populations as $K$ discrete demes, e.g. when modelling admixture, studying population splits and merges, or testing the transferability of GWAS and PGS. Clustering is a natural approach to this problem. Broadly, clustering is a class of methods that puts similar data points into the same cluster while keeping dissimilar data points in different clusters\citep{ben-david_clustering_2018}. A variety of clustering methods have been used in population genetics. These methods often require specifying $K$; though multiple methods have been proposed to estimate $K$ (e.g. \citep{evanno_detecting_2005,verity_estimating_2016}), though $K$ may be useful, it does not have a ``correct'' value as genetic data does not fall into natural discrete groups\citep{lawson_tutorial_2018}.
 
 Model-based clustering assumes that observations are randomly drawn from some parametric model. The first such method used in population genetics was STRUCTURE, in 2000, which assumed that each cluster was defined by some allele frequency; having observed the genotypes $X$, it infers the populations of origin $Z$ and allele frequencies $P$ through Bayesian modelling of $Pr(Z, P|X)$\citep{pritchard_inference_2000}. Each genome is then modelled as a mixture of some $K$ source populations---often presented in literature as a stacked bar graph where each individual is one bar with split ancestry proportions---and termed ``global ancestry estimation''\citep{alexander_fast_2009}. The idea has since evolved into many other methods (e.g. ADMIXTURE\citep{alexander_fast_2009}, FRAPPE\citep{tang_estimation_2005}, sparse non-negative matrix factorization\citep{frichot_fast_2014}, archetypal analysis\citep{gimbernat-mayol_archetypal_2022}) and is an active area of research to handle more complex model assumptions and larger data sets.
 
+\subsubsection{Distance-based clustering}
+
 One of the most common distance-based algorithms is $K$-means clustering. Developed in the 1970s, it works by dividing $M$ points in $N$ dimensions into $K$ groups by minimizing the within-cluster sum of squares\citep{hartigan_algorithm_1979}. $K$-means clustering has been used to define populations by, e.g., using the coordinates of individuals in PCA space and comparing to some known reference population within a cluster. $K$-means implicitly assumes that data points form a Gaussian distribution around some centroid\citep{mcinnes_accelerated_2017}. However, genetic data do not naturally present as clouds about some centroid---many individuals, particularly from admixed populations or uncommon genetic ancestries, will never be placed into a population, especially if there is no reference population\citep{ding_polygenic_2023}.
+
+\subsubsection{Density clustering}
 
 Density clustering is defined as finding sets of data with a high density of points; a formal outline can be found in Wasserman's review of TDA\citep{wasserman_topological_2018}. Briefly, assume we observe a sample $X_{1}, \dots , X_{n}$ from some distribution $P$ with density $p$ where $X_{i} \in \mathcal{X} \subseteq \mathbb{R}^d$. For any $t \ge 0$, we define the upper level set $L_{t}$ as:
 
@@ -135,9 +146,10 @@ $$ \mathcal{C} = \bigcup_{t \ge 0} \mathcal{C}_{t} $$
 
 The set of all density clusters $\mathcal{C}$ has a tree structure. 
 
-Intuitively, imagine our data are 
+
 
 - we do UMAP to make our data accessible to hdbscan, we use hdbscan because it has properties that are very nice, also it has probabilistic and topological interpretations
+- population structure is basically "similarity" and "nearness"
 
 \citep{malzer_hybrid_2020}
 
@@ -186,6 +198,8 @@ The Health and Retirement Study (HRS) is a cohort of retired American individual
 \subsection{UK biobank}
 
 The UK biobank (UKB) is a cohort of individuals living in the United Kingdom who were recruited by inviting those registered with the National Health Service (NHS)\citep{sudlow_uk_2015}. It contains the genotypes from $488,377$ participants as well as detailed health data, phenotypic measures, geographic coordinates, and sociodemographic information such as ethnic background.
+
+\section{Rationale and objectives}
 
 %\section{Methods}
 
