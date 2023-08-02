@@ -39,6 +39,10 @@ $$ y_{i} = \beta_0 + \beta_{1}x_{i} + \epsilon_{i} \text{ ,} \epsilon \sim N(0,\
 
 If a variant is more common in one population than another, and a measure differs systematically between them for non-genetic reasons (e.g. environmental exposure, cultural differences in diet, etc.), a GWAS would return a spurious correlation\citep{price_principal_2006}. These systematic differences can accrue in downstream applications like polygenic scores (PGS)\citep{zaidi_demographic_2020}. The effects of structure can be pernicious---in 2019 several studies that had found strong selection signals for height were found to likely be the result of structure\citep{berg_reduced_2019}. Even in populations considered to be relatively homogeneous, structure conferred its bias to PGS estimates\citep{kerminen_geographic_2019}. With applications like PGS becoming more common, understanding population structure in biobanks is critical\citep{kaplan_polygenic_2022}.
 
+\subsubsection{Models}
+
+Idealized models like WF, island-hopping, etc
+
 \subsubsection{Hardy-Weinberg Equilibrium}
 
 
@@ -136,14 +140,20 @@ One of the most common distance-based algorithms is $K$-means clustering. Develo
 
 \subsubsection{Density clustering}
 
-Owing to the aforementioned deficiencies of $K$-means clustering, we consider other methods. Density clustering finds sets of data with a high density of points; a formal outline can be found in Wasserman's review of TDA\citep{wasserman_topological_2018}. Briefly, assume we observe a sample $X_{1}, \dots , X_{n}$ from some distribution $P$ with density $p$ where $X_{i} \in \mathcal{X} \subseteq \mathbb{R}^d$. For any $t \ge 0$, we define the upper level set $L_{t} = \{x: p(x) > t \}$. The density clusters at level $t$ are denoted by $\mathcal{C}_{t}$ and are the connected components of $L_{t}$. The set of all density clusters is:
+[note: put EOM stuff in Appendix]
 
-$$ \mathcal{C} = \bigcup_{t \ge 0} \mathcal{C}_{t} $$
+Owing to the aforementioned deficiencies of $K$-means clustering, we consider other methods. Density clustering finds sets of data with a high density of points; a formal outline can be found in Wasserman's review of TDA\citep{wasserman_topological_2018}. Briefly, assume we observe a sample $X_{1}, \dots , X_{n}$ from some distribution $P$ with density $p$ where $X_{i} \in \mathcal{X} \subseteq \mathbb{R}^d$. For any $\lambda \ge 0$, we define the upper level set $L_{\lambda} = \{x: p(x) > \lambda \}$. The density clusters at level $\lambda$ are denoted by $\mathcal{C}_{\lambda}$ and are the connected components of $L_{\lambda}$. The set of all density clusters is:
 
-By varying the threshold $t$, level sets $L_{t}$ become nested within each other; that is, if $A, B \in \mathcal{C}$ then $A \subset B$ or $B \subset A$ or $A \cap B = \emptyset$. Thus the set $\mathcal{C}$ can be represented as a tree, and each branch represents a cluster.
+$$ \mathcal{C} = \bigcup_{\lambda \ge 0} \mathcal{C}_{\lambda} $$
 
-The first density clustering algorithm was Density Based Spatial Clustering of Applications with Noise (DBSCAN), developed in 1996\citep{ester1996density}and became the basis of many others\citep{khan_dbscan_2014}. A hierarchical version (HDBSCAN) was developed in 2013 and varied the thresholds $t$ \citep{campello_density-based_2013}
+By varying the threshold $\lambda$, level sets $L_{\lambda}$ become nested within each other; that is, if $A, B \in \mathcal{C}$ then $A \subset B$ or $B \subset A$ or $A \cap B = \emptyset$. Thus the set $\mathcal{C}$ can be represented as a tree, and each branch represents a cluster.
 
+The first density clustering algorithm was Density Based Spatial Clustering of Applications with Noise (DBSCAN), developed in 1996\citep{ester1996density} and became the basis of many others\citep{khan_dbscan_2014}. DBSCAN formalized the intuition that clusters were spaces that were dense with data, while areas that were relatively sparse were noise. For each point in a cluster, the neighbourhood of a given radius $\epsilon$ must contains at least $m$ points. Any points that meet this criterion, or fall within the neighbourhood, are assigned to clusters, while the rest are deemed noise.
+
+However, this requires a global density threshold $\epsilon$---clusters of variable densities are not considered. A hierarchical version (HDBSCAN) that varied the thresholds $\epsilon$ was developed in 2013\citep{campello_density-based_2013}. It required only the minimum points $m$ and optimized across the tree for $\mathcal{C}$, selecting values of $\epsilon$ that led to the highest stability, and defining $\lambda = \frac{1}{\epsilon}$.
+
+
+What does data \emph{truly} look like?
 
 
 \citep{mcinnes_topological_2019}
@@ -161,7 +171,7 @@ The first density clustering algorithm was Density Based Spatial Clustering of A
 \cite{mcinnes_accelerated_2017}
 
 
-\subsection{Visualization}
+\subsection{Biobank sampling}
 
 % some principles of visualization?
 
