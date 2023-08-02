@@ -126,7 +126,7 @@ UMAP is the core method of this thesis. In \hyperref[chap:chapter1]{Chapter~1}, 
 
 \subsection{Clustering}
 
-[mention form recognition]
+Clustering in population genetics can be separated into model-based methods, which are common in global ancestry estimation, and distance-based methods, which measure pairwise distances between individuals. Though we use the former in some analyses, \hyperref[chap:chapter3]{Chapter~3} focuses on the latter, specifically density clustering.
 
 \subsubsection{Model-based clustering}
 
@@ -136,7 +136,7 @@ Model-based clustering assumes that observations are randomly drawn from some pa
 
 \subsubsection{Distance-based clustering}
 
-One of the most common distance-based algorithms is $K$-means clustering. Developed in the 1970s, it works by dividing $M$ points in $N$ dimensions into $K$ groups by minimizing the within-cluster sum of squares\citep{hartigan_algorithm_1979}. $K$-means clustering has been used to define populations by, e.g., using the coordinates of individuals in PCA space and comparing to some known reference population within a cluster. $K$-means implicitly assumes that data points form a Gaussian distribution around some centroid\citep{mcinnes_accelerated_2017}. However, genetic data do not naturally present as clouds about some centroid. Data points are either partitioned arbitrarily, stripping clusters of interpretation, or the distances from the centroids have sharp cut-off points. In the latter case many individuals, particularly from admixed populations or uncommon genetic ancestries, will never be placed into a population, especially if there is no reference population to compare them to\citep{ding_polygenic_2023}.
+One of the most common distance-based algorithms is $K$-means clustering. Developed in the 1970s, it works by dividing $M$ points in $N$ dimensions into $K$ groups by minimizing the within-cluster sum of squares\citep{hartigan_algorithm_1979}. $K$-means clustering has been used to define populations by, e.g., using the coordinates of individuals in PCA space and comparing to some known reference population within a cluster. $K$-means implicitly assumes that data points form a Gaussian distribution around some centroid\citep{mcinnes_accelerated_2017}. However, genetic data do not naturally present as clouds about some centroid. Data points are either partitioned arbitrarily, stripping clusters of interpretation, or the distances from the centroids have sharp cut-off points. In the latter case many individuals, particularly from admixed populations or uncommon genetic ancestries, will never be placed into a cluster, especially if there is no reference population to compare them to\citep{ding_polygenic_2023}.
 
 \subsubsection{Density clustering}
 
@@ -144,22 +144,26 @@ Owing to the aforementioned deficiencies of $K$-means clustering, we consider ot
 
 $$ \mathcal{C} = \bigcup_{\lambda \ge 0} \mathcal{C}_{\lambda} $$
 
-By varying the threshold $\lambda$, level sets $L_{\lambda}$ become nested within each other; that is, if $A, B \in \mathcal{C}$ then $A \subset B$ or $B \subset A$ or $A \cap B = \emptyset$. Thus the set $\mathcal{C}$ can be represented as a tree, and each branch represents a cluster.
+By varying the threshold $\lambda$, level sets $L_{\lambda}$ become nested within each other; that is, if $A, B \in \mathcal{C}$ then $A \subset B$ or $B \subset A$ or $A \cap B = \emptyset$. Thus the set $\mathcal{C}$ can be represented as a tree, and each branch represents a cluster. This approach is useful if we know there is structure in our data but do not know how many clusters exist---if we can find an appropriate threshold for density, we can discover the structure.
 
 The first density clustering algorithm was Density Based Spatial Clustering of Applications with Noise (DBSCAN), developed in 1996\citep{ester1996density} and became the basis of many others\citep{khan_dbscan_2014}. DBSCAN formalized the intuition that clusters were spaces that were dense with data, while areas that were relatively sparse were noise. For each point in a cluster, the neighbourhood of a given radius $\epsilon$ must contains at least $m$ points. Any points that meet this criterion, or fall within the neighbourhood, are assigned to clusters, while the rest are deemed noise. However, this requires a global density $\epsilon$ threshold---clusters of variable densities are not considered. 
 
-A hierarchical version (HDBSCAN) that varied the thresholds $\epsilon$ was developed in 2013\citep{campello_density-based_2013}. It required only the minimum points $m$ and optimized across the tree for $\mathcal{C}$, selecting values of $\epsilon$ that led to the highest stability, and defining $\lambda = \frac{1}{\epsilon}$. Now we are presented with a dilemma: what if our data contain very large clusters \emph{and} very small clusters? Using DBSCAN with its global $\epsilon$ threshold would miss small clusters, while using HDBSCAN with a variable $\epsilon$ with a low minimum points $m$ would break large clusters apart into microclusters, with many points being discarded as noise. This motivated HDBSCAN($\hat{epsilon}$), a hybrid version that prevents clusters below a certain global threshold from splitting further\citep{malzer_hybrid_2020}.
+A hierarchical version (HDBSCAN) that varied the thresholds $\epsilon$ was developed in 2013\citep{campello_density-based_2013}. It required only the minimum points $m$ and optimized across the tree for $\mathcal{C}$, selecting values of $\epsilon$ that led to the highest stability, and defining $\lambda = \frac{1}{\epsilon}$. Now we are presented with a dilemma: what if our data set is large and contains very large clusters \emph{and} very small clusters? Using DBSCAN with its global $\epsilon$ threshold would miss small clusters, while using HDBSCAN with a variable $\epsilon$ with a low minimum points $m$ would break large clusters apart into microclusters, with many points being discarded as noise. This motivated HDBSCAN($\hat{\epsilon}$), a hybrid version that prevents clusters below a certain global threshold from splitting further\citep{malzer_hybrid_2020}.
+
+Stepping back, this last regime describes modern biobank data well. Dense areas in genetic space are those where many individuals are ``close'' to each other; that is, they have similar distributions of genetic variants, representing a shared demographic history. Biobanks generally do not have evenly-balanced populations, particularly when they are constructed using jurisdiction (e.g. people are only sampled within a certain geographic region).
 
 %More explicit details on cluster selection are available in \citep{mcinnes_accelerated_2017} and \citep{malzer_hybrid_2020}, with an outline in \hyperref[appendix:AppendixB]{Appendix~B}.
+
+
 
 What does data \emph{truly} look like?
 
 
-\citep{mcinnes_topological_2019}
+%\citep{mcinnes_topological_2019}
 
-\citep{mcinnes_accelerated_2017}
+%\citep{mcinnes_accelerated_2017}
 
-\citep{malzer_hybrid_2020}
+%\citep{malzer_hybrid_2020}
 
 
 - we do UMAP to make our data accessible to hdbscan, we use hdbscan because it has properties that are very nice, also it has probabilistic and topological interpretations
@@ -180,8 +184,6 @@ What does data \emph{truly} look like?
 
 %\subsection{HDBSCAN(\texorpdfstring{$\hat{\epsilon}$}{f})}
 % the {f} here doesn't do anything, but we need a text character for compilation
-
-\citep{mcinnes_accelerated_2017}
 
 \section{Data}
 
@@ -214,6 +216,8 @@ The Health and Retirement Study (HRS) is a cohort of retired American individual
 The UK biobank (UKB) is a cohort of individuals living in the United Kingdom who were recruited by inviting those registered with the National Health Service (NHS)\citep{sudlow_uk_2015}. It contains the genotypes from $488,377$ participants as well as detailed health data, phenotypic measures, geographic coordinates, and sociodemographic information such as ethnic background.
 
 \section{Rationale and objectives}
+
+
 
 %\section{Methods}
 
