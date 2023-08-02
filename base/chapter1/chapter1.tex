@@ -32,5 +32,22 @@ Non-linear dimension reduction methods tend to be computationally intensive. A c
 \section{Results}
 \subsection{Fine-scale visualization of the 1KGP dataset}
 
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \caption[Four methods of dimension reduction of 1KGP genotype data with population labels]{\textbf{Four methods of dimension reduction of 1KGP genotype data with population labels.} \textbf{(A)} PCA maps individuals in a triangle with vertices corresponding to African, Asian, and European continental ancestry. Discarding lower-variance PCs leads to overlap of populations with no close affinity, such as Central and South American populations with South Asians. \textbf{(B)} t-SNE forms groups corresponding to continents, with some overlap between European and Central and South American people. Smaller subgroups are visible within continental clusters. The cloud of peripheral points results from the method's poor convergence. \textbf{(C)} UMAP forms distinct clusters related to continent with clearly defined subgroups. Japanese, Finnish, Luhya, and some Punjabi and Telugu populations form separate clusters consistent with their population history\citep{10002015global}. \textbf{(D)} UMAP on the first 15 principal components forms fine-scale clusters for individual populations. Groups closely related by ancestry or geography, such as African Caribbean/African American, Spanish/Italian, and Kinh/Dai populations cluster together. Results using t-SNE on principal components are presented in \ref{fig:supp_megamontage_pc2_9}. Axes in UMAP and t-SNE are arbitrary. Since the algorithms prioritize local distances, long distances between clusters are not meaningful.}
+    \label{fig:fig1}
+\end{figure}
+
+The 1KGP contains genotype data of 3,450 individuals from 26 relatively distinct labeled populations\citep{10002015global}. Fig~\ref{fig:fig1} shows visualizations using PCA, t-SNE, UMAP, and UMAP with PCA pre-processing. Using UMAP and t-SNE on the genotype data presents clusters that are roughly grouped by continent, with UMAP showing a clear hierarchy of population and continental clusters, whereas t-SNE fails to assign many individuals to population clusters. Using either method on the top principal components leads to distinct population clusters and less defined continental structure. Adding more components results in progressively finer clusters until approximately 20 populations appear using 15 components; adding further components converges to results similar to using the entire genotype data (see \ref{fig:supp_megamontage_pc2_9}, \ref{fig:supp_megamontage_pc10_50}, and \ref{fig:supp_montage_1kgp_converge}). To investigate the population information contained in low-variance PCs, we performed UMAP on data projected onto PCs 100 to 3450 (i.e., without information about the leading 99 PCs). \nameref{fig:supp_1kgp_3350} shows that population structure is still clearly visible.
+
+Focusing on UMAP with the leading 15 principal components (\ref{fig:fig1}D), several population clusters reflect shared ancestries. British individuals from England and Scotland form a cluster mixed with those from Utah who claim Northern and Western European ancestry. Toscani and Iberian individuals form a cluster reflecting their Mediterranean heritage. African Americans in the Southwest US, African Caribbean individuals in Barbados, and some Puerto Ricans also form a cluster. Three East Asian clusters appear: one is largely Han and Southern Han individuals, another is comprised of the Chinese Dai in southern China and the Kinh from Vietnam, and the third is the Japanese population. Other clusters are comprised of Colombians and Peruvians, the Esan and Yoruba populations of Nigeria, and several South Asian populations. 
+
+Within population clusters, family members were projected near each other within broader population groups. When UMAP was parameterized to use only 5 nearest neighbours, however, families often formed distinct clusters (\ref{fig:supp_1kgp_families}): Using few neighbours to build a manifold emphasizes closer relatedness.
+
+\newpage
+
+\section{Supporting information}
 
 
+\newpage
