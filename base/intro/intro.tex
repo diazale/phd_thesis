@@ -140,18 +140,17 @@ One of the most common distance-based algorithms is $K$-means clustering. Develo
 
 \subsubsection{Density clustering}
 
-[note: put EOM stuff in Appendix]
-
 Owing to the aforementioned deficiencies of $K$-means clustering, we consider other methods. Density clustering finds sets of data with a high density of points; a formal outline can be found in Wasserman's review of TDA\citep{wasserman_topological_2018}. Briefly, assume we observe a sample $X_{1}, \dots , X_{n}$ from some distribution $P$ with density $p$ where $X_{i} \in \mathcal{X} \subseteq \mathbb{R}^d$. For any $\lambda \ge 0$, we define the upper level set $L_{\lambda} = \{x: p(x) > \lambda \}$. The density clusters at level $\lambda$ are denoted by $\mathcal{C}_{\lambda}$ and are the connected components of $L_{\lambda}$. The set of all density clusters is:
 
 $$ \mathcal{C} = \bigcup_{\lambda \ge 0} \mathcal{C}_{\lambda} $$
 
 By varying the threshold $\lambda$, level sets $L_{\lambda}$ become nested within each other; that is, if $A, B \in \mathcal{C}$ then $A \subset B$ or $B \subset A$ or $A \cap B = \emptyset$. Thus the set $\mathcal{C}$ can be represented as a tree, and each branch represents a cluster.
 
-The first density clustering algorithm was Density Based Spatial Clustering of Applications with Noise (DBSCAN), developed in 1996\citep{ester1996density} and became the basis of many others\citep{khan_dbscan_2014}. DBSCAN formalized the intuition that clusters were spaces that were dense with data, while areas that were relatively sparse were noise. For each point in a cluster, the neighbourhood of a given radius $\epsilon$ must contains at least $m$ points. Any points that meet this criterion, or fall within the neighbourhood, are assigned to clusters, while the rest are deemed noise.
+The first density clustering algorithm was Density Based Spatial Clustering of Applications with Noise (DBSCAN), developed in 1996\citep{ester1996density} and became the basis of many others\citep{khan_dbscan_2014}. DBSCAN formalized the intuition that clusters were spaces that were dense with data, while areas that were relatively sparse were noise. For each point in a cluster, the neighbourhood of a given radius $\epsilon$ must contains at least $m$ points. Any points that meet this criterion, or fall within the neighbourhood, are assigned to clusters, while the rest are deemed noise. However, this requires a global density $\epsilon$ threshold---clusters of variable densities are not considered. 
 
-However, this requires a global density threshold $\epsilon$---clusters of variable densities are not considered. A hierarchical version (HDBSCAN) that varied the thresholds $\epsilon$ was developed in 2013\citep{campello_density-based_2013}. It required only the minimum points $m$ and optimized across the tree for $\mathcal{C}$, selecting values of $\epsilon$ that led to the highest stability, and defining $\lambda = \frac{1}{\epsilon}$.
+A hierarchical version (HDBSCAN) that varied the thresholds $\epsilon$ was developed in 2013\citep{campello_density-based_2013}. It required only the minimum points $m$ and optimized across the tree for $\mathcal{C}$, selecting values of $\epsilon$ that led to the highest stability, and defining $\lambda = \frac{1}{\epsilon}$. Now we are presented with a dilemma: what if our data contain very large clusters \emph{and} very small clusters? Using DBSCAN with its global $\epsilon$ threshold would miss small clusters, while using HDBSCAN with a variable $\epsilon$ with a low minimum points $m$ would break large clusters apart into microclusters, with many points being discarded as noise. This motivated HDBSCAN($\hat{epsilon}$), a hybrid version that prevents clusters below a certain global threshold from splitting further\citep{malzer_hybrid_2020}.
 
+%More explicit details on cluster selection are available in \citep{mcinnes_accelerated_2017} and \citep{malzer_hybrid_2020}, with an outline in \hyperref[appendix:AppendixB]{Appendix~B}.
 
 What does data \emph{truly} look like?
 
