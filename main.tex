@@ -11,8 +11,10 @@
 \usepackage[labelfont=bf]{caption}
 \usepackage{subcaption}
 \usepackage{setspace}
-\captionsetup[table]{font = {stretch=1.35}}
-\captionsetup[figure]{font = {stretch=1.35}}
+%\captionsetup[table]{font = {stretch=1.35}}
+%\captionsetup[figure]{font = {stretch=1.35}}
+\captionsetup[table]{font = {stretch=1.0}}
+\captionsetup[figure]{font = {stretch=1.0}}
 \usepackage[margin=1in, headsep=1cm, bottom=5cm]{geometry}
 %\usepackage[hidelinks]{hyperref}
 %\usepackage[colorlinks=true]{hyperref}
@@ -30,6 +32,7 @@
 \usepackage{lmodern}
 \usepackage{titlesec}
 \usepackage[natbib,style=numeric-comp,backend=biber,sorting=none]{biblatex}
+
 
 \usepackage{times}
 
@@ -120,8 +123,12 @@
 \usepackage{xpatch}
 \xpretocmd\headrule{\color{red}}{}{\PatchFailed}
 
+
+
 %\author{\textcopyright Author, August, 2020}
 %\date{}
+
+% Don't break these acronyms up with hyphens
 
 \hyphenation{DBSCAN}
 \hyphenation{HDBSCAN}
