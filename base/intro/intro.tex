@@ -29,28 +29,68 @@ Recombination is not uniformly random. DNA that does not lie in the pseudoautoso
 
 \subsection{Population structure}
 
-The distribution of genetic variation is not fully random---genetic differentiation in subpopulations is nearly ubiquitous across organisms. Allele frequencies are influenced by factors like natural selection favouring certain genotypes, founder effects, genetic drift, etc\citep{hartl2007principles_6}. The mating range of an individual is usually much more constrained than the range of whole species; this leads to isolation by distance (IBD) where there is local structure because of random drift\citep{wright_isolation_1943}. Positive assortative mating, in which individuals choose mates with similar phenotypes, can increase homozygosity\citep{hartl2007principles_6}. Structure may also arise from population bottlenecks or geographic isolation\citep{crow_kimura_1970_3} or admixture between groups that had been separated\citep{crow_kimura_1970_9}. 
+The distribution of genetic variation is not fully random---genetic differentiation in subpopulations is nearly ubiquitous across organisms. Allele frequencies are influenced by factors like natural selection favouring certain genotypes, founder effects, genetic drift, etc.\citep{hartl2007principles_6}. The mating range of an individual is usually much more constrained than the range of whole species; this leads to isolation by distance (IBD) where there is local structure because of random drift\citep{wright_isolation_1943}. Positive assortative mating, in which individuals choose mates with similar phenotypes, can increase homozygosity\citep{hartl2007principles_6}. Structure may also arise from population bottlenecks or geographic isolation\citep{crow_kimura_1970_3} or admixture between groups that had been separated\citep{crow_kimura_1970_9}. 
 
 Population structure in humans is universal, complex, and multifactorial, resulting from all of the aforementioned causes, and presents as both continuous and discrete\citep{peter_geometric_2022}. Some phenomena unique to humans, such as language\citep{barbujani_zones_1990}, culture\citep{campbell_evolution_2010}, or assortative mating on (e.g.) educational attainment\citep{robinson_genetic_2017} also contribute to population structure. Inferring deep population structure is challenging because of a lack of data and fossil records and the complexity of the required models. Most present-day population structure is relatively recent, having arisen within the last $100,000$ years; prior structure may be best explained by repeated divergence, isolation, and merger between weakly-differentiated \textit{Homo sapiens} populations, though some combination of multiple populations and archaic introgression is also possible\citep{ragsdale_weakly_2023}.
 
+\subsubsection{Genome-wide association studies and polygenic scores}
+
+One of the greatest promises of the genomic age is to reveal the genetic architecture of phenotypes and disease risk. Two common and related methodologies are the genome-wide association study (GWAS) and the polygenic score (PGS), also called the polygenic risk score (PRS) when used in the context of disease risk.
+
+The most basic GWAS is a linear regression model. We assume that for some phenotype $y$, the variant $x$ has an additive effect that can be modelled linearly. Then, we can study the association of each variant across the genome, hence the name GWAS. The basic outline is:
+
+$$ Y = \beta_0 + X_{j}\beta_{j} + \epsilon \text{ , } \epsilon \sim N(0,\sigma^{2})  $$
+
+where $X_{j}$ is the matrix of genotype values at SNP $j$ and $\beta_{j}$ is its effect size. GWAS commonly include terms for genetic relatedness between samples as well as covariates related to genetic ancestry and environment. The model can be written as, e.g.\citep{uffelmann_genome-wide_2021}:
+
+\begin{spacing}{1}
+\begin{align*} 
+Y & = W\alpha + X_{j}\beta_{j} + g + \epsilon \\
+g & \sim N(0,\sigma^{2}_{A}\psi) \\
+\epsilon & \sim N(0,\sigma^{2}_{\epsilon}I)
+\end{align*} 
+\end{spacing}
+
+where $W$ is the matrix of covariates with associated estimates $\alpha$, $X_{j}$ is a vector of genotypes with effect size $\beta_{j}j$, $g$ is the effect of other SNPs with variance
+
+
+
 Structure confounds genetic research. For example, genome-wide association studies (GWAS) are a common family of models that, in their simplest form, estimate the effect of a variant $x$ on some measure $y$ using a linear model:
 
-$$ y_{i} = \beta_0 + \beta_{1}x_{i} + \epsilon_{i} \text{ ,} \epsilon \sim N(0,\sigma^{2})$$
 
-If a variant is more common in one population than another, and a measure differs systematically between them for non-genetic reasons (e.g. environmental exposure, cultural differences in diet, etc.), a GWAS would return a spurious correlation\citep{price_principal_2006}. These systematic differences can accrue in downstream applications like polygenic scores (PGS)\citep{zaidi_demographic_2020}. The effects of structure can be pernicious---in 2019 several studies that had found strong selection signals for height were found to likely be the result of structure\citep{berg_reduced_2019}. Even in populations considered to be relatively homogeneous, structure conferred its bias to PGS estimates\citep{kerminen_geographic_2019}. With applications like PGS becoming more common, understanding population structure in biobanks is critical\citep{kaplan_polygenic_2022}.
 
-\subsubsection{Models}
+If a variant is more common in one population than another, and a measure differs systematically between them for non-genetic reasons (e.g. environmental exposure, cultural differences in diet, etc.), a GWAS would return a spurious correlation\citep{price_principal_2006}. These systematic differences can accrue in downstream applications like polygenic scores (PGS)\citep{zaidi_demographic_2020}. 
 
-Idealized models like WF, island-hopping, etc
+
+The effects of structure can be pernicious---in 2019 several studies that had found strong selection signals for height were found to likely be the result of structure\citep{berg_reduced_2019}. Even in populations considered to be relatively homogeneous, structure conferred its bias to PGS estimates\citep{kerminen_geographic_2019}. With applications like PGS becoming more common, understanding population structure in biobanks is critical\citep{kaplan_polygenic_2022}.
 
 \subsubsection{Hardy-Weinberg Equilibrium}
 
+The Hardy-Weinberg model was outlined in 1908. It is used to model genotype frequencies, given several simplifying assumptions\citep{hartl2007principles_2}. If we have a diploid genome with alleles $A_{1}$ and $A_{2}$ that occur at respective frequencies $p$ and $q$, they follow the binomial distribution and are expected to naturally occur at rates
+\begin{spacing}{1}
+\begin{align*} 
+A_{1} \times A_{1} &= p^{2}\\
+A_{2} \times A_{2} &= q^{2}\\
+A_{1} \times A_{2} &= 2pq
+\end{align*} 
+\end{spacing}
 
+We can test for excess departure from Hardy-Weinberg equilibrium with a $\chi^2$ statistic, which can indicate technical errors, non-random mating, or population stratification.
 
 \subsubsection{Fixation index}
 
+The fixation index, also called the inbreeding coefficient, is a measure of population structure. Several different estimators exist, depending on the context\citep{bhatia_estimating_2013}.
+
+
 - geometric interpretation w/ PCA\citep{peter_geometric_2022}
 - not a formal distance\citep{arbisser_fst_2020}
+
+
+\subsubsection{Wright-Fisher model}
+
+Idealized models like WF, island-hopping, etc
+
+
 
 \section{Exploratory data analysis}
 
