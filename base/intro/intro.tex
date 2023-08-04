@@ -33,37 +33,6 @@ The distribution of genetic variation is not fully random---genetic differentiat
 
 Population structure in humans is universal, complex, and multifactorial, resulting from all of the aforementioned causes, and presents as both continuous and discrete\citep{peter_geometric_2022}. Some phenomena unique to humans, such as language\citep{barbujani_zones_1990}, culture\citep{campbell_evolution_2010}, or assortative mating on (e.g.) educational attainment\citep{robinson_genetic_2017} also contribute to population structure. Inferring deep population structure is challenging because of a lack of data and fossil records and the complexity of the required models. Most present-day population structure is relatively recent, having arisen within the last $100,000$ years; prior structure may be best explained by repeated divergence, isolation, and merger between weakly-differentiated \textit{Homo sapiens} populations, though some combination of multiple populations and archaic introgression is also possible\citep{ragsdale_weakly_2023}.
 
-\subsubsection{Genome-wide association studies and polygenic scores}
-
-One of the greatest promises of the genomic age is to reveal the genetic architecture of phenotypes and disease risk. Two common and related methodologies are the genome-wide association study (GWAS) and the polygenic score (PGS), also called the polygenic risk score (PRS) when used in the context of disease risk.
-
-The most basic GWAS is a linear regression model. We assume that for some phenotype $y$, the variant $x$ has an additive effect that can be modelled linearly. Then, we can study the association of each variant across the genome, hence the name GWAS. The basic outline is:
-
-$$ Y = \beta_0 + X_{j}\beta_{j} + \epsilon \text{ , } \epsilon \sim N(0,\sigma^{2})  $$
-
-where $X_{j}$ is the matrix of genotype values at SNP $j$ and $\beta_{j}$ is its effect size. GWAS commonly include terms for genetic relatedness between samples as well as covariates related to genetic ancestry and environment. The model can be written as, e.g.\citep{uffelmann_genome-wide_2021}:
-
-\begin{spacing}{1}
-\begin{align*} 
-Y & = W\alpha + X_{j}\beta_{j} + g + \epsilon \\
-g & \sim N(0,\sigma^{2}_{A}\psi) \\
-\epsilon & \sim N(0,\sigma^{2}_{\epsilon}I)
-\end{align*} 
-\end{spacing}
-
-where $W$ is the matrix of covariates with associated estimates $\alpha$, $X_{j}$ is a vector of genotypes with effect size $\beta_{j}j$, $g$ is the effect of other SNPs with variance
-
-
-
-Structure confounds genetic research. For example, genome-wide association studies (GWAS) are a common family of models that, in their simplest form, estimate the effect of a variant $x$ on some measure $y$ using a linear model:
-
-
-
-If a variant is more common in one population than another, and a measure differs systematically between them for non-genetic reasons (e.g. environmental exposure, cultural differences in diet, etc.), a GWAS would return a spurious correlation\citep{price_principal_2006}. These systematic differences can accrue in downstream applications like polygenic scores (PGS)\citep{zaidi_demographic_2020}. 
-
-
-The effects of structure can be pernicious---in 2019 several studies that had found strong selection signals for height were found to likely be the result of structure\citep{berg_reduced_2019}. Even in populations considered to be relatively homogeneous, structure conferred its bias to PGS estimates\citep{kerminen_geographic_2019}. With applications like PGS becoming more common, understanding population structure in biobanks is critical\citep{kaplan_polygenic_2022}.
-
 \subsubsection{Hardy-Weinberg Equilibrium}
 
 The Hardy-Weinberg model was outlined in 1908. It is used to model genotype frequencies, given several simplifying assumptions\citep{hartl2007principles_2}. If we have a diploid genome with alleles $A_{1}$ and $A_{2}$ that occur at respective frequencies $p$ and $q$, they follow the binomial distribution and are expected to naturally occur at rates
@@ -79,24 +48,47 @@ We can test for excess departure from Hardy-Weinberg equilibrium with a $\chi^2$
 
 \subsubsection{Fixation index}
 
-The fixation index, also called the inbreeding coefficient, is a measure of population structure. Several different estimators exist, depending on the context\citep{bhatia_estimating_2013}.
+We expect the level of heterozygosity ($\pi$) to be lower in the presence of population structure. The fixation index ($F_{ST}$) measures population structure; values close to $0$ indicate no structure, while values close to $1$ indicate fully structure populations. Several different estimators exist, depending on the context\citep{bhatia_estimating_2013}. The sample size-independent definition for two populations is:
 
+$$ F_{ST} = \frac{Var(\pi_{i})}{\pi(1-\pi)} $$
 
-- geometric interpretation w/ PCA\citep{peter_geometric_2022}
-- not a formal distance\citep{arbisser_fst_2020}
+where $Var(\pi)$ is the variance in allele frequencies between two populations.
 
+$F_{ST}$ is used as a measure of differentiation between populations. Though it is sometimes described as a pairwise distance between populations, it is not a true mathematical distance as it does not satisfy the triangle equality\citep{arbisser_fst_2020}.
 
-\subsubsection{Wright-Fisher model}
+%\subsubsection{Wright-Fisher model}
 
-Idealized models like WF, island-hopping, etc
+\subsection{Genome-wide association studies and polygenic scores}
 
+One of the greatest promises of the genomic age is to reveal the genetic architecture of phenotypes and disease risk. Two common and related methodologies are the genome-wide association study (GWAS) and the polygenic score (PGS), also called the polygenic risk score (PRS) when used in the context of disease risk.
 
+The most basic GWAS is a linear regression model. We assume that for some phenotype $y$, the variant $x$ has an additive effect that can be modelled linearly. Then, we can study the association of each variant across the genome, hence the name GWAS. The basic outline is:
+
+$$ y = \beta_0 + x_{j}\beta_{j} + \epsilon \text{ , } \epsilon \sim N(0,\sigma^{2})  $$
+
+where $x_{j}$ is the vector of genotype values at SNP $j$ and $\beta_{j}$ is its effect size. GWAS commonly include terms for genetic relatedness between samples as well as covariates related to genetic ancestry and environment. The model can be written as, e.g.\citep{uffelmann_genome-wide_2021}:
+
+\begin{spacing}{1}
+\begin{align*} 
+y & = W\alpha + x_{j}\beta_{j} + g + \epsilon \\
+g & \sim N(0,\sigma^{2}_{A}\psi) \\
+\epsilon & \sim N(0,\sigma^{2}_{\epsilon}I)
+\end{align*} 
+\end{spacing}
+
+Here, $W$ is the matrix of covariates with associated estimates $\alpha$, $x_{j}$ is a vector of genotypes effect size $\beta_{j}$, $g$ is the random polygenic effect of other SNPs with $\sigma^{2}_{A}$ measuring the phenotype's additive genetic variance and $\psi$ the genetic relatedness matrix, and $\epsilon$ is the regression model residual. To account for multiple testing, the threshold for statistical significance for $\beta_{j}$ is usually set to $10^{-8}$.
+
+Conversely, given a set of estimates $\hat{\beta}$ for each SNP (or each significant SNP), one could construct an estimate of a phenotype as the sum of the estimated effects. For an individual $i$ and for SNPs $j = 1, \dots, p$ we estimate PGS $y = \sum_{j}^{p}x_{j}\hat{\beta_{j}}$. This is the basis of polygenic scoring.
+
+Despite significant advances in data collection and methodology, population structure is a persistent confounder of genetic research. If a variant is more common in one population than another, and a measure differs systematically between them for non-genetic reasons (e.g. environmental exposure, cultural differences in diet, etc.), a GWAS would return a spurious correlation\citep{price_principal_2006}. These systematic differences can accrue in downstream applications like PGS\citep{zaidi_demographic_2020}. 
+
+The effects of structure can be pernicious---in 2019 several studies that had found strong selection signals for height were found to likely be the result of structure\citep{berg_reduced_2019}. Even in populations considered to be relatively homogeneous, structure conferred its bias to PGS estimates\citep{kerminen_geographic_2019}. With applications like PGS becoming more common, understanding population structure in biobanks is critical\citep{kaplan_polygenic_2022}.
 
 \section{Exploratory data analysis}
 
 Traditional statistical analyses of biological data follow the recommendations of R.A. Fisher in the 1930s\citep{holmes_modern_2019}. They have a linear structure: beginning with a biological question, an investigator forms a hypothesis and an associated null ($H_0$), designs an experiment, collects data, tests $H_0$ with a p-value, and formulates a conclusion. Beginning in the 1970s, statistician John W. Tukey proposed the alternative framework of exploratory data analysis (EDA)\citep{tukey_1977,hoaglin_john_2003}. This approach is iterative and instead begins with the data: we visualize it, understand it, and use it to inform what sort of analysis to use in an accompanying confirmatory data analysis. The two contrasting approaches are schematized in Figure~\ref{fig:paradigms}.
 
-\begin{figure}[h!]
+\begin{figure}[ht!]
 \centering
 \begin{subfigure}{0.3\textwidth}
     \includegraphics[height=0.5\textheight]{main_figures/intro/fisher_paradigm.png}
@@ -130,12 +122,10 @@ They are also used to correct for population structure in genome-wide associatio
 
 % Note to self: Rewrite this in terms of popgen challenges
 % can maybe get philosophical here
-We are often interested in learning about our data in to understand its large-scale structure, e.g., identifying different cell types or related individuals. Though we have some definitions of distances, we are interested in notions of \textit{similarity} or \textit{nearness}. Topology provides the mathematical machinery for ideas rooted in qualitative geometry\citep{carlsson_topology_2009}. Topological data analysis (TDA) is a set of statistical methods that uses ideas of shape and connectivity to study data\citep{wasserman_topological_2018}. We will focus on applications of manifold learning, non-linear dimensionality reduction, and density clustering.
+We are often interested in learning about our data in to understand its large-scale structure, e.g., identifying different cell types or related individuals. Though we have some definitions of distances, we are interested in notions of \textit{similarity} or \textit{nearness}. Topology provides the mathematical machinery for ideas rooted in qualitative geometry\citep{carlsson_topology_2009}. Topological data analysis (TDA) is a set of statistical methods that uses ideas of shape and connectivity to study data\citep{wasserman_topological_2018}. We will focus on applications of manifold learning, nonlinear dimensionality reduction, and density clustering.
 
 TDA assumes that we observe a sample $X_1, \dots, X_n \sim P$ with $P$ supported on some set $\supp(P) = \mathcal{X} \subseteq \mathbb{R}^d$. 
 In the simplest case of manifold learning, we suppose that $P$ is actually supported on some set $S$ with dimension $r$, where $r < d$ and $S$ is a smooth and compact manifold, and we may estimate $S$. PCA is a special case of linear manifold learning where data are assumed to lie on or near an affine subspace\citep{wasserman_topological_2018}. In cases where there is local nonlinear structure (such as clustering), nonlinear methods of manifold learning are more useful\cite{izenman_introduction_2012}.
-
-In population genetics, we observe samples from, e.g., the distributions of genotypes.
 
 \subsection{\texorpdfstring{$\mathbf{t}$}{f}-distributed stochastic neighbour embedding}
 % the {f} here doesn't do anything, but we need a text character for compilation
@@ -158,19 +148,17 @@ For the low-dimensional representation, we carry out the same process of buildin
 
 $$ \sum_{e \in E} w_{h}(e) \log{\left(\frac{w_{h}(e)}{w_{l}(e)}\right)} + (1 - w_{h}(e)) \log{\left(\frac{1 - w_{h}(e)}{1 - w_{l}(e)}\right)} $$
 
-Though the machinery seems roundabout in its derivation, it allows for reduction of data to an arbitrary number of dimensions and for topological interpretations. The value of $k$ defines the scale of the topology we wish to approximate, with lower values being more local and finer-scale and higher values approximating broader manifold structure. Each chapter of this thesis discusses the uses and parametrizations of UMAP in population genetics: briefly, lower values of $k$ approximate closer relationships, e.g., at a structure as fine-scale as families; higher values of minimum distance facilitate visualization, while lower values facilitate algorithmic cluster detection. Points that appear near each other in low-dimensional space are closely related to one another.
+Though the machinery seems roundabout in its derivation, it allows for reduction of data to an arbitrary number of dimensions and for topological interpretations. The value of $k$ defines the scale of the topology we wish to approximate, with lower values being more local and finer-scale and higher values approximating broader manifold structure. Each chapter of this thesis discusses the uses and parametrizations of UMAP in population genetics: briefly, lower values of $k$ approximate closer relationships, e.g., at a structure as fine-scale as families; higher values of minimum distance facilitate visualization, while lower values facilitate algorithmic cluster detection. Points that appear near each other in low-dimensional space are closely related to one another. UMAP often generates visual clusters---while the clusters themselves can be interpreted, the distances between them are generally not meaningful.
 
 UMAP is the core method of this thesis. In \hyperref[chap:chapter1]{Chapter~1}, we use UMAP in population genetics for the first time, exploring its potential applications thoroughly and compare it to PCA and t-SNE. Having been quickly adopted after our publication, in \hyperref[chap:chapter2]{Chapter~2}, we review its uses in the field and discuss different data inputs and parametrizations. In \hyperref[chap:chapter3]{Chapter~3}, we introduce the use of UMAP for topological stratification of complex biobank data by using it to pre-process data for clustering rather than simply visualization.
 
-``Is it possible to derive low dimensional embedding methods that explicitly preserve topological features of the data? This is an interesting open question.''\citep{wasserman_topological_2018}
-
 \subsection{Clustering}
 
-Clustering in population genetics can be separated into model-based methods, which are common in global ancestry estimation, and distance-based methods, which measure pairwise distances between individuals. Though we use the former in some analyses, \hyperref[chap:chapter3]{Chapter~3} focuses on the latter, specifically density clustering.
+Broadly, clustering is a class of methods that puts similar data points into the same cluster while keeping dissimilar data points in different clusters\citep{ben-david_clustering_2018}. Clustering in population genetics can be separated into model-based methods, which are common in global ancestry estimation, and distance-based methods, which measure pairwise distances between individuals. Though we use the former in some analyses, \hyperref[chap:chapter3]{Chapter~3} focuses on the latter, specifically density clustering.
+
+It can be useful to model populations as $K$ discrete demes, e.g. when modelling admixture, studying population splits and merges, or testing the transferability of GWAS and PGS. Clustering is a natural approach to this problem. A variety of clustering methods have been used in population genetics. These methods often require specifying $K$; though multiple methods have been proposed to estimate $K$ (e.g. \citep{evanno_detecting_2005,verity_estimating_2016}), it does not have a ``correct'' value as genetic data does not fall into natural discrete groups\citep{lawson_tutorial_2018}.
 
 \subsubsection{Model-based clustering}
-
-It can be useful to model populations as $K$ discrete demes, e.g. when modelling admixture, studying population splits and merges, or testing the transferability of GWAS and PGS. Clustering is a natural approach to this problem. Broadly, clustering is a class of methods that puts similar data points into the same cluster while keeping dissimilar data points in different clusters\citep{ben-david_clustering_2018}. A variety of clustering methods have been used in population genetics. These methods often require specifying $K$; though multiple methods have been proposed to estimate $K$ (e.g. \citep{evanno_detecting_2005,verity_estimating_2016}), though $K$ may be useful, it does not have a ``correct'' value as genetic data does not fall into natural discrete groups\citep{lawson_tutorial_2018}.
 
 Model-based clustering assumes that observations are randomly drawn from some parametric model. The first such method used in population genetics was STRUCTURE, in 2000, which assumed that each cluster was defined by some allele frequency; having observed the genotypes $X$, it infers the populations of origin $Z$ and allele frequencies $P$ through Bayesian modelling of $Pr(Z, P|X)$\citep{pritchard_inference_2000}. Each genome is then modelled as a mixture of some $K$ source populations---often presented in literature as a stacked bar graph where each individual is one bar with split ancestry proportions---and termed ``global ancestry estimation''\citep{alexander_fast_2009}. The idea has since evolved into many other methods (e.g. ADMIXTURE\citep{alexander_fast_2009}, FRAPPE\citep{tang_estimation_2005}, sparse non-negative matrix factorization\citep{frichot_fast_2014}, archetypal analysis\citep{gimbernat-mayol_archetypal_2022}) and is an active area of research to handle more complex model assumptions and larger data sets.
 
@@ -180,7 +168,7 @@ One of the most common distance-based algorithms is $K$-means clustering. Develo
 
 \subsubsection{Density clustering}
 
-Owing to the aforementioned deficiencies of $K$-means clustering, we consider other methods. Density clustering finds sets of data with a high density of points; a formal outline can be found in Wasserman's review of TDA\citep{wasserman_topological_2018}. Briefly, assume we observe a sample $X_{1}, \dots , X_{n}$ from some distribution $P$ with density $p$ where $X_{i} \in \mathcal{X} \subseteq \mathbb{R}^d$. For any $\lambda \ge 0$, we define the upper level set $L_{\lambda} = \{x: p(x) > \lambda \}$. The density clusters at level $\lambda$ are denoted by $\mathcal{C}_{\lambda}$ and are the connected components of $L_{\lambda}$. The set of all density clusters is:
+Density clustering finds sets of data with a high density of points; a formal outline can be found in Wasserman's review of TDA\citep{wasserman_topological_2018}. Briefly, assume we observe a sample $X_{1}, \dots , X_{n}$ from some distribution $P$ with density $p$ where $X_{i} \in \mathcal{X} \subseteq \mathbb{R}^d$. For any $\lambda \ge 0$, we define the upper level set $L_{\lambda} = \{x: p(x) > \lambda \}$. The density clusters at level $\lambda$ are denoted by $\mathcal{C}_{\lambda}$ and are the connected components of $L_{\lambda}$. The set of all density clusters is:
 
 $$ \mathcal{C} = \bigcup_{\lambda \ge 0} \mathcal{C}_{\lambda} $$
 
