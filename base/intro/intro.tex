@@ -191,7 +191,9 @@ A hierarchical version (HDBSCAN) that varied the thresholds $\epsilon$ was devel
 
 Biobanks are repositories of biological data. For this thesis, we are concerned with biobanks containing genetic data from humans. Large-scale biobanks are now common, with many having data from hundreds of thousands of participants. The Global Biobank Meta-analysis Initiative, for example, lists $23$ biobanks with genetic and phenotypic data from over $2.2$ million individuals\citep{zhou_global_2022}.
 
-Biobanks are regularly used for studies of demographic history, genetic ancestry, GWAS, and PRS. Their population structure, however, is enormously complex. This is a reflection of many 
+Biobanks are regularly used for studies of demographic history, genetic ancestry, GWAS, and PRS. Their population structure, however, is often enormously complex. Many biobanks are based off of medical cohorts, regional jurisdiction, or volunteer-driven databases for genetic genealogy. Though every biobank is a rich resource, it arrives with its own pitfalls from its sampling methodology.
+
+The results of biobank studies (e.g. GWAS, PRS) are applied to populations, but how these populations are defined is arbitrary and, arguably, archaic. We can use variables like country of birth or ethnic group, but these are not formally related to genetics and, at best, are proxies. Admixed populations are not well represented---PCA coordinates are themselves a proxy for population structure as it related to a phenotype's distribution.
 
 %\subsection{Biobank sampling}
 
