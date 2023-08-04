@@ -78,9 +78,9 @@ g & \sim N(0,\sigma^{2}_{A}\psi) \\
 
 Here, $W$ is the matrix of covariates with associated estimates $\alpha$, $x_{j}$ is a vector of genotypes effect size $\beta_{j}$, $g$ is the random polygenic effect of other SNPs with $\sigma^{2}_{A}$ measuring the phenotype's additive genetic variance and $\psi$ the genetic relatedness matrix, and $\epsilon$ is the regression model residual. To account for multiple testing, the threshold for statistical significance for $\beta_{j}$ is usually set to $10^{-8}$.
 
-Conversely, given a set of estimates $\hat{\beta}$ for each SNP (or each significant SNP), one could construct an estimate of a phenotype as the sum of the estimated effects. For an individual $i$ and for SNPs $j = 1, \dots, p$ we estimate PGS $y = \sum_{j}^{p}x_{j}\hat{\beta_{j}}$. This is the basis of polygenic scoring.
+Conversely, given a set of estimates $\hat{\beta}$ for each SNP (or each significant SNP), one could construct an estimate of a phenotype as the sum of the estimated effects. For an individual $i$ and for SNPs $j = 1, \dots, p$ we estimate the PGS $y = \sum_{j}^{p}x_{j}\hat{\beta_{j}}$. Importantly, PGS have been noted to transfer poorly to populations that are more differentiated from the populations used to estimate the values of $\hat{\beta}$\citep{wang_theoretical_2020}.
 
-Despite significant advances in data collection and methodology, population structure is a persistent confounder of genetic research. If a variant is more common in one population than another, and a measure differs systematically between them for non-genetic reasons (e.g. environmental exposure, cultural differences in diet, etc.), a GWAS would return a spurious correlation\citep{price_principal_2006}. These systematic differences can accrue in downstream applications like PGS\citep{zaidi_demographic_2020}. 
+Despite significant advances in data collection and methodology, population structure is a persistent confounder in GWAS and PGS. If a variant is more common in one population than another, and a measure differs systematically between them for non-genetic reasons (e.g. environmental exposure, cultural differences in diet, etc.), a GWAS would return a spurious correlation\citep{price_principal_2006}. These systematic differences can accrue in downstream applications like PGS\citep{zaidi_demographic_2020}. 
 
 The effects of structure can be pernicious---in 2019 several studies that had found strong selection signals for height were found to likely be the result of structure\citep{berg_reduced_2019}. Even in populations considered to be relatively homogeneous, structure conferred its bias to PGS estimates\citep{kerminen_geographic_2019}. With applications like PGS becoming more common, understanding population structure in biobanks is critical\citep{kaplan_polygenic_2022}.
 
@@ -148,9 +148,9 @@ For the low-dimensional representation, we carry out the same process of buildin
 
 $$ \sum_{e \in E} w_{h}(e) \log{\left(\frac{w_{h}(e)}{w_{l}(e)}\right)} + (1 - w_{h}(e)) \log{\left(\frac{1 - w_{h}(e)}{1 - w_{l}(e)}\right)} $$
 
-Though the machinery seems roundabout in its derivation, it allows for reduction of data to an arbitrary number of dimensions and for topological interpretations. The value of $k$ defines the scale of the topology we wish to approximate, with lower values being more local and finer-scale and higher values approximating broader manifold structure. Each chapter of this thesis discusses the uses and parametrizations of UMAP in population genetics: briefly, lower values of $k$ approximate closer relationships, e.g., at a structure as fine-scale as families; higher values of minimum distance facilitate visualization, while lower values facilitate algorithmic cluster detection. Points that appear near each other in low-dimensional space are closely related to one another. UMAP often generates visual clusters---while the clusters themselves can be interpreted, the distances between them are generally not meaningful.
+This mathematical machinery allows for reduction of data to an arbitrary number of dimensions and for topological interpretations. The value of $k$ defines the scale of the topology we wish to approximate, with lower values being more local and finer-scale and higher values approximating broader manifold structure. Each chapter of this thesis discusses the uses and parametrizations of UMAP in population genetics: briefly, lower values of $k$ approximate closer relationships, e.g., at a structure as fine-scale as families; higher values of minimum distance facilitate visualization, while lower values facilitate algorithmic cluster detection. Points that appear near each other in low-dimensional space are closely related to one another. UMAP often generates visual clusters---while the clusters themselves can be interpreted, the distances between them are generally not meaningful. Importantly, UMAP is a fast and scalable algorithm, capable of handling millions of data points.
 
-UMAP is the core method of this thesis. In \hyperref[chap:chapter1]{Chapter~1}, we use UMAP in population genetics for the first time, exploring its potential applications thoroughly and compare it to PCA and t-SNE. Having been quickly adopted after our publication, in \hyperref[chap:chapter2]{Chapter~2}, we review its uses in the field and discuss different data inputs and parametrizations. In \hyperref[chap:chapter3]{Chapter~3}, we introduce the use of UMAP for topological stratification of complex biobank data by using it to pre-process data for clustering rather than simply visualization.
+UMAP is the core method of this thesis. In \hyperref[chap:chapter1]{Chapter~1}, we use UMAP in population genetics for the first time, exploring its potential applications thoroughly and compare it to PCA and t-SNE. Having been quickly adopted after our publication, in \hyperref[chap:chapter2]{Chapter~2}, we review its uses in the field and discuss different data inputs and parametrizations. In \hyperref[chap:chapter3]{Chapter~3}, we introduce the use of UMAP for topological stratification of complex biobank data by using it to pre-process data for clustering rather than visualization.
 
 \subsection{Clustering}
 
@@ -172,37 +172,28 @@ Density clustering finds sets of data with a high density of points; a formal ou
 
 $$ \mathcal{C} = \bigcup_{\lambda \ge 0} \mathcal{C}_{\lambda} $$
 
-By varying the threshold $\lambda$, level sets $L_{\lambda}$ become nested within each other; that is, if $A, B \in \mathcal{C}$ then $A \subset B$ or $B \subset A$ or $A \cap B = \emptyset$. Thus the set $\mathcal{C}$ can be represented as a tree, and each branch represents a cluster. This approach is useful if we know there is structure in our data but do not know how many clusters exist---if we can find an appropriate threshold for density, we can discover the structure.
+By varying the threshold $\lambda$, level sets $L_{\lambda}$ become nested within each other; that is, if $A, B \in \mathcal{C}$ then $A \subset B$ or $B \subset A$ or $A \cap B = \emptyset$. Thus the set $\mathcal{C}$ can be represented as a tree, and each branch represents a cluster. This approach is useful if we know there is structure in our data but do not know how many clusters exist---if we can find an appropriate threshold for density, we can discover the structure. Unlike other clustering methods, this approach does not necessarily require specifying a number of clusters $K$ in advance---though some algorithms do incorporate $K$, we do not consider them in this thesis.
 
 The first density clustering algorithm was Density Based Spatial Clustering of Applications with Noise (DBSCAN), developed in 1996\citep{ester1996density} and became the basis of many others\citep{khan_dbscan_2014}. DBSCAN formalized the intuition that clusters were spaces that were dense with data, while areas that were relatively sparse were noise. For each point in a cluster, the neighbourhood of a given radius $\epsilon$ must contains at least $m$ points. Any points that meet this criterion, or fall within the neighbourhood, are assigned to clusters, while the rest are deemed noise. However, this requires a global density $\epsilon$ threshold---clusters of variable densities are not considered. 
 
-A hierarchical version (HDBSCAN) that varied the thresholds $\epsilon$ was developed in 2013\citep{campello_density-based_2013}. It required only the minimum points $m$ and optimized across the tree for $\mathcal{C}$, selecting values of $\epsilon$ that led to the highest stability, and defining $\lambda = \frac{1}{\epsilon}$. Now we are presented with a dilemma: what if our data set is large and contains very large clusters \emph{and} very small clusters? Using DBSCAN with its global $\epsilon$ threshold would miss small clusters, while using HDBSCAN with a variable $\epsilon$ with a low minimum points $m$ would break large clusters apart into microclusters, with many points being discarded as noise. This motivated HDBSCAN($\hat{\epsilon}$), a hybrid version that prevents clusters below a certain global threshold from splitting further, which would allow a better representation of the structure of data\citep{malzer_hybrid_2020}.
+A hierarchical version (HDBSCAN) that varied the thresholds $\epsilon$ was developed in 2013\citep{campello_density-based_2013}. It required only the minimum points $m$ and optimized across the tree for $\mathcal{C}$, selecting values of $\epsilon$ that led to the highest stability, and defining $\lambda = \frac{1}{\epsilon}$. Now we are presented with a dilemma: what if our data set is large and contains very large clusters \emph{and} very small clusters? Using DBSCAN with its global $\epsilon$ threshold would miss small clusters, while using HDBSCAN with a variable $\epsilon$ with a low minimum points $m$ would break large clusters apart into microclusters, with many points being discarded as noise. This motivated HDBSCAN($\hat{\epsilon}$), a hybrid version that prevents clusters below a certain global threshold from splitting further, which would allow a better representation of the structure of data\citep{malzer_hybrid_2020}. This latter method is key to \hyperref[chap:chapter3]{Chapter~3}. In particular, we combine it with data pre-processed with UMAP, introduce topological data analysis of biobanks, and demonstrate its utility to the study of modern genetic cohorts.
 
-Stepping back, this last regime describes modern biobank data well. Dense areas in genetic space are those where many individuals are ``close'' to each other; that is, they have similar distributions of genetic variants, representing a similar demographic history. Biobanks generally do not have evenly-balanced populations, particularly when they are constructed using jurisdiction (e.g. a biobank may recruit participants from a country, province, or metropolitan area). 
+%Stepping back, this last regime describes modern biobank data well. Dense areas in genetic space are those where many individuals are ``close'' to each other; that is, they have similar distributions of genetic variants, representing a similar demographic history. Biobanks generally do not have evenly-balanced populations, particularly when they are constructed using jurisdiction (e.g. a biobank may recruit participants from a country, province, or metropolitan area). 
 
 %More explicit details on cluster selection are available in \citep{mcinnes_accelerated_2017} and \citep{malzer_hybrid_2020}, with an outline in \hyperref[appendix:AppendixB]{Appendix~B}.
 
+%What does data \emph{truly} look like?
 
+%- we do UMAP to make our data accessible to hdbscan, we use hdbscan because it has properties that are very nice, also it has probabilistic and topological interpretations
+%- population structure is basically "similarity" and "nearness"
 
-What does data \emph{truly} look like?
+\section{Biobanks}
 
+Biobanks are repositories of biological data. For this thesis, we are concerned with biobanks containing genetic data from humans. Large-scale biobanks are now common, with many having data from hundreds of thousands of participants. The Global Biobank Meta-analysis Initiative, for example, lists $23$ biobanks with genetic and phenotypic data from over $2.2$ million individuals\citep{zhou_global_2022}.
 
-%\citep{mcinnes_topological_2019}
+Biobanks are regularly used for studies of demographic history, genetic ancestry, GWAS, and PRS. Their population structure, however, is enormously complex. This is a reflection of many 
 
-%\citep{mcinnes_accelerated_2017}
-
-%\citep{malzer_hybrid_2020}
-
-
-- we do UMAP to make our data accessible to hdbscan, we use hdbscan because it has properties that are very nice, also it has probabilistic and topological interpretations
-- population structure is basically "similarity" and "nearness"
-
-\citep{malzer_hybrid_2020}
-
-\cite{mcinnes_accelerated_2017}
-
-
-\subsection{Biobank sampling}
+%\subsection{Biobank sampling}
 
 % some principles of visualization?
 
@@ -212,20 +203,6 @@ What does data \emph{truly} look like?
 
 %\subsection{HDBSCAN(\texorpdfstring{$\hat{\epsilon}$}{f})}
 % the {f} here doesn't do anything, but we need a text character for compilation
-
-\section{Data}
-
-This research makes use of data from four biobanks. We focus on genotype data coded as the number of non-reference alleles. Given a set of $L$ SNPs for $N$ individuals, the genotype matrix $G$ is:
-
-%$$
-%G = \begin{bmatrix} 
-%    g_{11} & g_{12} & \dots g_{1L} \\
-%    \vdots & \ddots & \\
-%    g_{N1} &        & g_{NL} 
-%    \end{bmatrix}
-%    
-%\text{ where } g_{ij}\text{ is the number of non-reference alleles for individual } i \text{ at locus } j.
-%$$
 
 \subsection{The 1000 Genomes Project}
 
