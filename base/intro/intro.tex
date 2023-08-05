@@ -56,7 +56,9 @@ where $Var(\pi)$ is the variance in allele frequencies between two populations.
 
 $F_{ST}$ is used as a measure of differentiation between populations. Though it is sometimes described as a pairwise distance between populations, it is not a true mathematical distance as it does not satisfy the triangle equality\citep{arbisser_fst_2020}.
 
-%\subsubsection{Wright-Fisher model}
+\subsubsection{Linkage disequilibrium}
+
+\subsubsection{Identity-by-descent}
 
 \subsection{Genome-wide association studies and polygenic scores}
 
@@ -188,16 +190,45 @@ A hierarchical version (HDBSCAN) that varied the thresholds $\epsilon$ was devel
 %- population structure is basically "similarity" and "nearness"
 
 \section{Biobanks}
+% \hyperref[chap:chapter1]{Chapter~1}
+Biobanks are repositories of biological data; we are concerned with those containing genetic data from humans. Large-scale biobanks are now common, with many having data from hundreds of thousands of participants. The Global Biobank Meta-analysis Initiative (GBMI) lists $23$ biobanks with genetic and phenotypic data from over $2.2$ million individuals in total\citep{zhou_global_2022}. These biobanks are commonly used for studying genetic ancestry, demographic history, and biomedical research such as GWAS and PGS.
 
-Biobanks are repositories of biological data. For this thesis, we are concerned with biobanks containing genetic data from humans. Large-scale biobanks are now common, with many having data from hundreds of thousands of participants. The Global Biobank Meta-analysis Initiative, for example, lists $23$ biobanks with genetic and phenotypic data from over $2.2$ million individuals\citep{zhou_global_2022}.
+The sampling methodologies of biobanks vary widely. The 1000 Genomes Project (1KGP)\citep{global_2015} was designed to evenly sample a diverse representation of populations from around the world. Consequently, its population structure closely (but not fully!) aligns with its sampling structure. We study its population structure throughout this thesis, finding previously undetected clusters of structure in \hyperref[chap:chapter1]{Chapter~1}, explore the concept of connectivity in \hyperref[chap:chapter2]{Chapter~2}, and automatically extract clusters in \hyperref[chap:chapter3]{Chapter~3}. As the data are publicly available, there are repositories of our code and data provided for each chapter.
 
-Biobanks are regularly used for studies of demographic history, genetic ancestry, GWAS, and PRS. Their population structure, however, is often enormously complex. Many biobanks are based off of medical cohorts, regional jurisdiction, or volunteer-driven databases for genetic genealogy. Though every biobank is a rich resource, it arrives with its own pitfalls from its sampling methodology.
+Public health biobanks are commonly sampled from some combination of political jurisdiction and existing health care services. The UK biobank (UKB) and CARTaGENE (CaG), for example, recruit volunteers who are registered with their respective health care administrations within certain geographical regions and political boundaries\citep{sudlow_uk_2015}\citep{awadalla_cohort_2013}. Such administrative records are convenient sampling frames, since they tend to have contact information, associated data such as electronic health records, and established epidemiological methodologies. The wealth of health data, particularly longitudinal data, makes these biobanks invaluable for health care research. 
+
+Their population structure, however, is extraordinarily complex and not known in advance. The demographic history of every region influences its population structure; even limiting a biobank to one city requires an in-depth knowledge of its history: indigenous structure, migrations, admixture, 
+
+a panacea can quickly transform into a witch's brew of statistical biases
+
+there is a witch's brew of 
+
+%There are many layers of bias [make a figure here?]
+
+The combination of 
+
+\citep{alten_reweighting_2022})
+
+\citep{martin_human_2017}
+
+Pervasive selection bias in the UKB
+
+witch's brew
+
+%sex-differential participation bias in 23andme data \citep{pirastu_genetic_2021}
+
+ Casting a wide net creates rich databases that can be combined with established epidemiology methodology (e.g. from previous studies of the populations), but 
+
+Biobanks are regularly used for studies of demographic history, genetic ancestry, GWAS, and PGS. 
+
+Their population structure, however, is often enormously complex. Many biobanks are based off of medical cohorts, regional jurisdiction, or volunteer-driven databases for genetic genealogy. Though every biobank is a rich resource, it arrives with its own pitfalls from its sampling methodology.
 
 The results of biobank studies (e.g. GWAS, PRS) are applied to populations, but how these populations are defined is arbitrary and, arguably, archaic. We can use variables like country of birth or ethnic group, but these are not formally related to genetics and, at best, are proxies. Admixed populations are not well represented---PCA coordinates are themselves a proxy for population structure as it related to a phenotype's distribution.
 
-%\subsection{Biobank sampling}
+% Maybe mention in disco?
+%Consumer genetic ancestry databases, such as AncestryDNA and 23andMe, contain tens of millions of records, but are fully volunteer-based\citep{mathieson_what_2020}. Though their sample sizes are massive, there is undoubtedly significant selection bias, and the population structure cannot be known in advance.
 
-% some principles of visualization?
+%23andMe is using UMAP for reference panels\citep{oconnell_population}
 
 % unsupervised learning?
 
