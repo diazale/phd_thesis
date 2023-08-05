@@ -197,33 +197,24 @@ The sampling methodologies of biobanks vary widely. The 1000 Genomes Project (1K
 
 Public health biobanks are commonly sampled from some combination of political jurisdiction and existing health care services. The UK biobank (UKB) and CARTaGENE (CaG), for example, recruit volunteers who are registered with their respective health care administrations within certain geographical regions and political boundaries\citep{sudlow_uk_2015}\citep{awadalla_cohort_2013}. Such administrative records are convenient sampling frames, since they tend to have contact information, associated data such as electronic health records, and established epidemiological methodologies. The wealth of health data, particularly longitudinal data, makes these biobanks invaluable for health care research. 
 
-Their population structure, however, is extraordinarily complex and not known in advance. The demographic history of every region influences its population structure; even limiting a biobank to one city requires an in-depth knowledge of its history: indigenous structure, migrations, admixture, 
-
-a panacea can quickly transform into a witch's brew of statistical biases
-
-there is a witch's brew of 
+Their population structure, however, is extraordinarily complex and not known in advance. Even limiting a biobank to one city requires in-depth knowledge of its regional history, its migrations, its cultures, its physical and social environments, etc. Without a means to understand population structure and how it relates to the aforementioned, biobanks can transform from a panacea into a witch's brew of statistical biases. In \hyperref[chap:chapter1]{Chapter~1} and \hyperref[chap:chapter3]{Chapter~3}, we study the relationships between population structure and these variables.
 
 %There are many layers of bias [make a figure here?]
 
-The combination of 
+%The combination of 
 
-\citep{alten_reweighting_2022})
+%\citep{alten_reweighting_2022})
 
-\citep{martin_human_2017}
-
-Pervasive selection bias in the UKB
-
-witch's brew
 
 %sex-differential participation bias in 23andme data \citep{pirastu_genetic_2021}
 
- Casting a wide net creates rich databases that can be combined with established epidemiology methodology (e.g. from previous studies of the populations), but 
+% Casting a wide net creates rich databases that can be combined with established epidemiology methodology (e.g. from previous studies of the populations), but 
 
-Biobanks are regularly used for studies of demographic history, genetic ancestry, GWAS, and PGS. 
+%Biobanks are regularly used for studies of demographic history, genetic ancestry, GWAS, and PGS. 
 
-Their population structure, however, is often enormously complex. Many biobanks are based off of medical cohorts, regional jurisdiction, or volunteer-driven databases for genetic genealogy. Though every biobank is a rich resource, it arrives with its own pitfalls from its sampling methodology.
+%Their population structure, however, is often enormously complex. Many biobanks are based off of medical cohorts, regional jurisdiction, or volunteer-driven databases for genetic genealogy. Though every biobank is a rich resource, it arrives with its own pitfalls from its sampling methodology.
 
-The results of biobank studies (e.g. GWAS, PRS) are applied to populations, but how these populations are defined is arbitrary and, arguably, archaic. We can use variables like country of birth or ethnic group, but these are not formally related to genetics and, at best, are proxies. Admixed populations are not well represented---PCA coordinates are themselves a proxy for population structure as it related to a phenotype's distribution.
+%The results of biobank studies (e.g. GWAS, PRS) are applied to populations, but how these populations are defined is arbitrary and, arguably, archaic. We can use variables like country of birth or ethnic group, but these are not formally related to genetics and, at best, are proxies. Admixed populations are not well represented---PCA coordinates are themselves a proxy for population structure as it related to a phenotype's distribution.
 
 % Maybe mention in disco?
 %Consumer genetic ancestry databases, such as AncestryDNA and 23andMe, contain tens of millions of records, but are fully volunteer-based\citep{mathieson_what_2020}. Though their sample sizes are massive, there is undoubtedly significant selection bias, and the population structure cannot be known in advance.
@@ -237,30 +228,26 @@ The results of biobank studies (e.g. GWAS, PRS) are applied to populations, but 
 %\subsection{HDBSCAN(\texorpdfstring{$\hat{\epsilon}$}{f})}
 % the {f} here doesn't do anything, but we need a text character for compilation
 
-\subsection{The 1000 Genomes Project}
+\subsection{Data sources}
+
+We make use of four biobanks in this research.
+
+\subsubsection{The 1000 Genomes Project}
 
 The 1000 Genomes Project (1KGP) is a publicly available data set of genetic data sampled from many populations from around the world\citep{global_2015}. We used $3,450$ genotypes from the Affy 6.0 platform sampled from $26$  populations. The populations sizes are roughly similar, with between $104$ to $183$ in each group.
 
-\subsection{CARTaGENE}
+\subsubsection{CARTaGENE}
 
 CARTaGENE (CaG) is a cohort of residents of Qu\'{e}bec with genotype data for $29,337$ participants, who were recruited using registration data from the R\'{e}gie de l’assurance maladie du Qu\'{e}bec (RAMQ), the provincial health authority\citep{awadalla_cohort_2013}. In addition to genetic data, it contains questionnaire health data and demographic information such as country of birth and ethnicity.
 
-\subsection{Health and Retirement Study}
+\subsubsection{Health and Retirement Study}
 
 The Health and Retirement Study (HRS) is a cohort of retired American individuals\citep{juster_overview_1995}. We used genotype data from 12,454 individuals from the Health and Retirement Study (HRS), genotyped on the Illumina Human Omni 2.5M platform. The database contains basic demographic data such as age, US Census Bureau region of birth, and race.
 
-\subsection{UK biobank}
+\subsubsection{UK biobank}
 
 The UK biobank (UKB) is a cohort of individuals living in the United Kingdom who were recruited by inviting those registered with the National Health Service (NHS)\citep{sudlow_uk_2015}. It contains the genotypes from $488,377$ participants as well as detailed health data, phenotypic measures, geographic coordinates, and sociodemographic information such as ethnic background.
 
-\section{Rationale and objectives}
+\section{Rationale of research}
 
-
-
-%\section{Methods}
-
-%\subsection{PCA}
-
-%\subsection{UMAP}
-
-%\subsection{Genomic tools}
+This thesis will introduce topological data analysis to population genetics. We will use dimensionality reduction and clustering to characterize population structure in a variety of biobanks, focusing on using UMAP and HDBSCAN($\hat{\epsilon}$). We provide a framework for a new methodology for population genetics and will demonstrate its utility to the field. We relate population structure to other collected data in biobanks, such as population labels, phenotypic information, geographic coordinates, demographic history, genetic ancestry, and other variables.
