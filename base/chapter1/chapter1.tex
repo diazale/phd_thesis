@@ -133,6 +133,75 @@ The largest cluster in \ref{fig:fig3}B consists of the White British and Irish p
 
 \ref{fig:fig4} presents the UMAP projection from \ref{fig:fig3}B coloured instead by geographical coordinates from the Ordnance Survey National Grid (OSGB1936), with distances defined as a north or east position relative to the Isles of Scilly. Geographic clusters form in the large White British grouping, reflecting the relationship between genetic and geographic distance, as has been observed in Europe and British-wide data\citep{novembre2008europe,leslie2015fine}. \ref{fig:fig3}B shows that the admixed individuals have UMAP coordinates next to White British individuals residing in the South East of the UK, where London is located (see also \ref{fig:supp_london_distance}, where individuals are coloured by distance from London). This likely reflects the high migration levels to the city and surrounding area: the UMAP projection attempted to preserve both the genetic similarity among admixed individuals and the relatedness with White British individuals in cosmopolitan areas. 
 
+The detailed shape of extended clusters is not stable as we vary the number of PCs included, but the patterns mentioned above are preserved. \ref{fig:supp_montage_ukbb_eth}, \ref{fig:supp_montage_ukbb_ns}, and \ref{fig:supp_montage_ukbb_ew} show UMAP plots using the top $40$ PCs from the UKBB.
+
+\clearpage
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{\columnwidth}
+%    \includegraphics[width=0.8\columnwidth]{images/UKBB_UMAP_PC10_NN15_MD05_2018328174511_geo_permuted_10nn_sd50000_base50000_201883118582.pdf}
+    \includegraphics[width=0.8\columnwidth]{placeholder.png}
+    \caption{}
+    \label{fig:umap_ukbb_geo_osgb}
+    \end{subfigure}
+      \caption[UMAP captures relationships between population structure and geography]{\textbf{UMAP captures relationships between population structure and geography.} Each individual is coloured by their geographical coordinates of residence. Coordinates follow the UKBB's OSGB1936 geographic grid system and represent distance from the Isles of Scilly, which lie southwest of Great Britain. The left image colours individuals by their north-south (``northing'') coordinates, and the right image colours them by their east-west (``easting'') coordinates. Adding more components creates finer clusters  (\ref{fig:supp_montage_ukbb_ns} and \ref{fig:supp_montage_ukbb_ew}). Northing values were truncated between $100$km and $700$km, and easting values were truncated between $200$km and $600$km.}
+\label{fig:fig4}
+\end{figure}
+
+\clearpage
+
+\begin{figure}[h!]
+  \centering
+  \begin{subfigure}[b]{0.4\linewidth}
+    %\includegraphics[width=\linewidth]{images/UKBB_mapsInMaps_2D3_permute50.jpg}
+        \includegraphics[width=\columnwidth]{placeholder.png}
+    \caption{}
+    \label{fig:umap_ukbb_geo_map}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.4\linewidth}
+%    \includegraphics[width=\linewidth]{images/meanWorldMap.jpg}
+    \includegraphics[width=\columnwidth]{placeholder.png}
+    \caption{}
+  \label{fig:umap_world_map}
+  \end{subfigure}
+  \caption[Maps coloured by 3D UMAP projections]{\textbf{Maps coloured by 3D UMAP projections of the top 20 principal components of the UKBB.} Each individual is assigned a 3D RGB vector based on 3D UMAP coordinates (a flattened projection is in the top right of panel A). Individuals who are closer to each other in the projection will be closer in colour in the maps. More details on colouring, as well as randomization of points to protect participant privacy, are available in the materials and methods. \textbf{(a)} Each point is an individual placed based on where they live. Patterns in genetic similarity are visible in Scotland, South England, North and South Wales, the East and West Midlands, and major urban centres. \textbf{(b)} Geographic distribution of UMAP coordinates. Using the country of birth of individuals in the UKBB, we colour countries by the closeness in 3D UMAP space of those born there. Broad patterns of similarity appear in East Asia, South Asia, North African and the Middle East, West Africa, and South America. Differences between neighbouring countries can reflect both ancient population structure and recent differences in migration history. Evidence of migrations related to colonialism are visible with, e.g., European ancestry in South Africa and South Asian ancestry in Kenya and Tanzania. Because of the large number of White British individuals born abroad, to avoid skewing the colour scale they were not included unless they were born in the UK, Europe, Australia, Canada, or the United States, where UKBB participants already tended to have European ancestry. Zoomed maps of East Asia, the Caribbean, and Europe are available in \ref{fig:supp_umap_ukbb_asia}, \ref{fig:supp_umap_ukbb_car}, and \ref{fig:supp_umap_ukbb_eur}, respectively.}
+  \label{fig:fig5}
+\end{figure}
+
+\clearpage
+
+As an alternate visualization of geography and genetic diversity, we performed a 3D UMAP projection and converted the UMAP coordinates into RGB values, allowing us to plot individuals on a map of Great Britain, emphasizing both spatial gradients of genetic relatedness and increased diversity in urban centers (\ref{fig:fig5}A). The geographical patterns outside major urban centers are similar to those reported in~\citep{leslie2015fine} using the haplotype-based CHROMOPAINTER on British individuals whose grandparents lived nearby. Using data about country of birth, we performed a similar analysis of a world map in \ref{fig:fig5}B, revealing subtle regional variation around the world. 
+
+Similarly to UMAP, t-SNE applied to the UKBB data both displays diversity within the "White British" population and identifies clusters among other groups. However, it has three drawbacks: it is much slower, requiring 2.26 hours for its first thousand iterations alone on 10 principal components against UMAP's 14 minutes; it fails to find a global optimum, which results in a scattering of individuals and groups that are not stable across independent runs; and it does not identify continuity between different continental groups resulting from admixture (fig~\ref{fig:supp_ukbb_tsne}). 
+
+\subsection{Identifying patterns in phenotype variation related to genetic population structure} 
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{\columnwidth}
+%    \includegraphics[width=0.8\columnwidth]{images/UKBB_UMAP_PC10_NN15_MD05_2018328174511_geo_permuted_10nn_sd50000_base50000_201883118582.pdf}
+    \includegraphics[width=0.8\columnwidth]{placeholder.png}
+    \caption{}
+    \label{fig:umap_height_female}
+    \end{subfigure}
+      \caption[UMAP captures relationships between population structure and phenotype heterogeneity.]{\textbf{UMAP captures relationships between population structure and phenotype heterogeneity.} Females from the UMAP projection in \ref{fig:fig3}B, coloured by age-adjusted difference from mean population height (left) and leukocyte counts (right). Individuals with missing data were excluded. To protect participant privacy, data in these images has been randomized as explained in the materials and methods section.}
+\label{fig:fig6}
+\end{figure}
+
+Covariates such as height and leukocyte count (\ref{fig:fig6}) and autoimmune and asthma-related measures (\ref{fig:supp_ukbb_basophill_f} to \ref{fig:supp_ukbb_neutrophill_m}) correlate strongly with both discrete and continuous population structure. Several populations in \ref{fig:fig6}, including South Asian, East Asian, African, and others have noticeably lower-than-average heights. More subtle patterns are also visible: the area of the projection in \ref{fig:fig3}B with the cluster of White Irish people appears more blue than the main body of White British individuals. To quantify and statistically test these qualitative observations, we performed an unpaired two sample t-test of self-identified White Irish and White British individuals and found British males taller on average by 0.846cm (p-value $2.10\times 10^{-23}$) and British females by 0.763cm (p-value $3.65\times 10^{-23}$) (see \ref{fig:supp_box_height_f} and \ref{fig:supp_box_height_m} for boxplots). Height differences between Irish and British populations have been previously observed but the direction of the difference is not consistent\citep{robinson2015population,komlos1994stature}.
+
+In clinical settings, baseline Forced Expiratory Volume in 1 second (FEV1) is determined via equations that include ethnicity or race\citep{quanjer2012multi}, but studies in several populations have shown that there is considerable variation based on ancestry, even within self-defined ethnicity\citep{ortega2015effect}. \ref{fig:supp_ukbb_fev_f} and \ref{fig:supp_ukbb_fev_m} show strong correlations with genetic clustering: certain populations---South Asian, African, and Caribbean---have considerably lower measurements on average (see \ref{fig:supp_box_fev_f} and \ref{fig:supp_box_fev_m} for boxplots and p-values). 
+ 
+Notably, there appears to be a juncture in the admixed population, highlighted in \ref{fig:supp_comparison_fev_afr}, where the distribution of FEV1 changes. This roughly corresponds to the transition from Black African/Caribbean individuals to those who identified having mixed backgrounds. Boxplots and statistical testing suggest that relative to White British populations, FEV1 values are significantly lower for Black African and Black Caribbean populations, but not for White and Black Caribbean and White and Black African populations (\ref{fig:supp_box_fev_f} and \ref{fig:supp_box_fev_m}).
+
+\ref{fig:supp_comparison_fev_chi_eur} further suggests a difference in FEV1 between those who self-identified as Chinese and a nearby cluster enriched in individuals born in Japan; to our knowledge there have not been studies into differences in FEV1 between these populations. To focus on individuals of Asian ancestry (rather than, e.g., individuals born in Japan but who have European ancestry), we first selected the individuals whose UMAP coordinates were near the Chinese cluster. We then focused on individuals born in Japan, Malaysia, and the Philippines as well as the self-identified Chinese population. These four groups are mutually exclusive and are shown in \ref{fig:supp_fev_test_pops}. After adjusting for age, age$^2$, height, and sex, an unpaired two-sample t-test shows those born in Japan have a higher mean FEV1 than Chinese individuals by 0.224 (p-value $2.787\times 10^{-15}$). By sex, there is a difference of 0.213 (p-value $5.4\times 10^{-13}$) among females and 0.317 (p-value $5.1\times 10^{-4}$) among males, though there are considerably fewer males in the sample (distributions presented in \ref{fig:supp_fev_ridgeplots}). For comparison, the adjusted difference between self-identified African and British individuals in the UKBB is 0.762 (p-value $2.2\times 10^{-16}$).
+
+\subsection{Comparing t-SNE and UMAP}
+Identifying the best dimension reduction technique is challenging, both because the ``best'' representation depends on context, and because convergence issues may mean that a good theoretical model for dimensional reduction might perform poorly because of challenges in numerical optimization. To assess whether the relatively poor performance of t-SNE could be due to convergence rather than a flawed model, we used UMAP to preprocess the UKBB data and provide a starting point to a standard t-SNE implementation. This led to representations that were objectively better (according to the t-SNE metric) than the default t-SNE implementation (\ref{fig:supp_tsne_umap_compare_ukbb_graph}). Yet, these representations were much less detailed than the UMAP embedding provided as a starting point (\ref{fig:supp_tsne_umap_compare_ukbb}).  Given these results, we recommend UMAP over t-SNE for large and diverse genomic datasets.
+
+
+
 \clearpage
 
 \section{Supporting information}
