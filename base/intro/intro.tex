@@ -33,7 +33,7 @@ The distribution of genetic variation is not fully random---genetic differentiat
 
 Population structure in humans is universal, complex, and multifactorial, resulting from all of the aforementioned causes, and presents as both continuous and discrete\citep{peter_geometric_2022}. Some phenomena unique to humans, such as language\citep{barbujani_zones_1990}, culture\citep{campbell_evolution_2010}, or assortative mating on (e.g.) educational attainment\citep{robinson_genetic_2017} also contribute to population structure. Inferring deep population structure is challenging because of a lack of data and fossil records and the complexity of the required models. Most present-day population structure is relatively recent, having arisen within the last $100,000$ years; prior structure may be best explained by repeated divergence, isolation, and merger between weakly-differentiated \textit{Homo sapiens} populations, though some combination of multiple populations and archaic introgression is also possible\citep{ragsdale_weakly_2023}.
 
-\subsubsection{Hardy-Weinberg Equilibrium}
+\subsubsection{Hardy-Weinberg principle}
 
 The Hardy-Weinberg model was outlined in 1908. It is used to model genotype frequencies, given several simplifying assumptions\citep{hartl2007principles_2}. If we have a diploid genome with alleles $A_{1}$ and $A_{2}$ that occur at respective frequencies $p$ and $q$, they follow the binomial distribution and are expected to naturally occur at rates
 \begin{spacing}{1}
@@ -56,9 +56,13 @@ where $Var(\pi)$ is the variance in allele frequencies between two populations.
 
 $F_{ST}$ is used as a measure of differentiation between populations. Though it is sometimes described as a pairwise distance between populations, it is not a true mathematical distance as it does not satisfy the triangle equality\citep{arbisser_fst_2020}.
 
-\subsubsection{Linkage disequilibrium}
+\subsubsection{Wright-Fisher model}
 
-\subsubsection{Identity-by-descent}
+The Wright-Fisher model is a forward simulation of random genetic drift\citep{hartl2007principles_3}. It assumes a fixed population size of $N$ and discrete non-overlapping generations, where individuals from generation $k+1$ draw their alleles at random from generation $k$. It is a simple foundational approach that can be modified to allow for forces like selection, mutation, etc. The alleles follow a binomial distribution with parameters $2N$ and $p$, where $p$ is the proportion of individuals with an allele in the previous generation.
+
+\subsubsection{Coalescent}
+
+The trajectory of $N$ loci can be modelled backwards using the coalescent approach\citep{hartl2007principles_3}. For large N, the probability that two branches coalesce at time t is exponentially distributed with mean N. To incorporate recombination, the problem is formulated as an Ancestral Recombination Graph (ARG) where nodes in the tree are events (either common ancestors or recombinations). This approach scaled poorly, leading to the development of the sequentially Markov coalescent (SMC) approximation where observed data are dependent on underlying sequence data and are modelled as a hidden Markov Model (HMM). There have been considerable improvements in computational approaches for coalescent models and it is an active area of research\citep{kelleher2019inferring}\citep{yc2022evaluation}\citep{zhang2023biobank}.
 
 \subsection{Genome-wide association studies and polygenic scores}
 
