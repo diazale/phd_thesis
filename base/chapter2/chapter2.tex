@@ -38,7 +38,7 @@ Data cleaning, including LD thinning, is important when performing UMAP. Certain
   \centering
     %\includegraphics[width=\linewidth]{external_images/umap_hla_comparison_highlighted.jpg}
         \includegraphics[width=0.8\linewidth]{placeholder.png}
-  \caption[UMAP with and without HLA regions filtered]{UMAP with (left) and without (right) HLA regions used on the Genizon database. The cluster in the dotted lines disappears when filtering for HLA and linkage disequilibrium.}
+  \caption[UMAP with and without HLA regions filtered]{\testbf{UMAP with (left) and without (right) HLA regions used on the Genizon database.} The cluster in the dotted lines disappears when filtering for HLA and linkage disequilibrium.}
   \label{fig:HLA}
 \end{figure}
 
@@ -62,7 +62,7 @@ Comparing PCA and UMAP on the 1000GP and UKB datasets shows how the sampling sch
     \caption{}
     \label{fig:UMAP}
   \end{subfigure}
-  \caption[PCA compared to UMAP of the 1KGP]{Visualizations of data from the 1000GP. The first two principal components (left) versus a two-dimensional UMAP embedding (right).}
+  \caption[PCA compared to UMAP of the 1KGP]{\textbf{Visualizations of data from the 1000GP.} The first two principal components (left) versus a two-dimensional UMAP embedding (right).}
   \label{fig:PCA_and_UMAP}
 \end{figure}
 
@@ -72,13 +72,13 @@ Comparing PCA and UMAP on the 1000GP and UKB datasets shows how the sampling sch
   \centering
 %    \includegraphics[width=\linewidth]{code/ukb/images/ukbb_montage.jpeg}
     \includegraphics[width=0.8\linewidth]{placeholder.png}
-  \caption[PCA vs UMAP of the UKB]{PCA (left) and UMAP (right) projections of the UKB data, coloured by self-identified ethnic background. Unlike PCA, UMAP focuses on preserving local relationships and emphasizes fine-scale patterns in data. Groups in the UMAP projection are less compressed showing, for example, the relative size of the British and Irish populations in the UKB, alongside populations of other ancestries, while simultaneously showing the population structure between and within groups.}
+  \caption[PCA compared to UMAP of the UKB]{\textbf{PCA (left) and UMAP (right) projections of the UKB data, coloured by self-identified ethnic background.} Unlike PCA, UMAP focuses on preserving local relationships and emphasizes fine-scale patterns in data. Groups in the UMAP projection are less compressed showing, for example, the relative size of the British and Irish populations in the UKB, alongside populations of other ancestries, while simultaneously showing the population structure between and within groups.}
   \label{fig:UKB}
 \end{figure}
 
 \clearpage
 
-Since its strength is in revealing fine-scale population structure, UMAP is well-suited to data with a high number of significant PCs, and can also extract population structure signal from the collection of high-order PCs. \citep{diaz-papkovich_umap_2019}.  Figures~\ref{fig:gnomAD_UMAP} and \ref{fig:BBJ_UMAP} visualize, respectively, the Genome Aggregation Database (gnomAD v3) from the Broad Institute\citep{karczewski_mutational_2020} and Biobank Japan (BBJ)\citep{nagai2017overview}\citep{sakaue_dimensionality_2020}, each of which contains over $100,000$ individuals. When applied to ethnically diverse groups such as the UKB, Bio\textit{Me}\citep{belbin_towards_2019} and the Million Veterans Program (MVP) \citep{hunter-zinck_genotyping_2020}, UMAP tends to highlight groups with different international migration and admixture histories. In relatively more homogeneous populations such as BBJ, it highlights clusters related to geographic features such as island populations.
+Since its strength is in revealing fine-scale population structure, UMAP is well-suited to data with a high number of significant PCs, and can also extract population structure signal from the collection of high-order PCs. \citep{diaz-papkovich_umap_2019}.  Figures~\ref{fig:gnomAD_UMAP} and \ref{fig:BBJ_UMAP} visualize, respectively, the Genome Aggregation Database (gnomAD v3) from the Broad Institute\citep{karczewski_mutational_2020} and Biobank Japan (BBJ)\citep{nagai2017overview,sakaue_dimensionality_2020}, each of which contains over $100,000$ individuals. When applied to ethnically diverse groups such as the UKB, Bio\textit{Me}\citep{belbin_towards_2019} and the Million Veterans Program (MVP) \citep{hunter-zinck_genotyping_2020}, UMAP tends to highlight groups with different international migration and admixture histories. In relatively more homogeneous populations such as BBJ, it highlights clusters related to geographic features such as island populations.
 
 \clearpage
 
@@ -87,7 +87,7 @@ Since its strength is in revealing fine-scale population structure, UMAP is well
   \begin{subfigure}[b]{0.4\linewidth}
 %    \includegraphics[width=\linewidth]{external_images/gnomAD_umap.jpeg}
     \includegraphics[width=\linewidth]{placeholder.png}
-    \caption{gnomADv3 data visualized using UMAP.}
+    \caption{\textbf{gnomADv3 data visualized using UMAP.}}
     \label{fig:gnomAD_UMAP}
   \end{subfigure}
 
@@ -97,7 +97,7 @@ Since its strength is in revealing fine-scale population structure, UMAP is well
     \caption{BBJ data visualized using UMAP.}
     \label{fig:BBJ_UMAP}
   \end{subfigure}
-  \caption[UMAP of gnomAD and Biobank Japan]{The Genome Aggregation Database (gnomAD, left) and Biobank Japan (BBJ, right) visualized using UMAP. UMAP illustrates the ancestral diversity of gnomAD, showing many the relationships between populations on continental and subcontinental levels. For the relatively more homogeneous BBJ data, it splits data geographically into the large mainland cluster (consisting of Hokkaido, Tohoku, Kanto-Koshinetsu, Chubu-Hokuriku, Kinki, and Kyushu regions), and smaller non-mainland clusters. The gnomAD image is reproduced from \citep{karczewski_mutational_2020}, and the BBJ image is reproduced from \citep{sakaue_dimensionality_2020}.
+  \caption[UMAP of gnomAD and Biobank Japan]{\textbf{The Genome Aggregation Database (gnomAD, top) and Biobank Japan (BBJ, bottom) visualized using UMAP.} UMAP illustrates the ancestral diversity of gnomAD, showing many the relationships between populations on continental and subcontinental levels. For the relatively more homogeneous BBJ data, it splits data geographically into the large mainland cluster (consisting of Hokkaido, Tohoku, Kanto-Koshinetsu, Chubu-Hokuriku, Kinki, and Kyushu regions), and smaller non-mainland clusters. The gnomAD image is reproduced from \citep{karczewski_mutational_2020}, and the BBJ image is reproduced from \citep{sakaue_dimensionality_2020}.
   }
   \label{fig:external_UMAP}
 \end{figure}
@@ -148,7 +148,7 @@ The reference implementation of UMAP is regularly updated with new features\cite
     \caption{Connectivity map of 200 neighbours.}
     \label{fig:UMAP_high_NN_connectivity}
   \end{subfigure}
-  \caption[UMAP parametrization impacts cluster connectivity]{UMAP projection of the same genotype data from the 1000GP comparing parametrization with a small (top) and large (bottom) number of nearest neighbours. Left images are coloured by population; right images are the same points but with the simplicial complex drawn. When adding more neighbours, subclusters become less separated, as with the LWK population, for example. Looking at the connectivity maps, we see new connections between continental groups, such as the Central/South American clusters and East Asian clusters. Darker lines indicate that individuals are closer to each other in genotype space.}
+  \caption[UMAP parametrization changes the connectivity of points]{\textbf{UMAP projection of the same genotype data from the 1000GP comparing parametrization with a small (top) and large (bottom) number of nearest neighbours.} Left images are coloured by population; right images are the same points but with the simplicial complex drawn. When adding more neighbours, subclusters become less separated, as with the LWK population, for example. Looking at the connectivity maps, we see new connections between continental groups, such as the Central/South American clusters and East Asian clusters. Darker lines indicate that individuals are closer to each other in genotype space.}
   \label{fig:UMAP_connectivity}
 \end{figure}
 
@@ -158,4 +158,4 @@ The reference implementation of UMAP is regularly updated with new features\cite
 With its effective performance and widespread use in under two years, UMAP shows considerable promise as part of the toolbox of a population geneticist, especially in the case of large cohorts. Beyond its capacity to visualize data, it holds promise for downstream methods such as clustering, correction for fine-scale population structure in GWAS and PGS, and identifying unique demographic histories. We anticipate that UMAP and/or related methods of dimensionality reduction will continue to find applications in the field, bolstering our exploration and understanding of human genomic data and the study of complex polygenic traits.
 
 \section{Materials and methods}
-All code used to process 1000GP data and generate images is available at \url{https://github.com/diazale/umap_review}. We used genotype data from $3,450$ individuals from the 1000GP using Affy 6.0 genotyping\citep{10002015global}. Genotype data from the 1000GP is available at \url{http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/supporting/hd_genotype_chip/} and \url{http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/}. The Genizon cohort is comprised of $7,843$ genotyped individuals from Quebec. The genotype data from this cohort was compiled from 4 different chips (HumanHap375, HumanHap550, Illumina1M and Human610-Quad). The missing data from the merging of these datasets was imputed using the Michigan Imputation Server.  The UKB provides genotype data and principal components on $488,377$ individuals. Visualizations were done with matplotlib\citep{Hunter2007} and PCA was done using sklearn\citep{scikit-learn}. 
+All code used to process 1000GP data and generate images is available at \url{https://github.com/diazale/umap_review}. We used genotype data from $3,450$ individuals from the 1000GP using Affy 6.0 genotyping\citep{global_2015}. Genotype data from the 1000GP is available at \url{http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/supporting/hd_genotype_chip/} and \url{http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/}. The Genizon cohort is comprised of $7,843$ genotyped individuals from Quebec. The genotype data from this cohort was compiled from 4 different chips (HumanHap375, HumanHap550, Illumina1M and Human610-Quad). The missing data from the merging of these datasets was imputed using the Michigan Imputation Server.  The UKB provides genotype data and principal components on $488,377$ individuals. Visualizations were done with matplotlib\citep{Hunter2007} and PCA was done using sklearn\citep{scikit-learn}. 
