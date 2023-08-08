@@ -1,19 +1,50 @@
-We have prese
+We have presented a method of nonlinear dimensionality reduction that is compatible with the scale and composition of modern biobanks. With UMAP and HDBSCAN($\hat{\epsilon}$) we have uncovered a wide variety of patterns of fine-scale population structure in every biobank studied. Since the publication of \hyperref[chap:chapter1]{Chapter~1} , UMAP has become a standard method for visualization and exploratory data analysis in population genetics. Given the demand for cluster extraction noted in \hyperref[chap:chapter3]{Chapter~3}, it is possible that HDBSCAN($\hat{\epsilon}$)---or some other density clustering method---could see similar adoption.
 
-We have presented a method of nonlinear dimensionality reduction that is compatible with scale and composition of modern biobanks. 
+The timing of UMAP coincides fortuitously with the growth of biobanks and the genomic revolution. Writing in his review of TDA in 2018, Wasserman asked, ``is it possible to derive low dimensional embedding methods that explicitly preserve topological features of the data? This is an interesting open question.''\citep{wasserman_topological_2018} This review was published in the same year that UMAP was released. Topological analysis and density clustering seem especially well-suited to the task of understanding population structure in diverse biobanks.
 
 \section{The value of visualization}
 
-Presenting this research provokes an interesting duality: people will ask if there is any value to the visualizations, while simultaneously implementing them. There is an inherent value to being able to see your data and understand its structure, even if the meaning does not jump out immediately. Echoing a point from Chapter 2, dimensionality reduction is to data what the microscope is to biology. We could certainly do biological research purely through statistical inference and clever theory, but it would not be nearly as fast or fruitful or creative.
+In \hyperref[chap:chapter2]{Chapter~2} we describe the relationship between dimensionality reduction and biological data as analogous to that of microscopes and biological samples. This analogy has been made before with respect to mathematics in general\citep{cohen_mathematics_2004}. Though analyses, inferences, and models can shed light on the biological world, there is an inherent value to being able to literally see your data and understand its structure. Among the most cited papers in population genetics is ``Genes mirror geography within Europe''\citep{novembre2008europe}---although isolation-by-distance had been characterized almost a century earlier, the figure of the top principal components superimposed over Europe was an elegant illustration of the geographical distribution of human genetic variation.
+
+With UMAP, we are able to map complex genetic structure down to $2$ or $3$ dimensions for visualization. Using auxiliary data---geographic data, population labels, phenotypic information, environmental variables, etc.---we can visually scan for patterns and generate hypotheses. 
+
+ADS\citep{correard_allele_2022}
+
+%Mathematics itself has been described as biology's ``next microscope''\citep{cohen_mathematics_2004}. However, t
+
+ Echoing a point from Chapter 2, dimensionality reduction is to data what the microscope is to biology. We could certainly do biological research purely through statistical inference and clever theory, but it would not be nearly as fast or fruitful or creative. People like looking at interesting figures---draw the attention of the eye and you can provoke interesting questions.
 
 - the philosophy of unsupervised learning and clustering in general
 - we're finding something, it's probably not nothing
 
 Creative uses like colouring maps
 
+\clearpage
+
 \section{Defining populations}
 
-Inferential statistics requires a definition of ``population''\citep{statcan2003}. To establish the scope of a study, we define the ``target population'' (the group to which research applies) and the ``survey population'' (the group which is covered by the study and, ideally, is very similar to the target population). The survey population is ultimately chosen from the survey frame, which provides the means to sample the individuals from the population. [talk about popgen, biobanks, assumptions, etc]
+\begin{figure}[h]
+\centering
+\begin{subfigure}{0.45\linewidth}
+    \includegraphics[width=\linewidth]{main_figures/discussion/populations_1.png}
+    \caption{}
+    \label{fig:statistical_populations1}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.45\linewidth}
+    \includegraphics[width=\linewidth]{main_figures/discussion/populations_2.png}
+    \caption{}
+    \label{fig:statistical_populations2}
+\end{subfigure}
+\caption[The relationship between target and study populations]{\textbf{The study population should match the target population.} In \textbf{(a)}, the study population is a subset of the target population, so inferences drawn from it will apply to the target population. In \textbf{(b)}, the study population is not fully a subset of the target population, so its inferences will be less reliable.}
+\label{fig:statistical_populations}
+\end{figure}
+
+Though genetic variation exists on a multidimensional continuum, defining discrete populations can be useful, e.g. for modelling ancestry\citep{pritchard_inference_2000}. In inferential statistics, we also require a definition of ``population''\citep{statcan2003}. To establish the scope of a study, we define the ``target population'' (the group to which research applies) and the ``survey population'' (the group which is covered by the study and, ideally, is very similar to the target population). The survey population is ultimately chosen from the survey frame, which provides the means to sample the individuals from the population. Figure~\ref{fig:statistical_populations} provides a schematic of this concept, as well as a schematic of when the study population is not drawn from the target population.
+
+Though this principle derives from survey statistics, it applies to inferences and studies based on biobanks as well.
+
+[talk about popgen, biobanks, assumptions, etc]
 
 
 Structure may be subtle and arise from, e.g., recent population structure or admixture\citep{gopalan_human_2022}
@@ -27,9 +58,8 @@ Though clustering is often viewed as a statistical or computational method, it h
 genetics of participants may not match non-participants
 \citep{benonisdottir_studying_2023}
 
-``Is it possible to derive low dimensional embedding methods that explicitly preserve topological features of the data? This is an interesting open question.''\citep{wasserman_topological_2018}
-
 The UKB's nested structure, and how definitions shape our perceptions.
+
 
 \section{Equitability in the genomic revolution}
 
@@ -51,5 +81,12 @@ Bad actors are not motivated by methodology---the correlation coefficient, the d
 
 Algorithmic colonialism, helicopter/imperialistic research, 
 
+\citep{gebru_race_2020}
+
+
+
 \section{Limitations}
 
+\section{Etc}
+
+Biology is the new physics \citep{hunter_biology_2010}
