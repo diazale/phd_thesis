@@ -194,6 +194,8 @@ Despite the complexity of the UKB, topological clustering identifies population 
 
 Epidemiological research often focuses on observed differences between groups---for example, finding the mean of a phenotype or sociodemographic measure and comparing between populations. Clustering is one method to define groups based on shared demographic history. However, clustering data featuring continuous variation patterns can be sensitive to input parameters, may not reflect true boundaries, and risks encouraging the perception that clusters are more distinct than they really are\citep{lewis_getting_2022}. As an illustration of how topological approaches can help interpret data beyond specific clustering choices, we use HDBSCAN($\hat{\epsilon}$) to define a simple regularization method, defined in Algorithm~\ref{alg:regularization}, that allows us to incorporate alternative parameterizations. We use this smoothing method to examine phenotypic and sociodemographic data with respect to population structure and identify outstanding patterns.
 
+\clearpage
+
 \begin{algorithm}
 \caption{We create a regularized value for each measure by taking the mean of cluster means for each individual. Given a set of parameters $P$ for the clustering algorithm, each parametrization $p$ will result in a set of clusters $C_p$. We use varying cluster assignments across parametrizations to smooth a measured quantity (e.g. phenotype) $m$ for individual $i$.}
 \label{alg:regularization}
@@ -207,6 +209,52 @@ Epidemiological research often focuses on observed differences between groups---
 \State Set $\mu_{i}:=\frac{\sum_{p \in P}\mu_{p,i}}{\mid P \mid}$
 \end{algorithmic}
 \end{algorithm}
+
+\clearpage
+
+\begin{figure}[!ht]
+  \centering
+  \begin{subfigure}[b]{0.45\linewidth}
+    %\includegraphics[width=\linewidth]{images/smoothed_phenotypes/SR4_FEV1.jpeg}
+       \includegraphics[width=\linewidth]{placeholder.png}
+    \caption{}
+    \label{fig:smoothed_fev1}
+  \end{subfigure}
+    \begin{subfigure}[b]{0.45\linewidth}
+   % \includegraphics[width=\linewidth]{images/smoothed_phenotypes/SR4_X30140_Neutrophill_count.jpeg}
+   \includegraphics[width=\linewidth]{placeholder.png}
+    \caption{}
+      \label{fig:smoothed_neutrophil}
+  \end{subfigure}
+  \caption[Smoothed phenotypic measures across multiple parametrizations of clustering]{\textbf{Smoothed phenotypic measures across multiple parametrizations of clustering.} A 2D UMAP coloured by phenotype value after having removed the top $40$ PCs and averaged by cluster, run over $604$ parametrizations of the clustering pipeline. The colour scale runs from $-0.5\sigma$ to $0.5\sigma$, for the standard deviation $\sigma$ of each phenotype after regressing the linear effects of the top $40$ PCs. We observe that the distributions of phenotypes among some groups are not centred about $0$ even after PC adjustment. (a) Left: FEV1. (b) Right:  Neutrophil count.}
+\label{fig:smoothed_phenos}
+\end{figure}
+
+\clearpage
+
+In Figure~\ref{fig:smoothed_phenos}, we visualize the smoothing across $604$ parametrizations of UMAP-HDBSCAN($\hat{\epsilon}$) FEV1 and neutrophil count. Despite regressing out the effects of the top $40$ principal components, there remains structure in the distribution of the residuals. For example, the average residual value is noticeably higher in individuals who fall in Cluster~22 in Figure~\ref{fig:ukb_hdbscan_labels}. This cluster is composed mostly of individuals with admixed African/European backgrounds, and although they are intermediate to African and European ancestry populations in PCA space (Figure~\ref{fig:supp_cluster_22_pca}), their phenotype distributions are not intermediate to clusters of primarily European- and African-ancestry individuals (Figure~\ref{fig:supp_pheno_ridge_fev}, Figure~\ref{fig:supp_pheno_ridge_neut}).
+
+\clearpage
+
+\begin{figure}[!ht]
+  \centering
+  \begin{subfigure}[b]{0.7\linewidth}
+    %\includegraphics[width=\linewidth]{{"images/phenotype_models/MSE_rotated_White and Black Caribbean"}.png}
+    \includegraphics[width=0.5\linewidth]{placeholder.png}
+    \caption{}
+    \label{fig:wabc_pheno_model}
+  \end{subfigure}
+    \begin{subfigure}[b]{0.7\linewidth}
+    %\includegraphics[width=\linewidth]{{"images/phenotype_models/MSE_rotated_White and Black African"}.png}
+    \includegraphics[width=0.5\linewidth]{placeholder.png}
+    \caption{}
+    \label{fig:waba_pheno_model}
+  \end{subfigure}
+  \caption[MSE of cluster-based phenotype estimation]{\textbf{Cluster-based estimation can improve phenotype models.} To test the explanatory value of smoothed cluster estimates generated from Algorithm~\ref{alg:regularization}, we carried out an $80-20$ split on the UKB data and compared phenotype prediction using the top $40$ principal components versus estimates generated from the residual structure, presented in Figure~\ref{fig:smoothed_phenos}.}
+  \label{fig:pheno_models}
+\end{figure}
+
+\clearpage
 
 
 
@@ -246,8 +294,38 @@ Epidemiological research often focuses on observed differences between groups---
     \caption{}
     \label{fig:supp_pheno_ridge_fev_post}
   \end{subfigure}
-  \caption[Distributions of FEV1 adjusted for age and sex stratified by cluster]{Distributions of FEV1 adjusted for age and sex stratified by cluster. Vertical dotted lines represent the mean of the distribution. Cluster labels and colours match those in Figure~\ref{fig:ukb_hdbscan_labels}. Cluster 17 is mostly European-born individuals, Cluster 18 is mostly sub-Saharan African born individuals, Cluster 19 is mostly individuals born in England, the Caribbean, Ghana, and Nigeria, and Cluster 22 is mostly individuals born in England who chose the EB ``White and Black Caribbean'' or ``White and Black African''. (a) Top: Distribution of FEV1 by cluster without adjusting for population structure. (b) Bottom: Distribution of FEV1 by cluster after having adjusted for the top $40$ principal components.}
+  \caption[Distributions of FEV1 by cluster]{Distributions of FEV1 adjusted for age and sex stratified by cluster. Vertical dotted lines represent the mean of the distribution. Cluster labels and colours match those in Figure~\ref{fig:ukb_hdbscan_labels}. Cluster 17 is mostly European-born individuals, Cluster 18 is mostly sub-Saharan African born individuals, Cluster 19 is mostly individuals born in England, the Caribbean, Ghana, and Nigeria, and Cluster 22 is mostly individuals born in England who chose the EB ``White and Black Caribbean'' or ``White and Black African''. (a) Top: Distribution of FEV1 by cluster without adjusting for population structure. (b) Bottom: Distribution of FEV1 by cluster after having adjusted for the top $40$ principal components.}
   \label{fig:supp_pheno_ridge_fev}
+\end{figure}
+
+\clearpage
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}[b]{0.7\linewidth}
+    %\includegraphics[width=\linewidth]{images/pheno_distributions/SR4_X30140_Neutrophill_count_ridge_prepc.jpeg}
+    \includegraphics[width=\linewidth]{placeholder.png}
+    \caption{}
+    \label{fig:supp_pheno_ridge_neut_pre}
+  \end{subfigure}
+    \begin{subfigure}[b]{0.7\linewidth}
+    %\includegraphics[width=\linewidth]{images/pheno_distributions/SR4_X30140_Neutrophill_count_ridge_postpc.jpeg}
+    \includegraphics[width=\linewidth]{placeholder.png}
+    \caption{}
+    \label{fig:supp_pheno_ridge_neut_post}
+  \end{subfigure}
+  \caption[Distributions of neutrophil count by cluster]{Distributions of neutrophil count adjusted for age and sex stratified by cluster. Vertical dotted lines represent the mean of the distribution. Cluster labels and colours match those in Figure~\ref{fig:ukb_hdbscan_labels}. Cluster 17 is mostly European-born individuals, Cluster 18 is mostly sub-Saharan African born individuals, Cluster 19 is mostly individuals born in England, the Caribbean, Ghana, and Nigeria, and Cluster 22 is mostly individuals born in England who chose the EB ``White and Black Caribbean'' or ``White and Black African''. (a) Top: Distribution of neutrophil count by cluster without adjusting for population structure. (b) Bottom: Distribution of neutrophil count by cluster after having adjusted for the top $40$ principal components.}
+  \label{fig:supp_pheno_ridge_neut}
+\end{figure}
+
+\clearpage
+
+\begin{figure}[ht]
+  \centering
+    %\includegraphics[width=0.9\linewidth]{images/hdbscan_labels_min25_EPS05_ukbb_pca_with_ids_UMAP_PC25_NC5_NN10_MD001_euclidean_20200214_065646/pca_cluster_22_20200214_065646_2.png}
+    \includegraphics[width=0.9\linewidth]{placeholder.png}
+  \caption{Cluster 22 from Figure~\ref{fig:ukb_hdbscan_labels} highlighted coloured in on a plot of PC1 and PC2.}
+  \label{fig:supp_cluster_22_pca}
 \end{figure}
 
 \clearpage
