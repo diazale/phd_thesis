@@ -14,4 +14,768 @@ This manuscript was released as a preprint on \textit{BioRxiv} in 2023.
 
 Biobanks now contain genetic data from millions of individuals. Dimensionality reduction, visualization and stratification are standard when exploring data at these scales; while efficient and tractable methods exist for the first two, stratification remains challenging because of uncertainty about sources of population structure. In practice, stratification is commonly performed by drawing shapes around dimensionally reduced data or assuming populations have a "type" genome. We propose a method of stratifying data with topological analysis that is fast, easy to implement, and integrates with existing pipelines. The approach is robust to the presence of sub-populations of varying sizes and wide ranges of population structure patterns. We demonstrate its effectiveness on genotypes from three biobanks and illustrate how topological genetic strata can help us understand structure within biobanks, evaluate distributions of genotypic and phenotypic data, examine polygenic score transferability, identify potential influential alleles, and perform quality control.
 
-Chapter three. Chaaaapter three.\citep{novembre2008europe}
+\section{Introduction}
+
+Following improvements in genomic technologies, large-scale biobanks have become commonplace. The ﻿Global Biobank Meta-analysis Initiative (GBMI), for example, lists 23 biobanks with genetic data and health records from over 2.2 million individuals﻿\cite{zhou_global_2022}. The growth in sample sizes has led to increased potential for scientific findings; methods like genome-wide association studies (GWAS) and polygenic scores (PGS) have gained widespread popularity, and accordingly thousands of genetic loci have been implicated across numerous phenotypes. Though the growth of biobanks has fuelled discovery, population structure---the  phenomenon in which allele frequencies systematically differ between populations---remains a persistent confounder in GWAS and PGS (e.g. \cite{sakaue_dimensionality_2020,zaidi_demographic_2020}). Many methods in population genetics seek to describe and account for population structure, but the complexity of human history, along with factors like biobank recruitment strategies, preclude model-based approaches from effectively capturing the many determinants of observed genetic variation.
+
+Dimensionality reduction and visualization are common in examining both discrete and continuous aspects of genetic variation (e.g. \cite{diaz-papkovich_umap_2019,battey_visualizing_2021}). Within the framework of exploratory-confirmatory data analysis, visualization of complex data enables pattern-recognition and the generation and testing of hypotheses\cite{holmes_modern_2019}. Visualization alone, though, cannot be used for analysis, and data stratification is often necessary. Algorithmic genetic stratification or clustering is often based on principal component analysis (PCA), sometimes using reference panels or assuming a ``type'' genome---e.g., all points within a certain radius in PCA space are classified as ``European''.  In recently admixed populations (i.e., populations who derive ancestry from ``source'' populations who had been in relative isolation), grouping based on inferred admixture proportions is also common, often with the use of a reference panel as a proxy for the source populations. These approaches may not work for populations with no reference panel, or with complex admixture histories, or small sample sizes\citep{ding_polygenic_2023}. Other approaches cluster based on shared identity-by-descent (IBD) segments or recent genetic relatedness (e.g. \citep{freyman_fast_2021,shemirani_rapid_2021}). These approaches typically capture finer scale population structure, but are analytically and computationally demanding. Self-declared variables like race and ethnicity are also sometimes used for genetic stratification but are imperfect indicators of genetic ancestry and are no longer recommend as proxies for it\citep{committee_2023, kaseniit_genetic_2020}.
+
+Despite the demand, there is not an effective, fast, and tractable method for stratifying biobank data based on patterns of genetic structure. In practice, researchers often manually group participants into discrete ad hoc ``clusters'' that they perceive in low-dimensional visualizations, which they use as strata in downstream analyses regarding, e.g., heterogeneity in ancestry and allele frequencies\citep{halldorsson_sequences_2022}, environmental exposures\citep{diaz-papkovich_umap_2019}, or assessing the performance of PGS\citep{sakaue_dimensionality_2020,martin_clinical_2019}. There are many drawbacks to such ad hoc approaches. For example, in cosmopolitan cohorts, there are many subgroups with distinct ancestral histories, leading researchers to manually distinguish between a ``majority’’ cluster and an ``everybody else’’ cluster---often to be discarded due to its heterogeneity\citep{ben-eghan_dont_2020,martschenko_including_2023}. 
+
+We propose topological data analysis as an alternative approach. Rather than fitting individuals to a pre-defined notion of a population, a topological approach describes the network of neighbourhoods between data points---here, this would be the network of genetic similarity between individuals. It is especially well-suited to describe collections of points in high-dimensional space with smooth distributions but with no clear centre or ``archetype''. We assume that structure in high-dimensional genetic data can be represented topologically, and can be locally approximated and reconstructed in a low-dimensional space. After reconstructing data in the low-dimensional space, we identify dense clusters of data---i.e., the genetic strata. This approach is unsupervised, requiring neither a number of clusters nor a reference panel, and thus fits naturally with population genetic data, which is sparse and contains numerous sub-populations of unknown and varying sizes, often without \emph{a priori} definitions. 
+
+We demonstrate the effectiveness of this approach on three biobanks, showing that we can consistently and effectively identify and characterize sources of population structure in each cohort, as well as relate many key variables to this structure. We identify subtle population structure quickly, simultaneously identifying structured groups as small as $100$ individuals and as large as $400,000$ within the same cohort. We show that this provides important insight into the relationships between genetic structure, environmental and sociodemographic variables, and phenotype distributions. We use stratification to identify populations for which PCA adjustment fails within a biobank (often admixed populations) and populations for which PGS transferability is poor (often, but not always, populations diverged from the training population). Finally, we illustrate how to use topological modelling as a quality control tool, a critical if less glamorous aspect of the fast-growing biobank space.
+
+In summary, we argue that topological modelling, which describes data in terms of local neighbourhoods in a high-dimensional space, is a powerful alternative to ancestry-based modelling for the description of genetic variation in complex cohorts.
+
+\clearpage
+
+\section{Methods}
+
+\begin{figure}[!ht]
+  \centering
+  \begin{subfigure}[b]{0.9\linewidth}
+%  \includegraphics[width=\linewidth]{images/method_schematic.png}
+\includegraphics[width=\linewidth]{placeholder.png}
+  \end{subfigure}
+  \caption[Overview of visualization and clustering pipeline]{\textbf{Overview of visualization and clustering pipeline.} We use the same genotype data to generate visualizations as well as cluster labels and combine them within one figure. For visualization, we reduce data to 2D and optimize for visual clarity. For clustering, we use higher UMAP dimensions to maximize information and minimize distortions before HDBSCAN($\hat{\epsilon}$) processing. These clusters are then used to colour the 2D plot, where each point is an individual and the cluster is represented by colour. Genotype data is pre-processed with PCA.}
+    \label{fig:method}
+\end{figure}
+
+\clearpage
+
+Our method works on structured genotype data, represented by a matrix of allele counts for each individual and genetic variant. To reduce computational burden, we perform analyses using leading principal component (PCs) on the raw genotype data. This approach has the additional benefit that many genetic cohorts have PC coordinates pre-computed as part of standard quality control pipelines. We use uniform manifold approximation and projection (UMAP)\citep{mcinnes_umap_2020}, a dimensionality reduction method, and a clustering algorithm, Hierarchical Density-Based Spatial Clustering of Applications with Noise (HDBSCAN), using an implementation by Malzer and Baum called HDBSCAN($\hat{\epsilon}$)\citep{malzer_hybrid_2020}. Both methods are unsupervised.
+
+UMAP is designed to preserve the topology of high-dimensional data by assuming the data lie on a manifold and then approximating the manifold on a local level\citep{mcinnes_umap_2020}. The algorithm requires three parameter inputs: the target number of dimensions, the number of nearest neighbours (used to define the size of high-dimensional neighbourhoods to approximate), and the minimum distance between points in the low-dimensional space. We have previously explored its use for visualization in $2$ and $3$ dimensions\citep{diaz-papkovich_umap_2019}. Figure~\ref{fig:method} highlights the two distinct roles played by UMAP in this work, each requiring distinct parameters:  
+
+\begin{enumerate}
+\item For visualization, reducing data to $2$ dimensions and using a relatively high minimum distance ($0.3$ to $0.5$), to facilitate human perception and understanding
+\item For clustering, reducing data to $3$ or more dimensions and using a very low minimum distance (near or equal to $0$) to facilitate algorithmic identification of dense clumps of data.
+\end{enumerate}
+
+After reducing genetic data to $3$ or more dimensions with UMAP in step 2, we use HDBSCAN($\hat{\epsilon}$) to extract clusters. HDBSCAN($\hat{\epsilon}$) is a hierarchical density-based clustering algorithm based on predecessors HDBSCAN and DBSCAN*\citep{malzer_hybrid_2020}. It is motivated by situations where we expect data to be in a sparsely populated space with relatively dense clusters throughout. The number of clusters is not known, and the sizes of the clusters are assumed to vary. This describes biobank data particularly well, since it is expected to contain population structure at many different scales, and it is usually difficult to specify in advance a useful number of subgroups to consider. The parameter $\hat{\epsilon}$ allows clusters to have widely varying sizes; we provide more details on parameters in the Supporting Information (SI).
+
+We use UMAP-assisted density-based clustering on data from three biobanks: the Thousand Genomes Project (1KGP), the UK biobank (UKB), and CARTaGENE (CaG). The 1KGP data consists of the genotypes of $3,450$ individuals sampled from $26$ populations from around the world; the populations were decided in advance and their sample sizes are similar, ranging from $104$ to $183$ samples\citep{global_2015}. The UKB is a cohort of $488,377$ individuals from the United Kingdom (UK) with genotypic, phenotypic, and sociodemographic data. UKB participants were recruited by inviting 9 million individuals registered with the National Health Service (NHS) who lived near a testing centre\citep{sudlow_uk_2015}. CaG is a cohort of residents of the Canadian province of Qu\'{e}bec, with genotype data for $29,337$ participants who were recruited using registration data from the R\'{e}gie de l'assurance maladie du Qu\'{e}bec (RAMQ), the provincial health authority, from four metropolitian areas in the province\citep{awadalla_cohort_2013}. Unlike the 1KGP, CaG and the UKB do not have \emph{a priori} populations defined, though they collected information about ethnicity, country of birth, and residential geographic distribution.
+
+\clearpage
+
+\section{Results}
+
+\subsection{Clustering captures population structure from sample design}
+\begin{figure}[!ht]
+  \centering
+  \begin{subfigure}[b]{0.45\linewidth}
+%    \includegraphics[width=\linewidth]{images/1KGP_no_colours.png}
+\includegraphics[width=\linewidth]{placeholder.png}
+    \caption{}
+    \label{fig:1KGP_no_colours}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.45\linewidth}
+%    \includegraphics[width=\linewidth]{images/1KGP_population_colours.png}
+\includegraphics[width=\linewidth]{placeholder.png}
+    \caption{}
+    \label{fig:1KGP_pop_colours}
+  \end{subfigure}
+    \begin{subfigure}[b]{0.49\linewidth}
+%    \includegraphics[width=\linewidth]{images/1KGP_cluster_colours.png}
+\includegraphics[width=\linewidth]{placeholder.png}
+    \caption{}
+    \label{fig:1KGP_cluster_colours}
+  \end{subfigure}
+    \begin{subfigure}[b]{0.49\linewidth}
+%    \includegraphics[height=15em,keepaspectratio]{images/1KGP_heatmap.png}
+\includegraphics[width=\linewidth]{placeholder.png}
+    \caption{}
+    \label{fig:1KGP_heatmap}
+  \end{subfigure}
+  \caption[Clusters generated from 1KGP genotype data reflect its population sampling]{\textbf{Clusters generated from 1KGP genotype data reflect its population sampling.} (A) UMAP embedding of data without labels. (B) UMAP embedding of data, coloured by population label. (C) UMAP embedding of data, coloured by clusters derived from HDBSCAN($\hat{\epsilon}$) applied to a 5D UMAP embedding. (D) Proportions of each 1KGP population contained within a given cluster. Most populations fall almost entirely within a single cluster, with a few splitting into multiple clusters. Population labels are provided in Table~\ref{table:1kgp_labels}.}
+  \label{fig:1000GP}
+\end{figure}
+
+\clearpage
+
+The 1KGP's relatively balanced global sample design makes it useful for testing algorithms to identify population structure. We have previously shown that UMAP results in clear visual clusters from 1KGP data in two dimensions\citep{diaz-papkovich_umap_2019}. Figure~\ref{fig:1000GP} shows a UMAP representation of the 1KGP. Figure~\ref{fig:1KGP_no_colours} shows the data without population labels (to mimic data with unknown populations), Figure~\ref{fig:1KGP_pop_colours} shows the data with corresponding population labels from the 1KGP, and Figure~\ref{fig:1KGP_cluster_colours} shows the data with cluster labels generated by HDBSCAN($\hat{\epsilon}$) run on a $5D$ UMAP.
+
+The major source of genetic structure in 1KGP data is its sampling scheme, which selected individuals from geographically diverse populations. The clusters formed by UMAP and extracted by HDBSCAN($\hat{\epsilon}$) largely reflect this sampling strategy, with some exceptions noted below. Figure~\ref{fig:1KGP_heatmap} shows that there is strong agreement between population label and cluster label, with full breakdowns provided in Tables~\ref{table:1kgp_clusters} and \ref{table:1kgp_populations}. These results are comparable to a supervised neural network approach to predict sampled population label (e.g. Figure~3 in \citep{romero_diet_2017}), though our approach is unsupervised and runs on the order of seconds.
+
+\clearpage
+
+\begin{figure}[ht]
+  \centering
+%    \includegraphics[width=0.75\linewidth]{images/1kgp_ternary.png}
+\includegraphics[width=0.75\linewidth]{placeholder.png}
+  \caption[Clusters capture structure in populations with overlapping admixture proportions in the 1KGP]{\textbf{Clusters capture structure in populations with overlapping admixture proportions in the 1KGP.} A ternary plot of the PUR, PEL, MXL, and CLM populations from the 1KGP with axes corresponding to global ancestry proportions estimated using ADMIXTURE ($K=3$). Shapes indicate 1KGP label, colours indicate cluster label and match Figure~\ref{fig:1KGP_cluster_colours}; bolded points with a + symbol overlaid indicate individuals who are not members of the modal cluster of their 1KGP population (full results given in Tables~\ref{table:1kgp_clusters} and \ref{table:1kgp_populations}). Many individuals from the populations have similar admixture proportions; UMAP-HDBSCAN($\hat{\epsilon}$) clusters reflect structure from the sample populations, while clusters based on inferred admixture proportions would not.}
+  \label{fig:1000GP_ternary}
+\end{figure}
+
+\clearpage
+
+One benefit of the unsupervised approach is that we do not require \emph{a priori} assumptions about the origins of structure, making it possible to capture meaningful clusters despite considerable within-cluster heterogeneity, including in admixed populations. The Central and South American clusters largely match their 1KGP labels despite overlapping distributions in ADMIXTURE-estimated continental ancestry within each group (Figure~\ref{fig:1000GP_ternary}). Some populations are clustered together: GBR and CEU (British From England and Scotland; and Utah residents with Northern/Western European ancestry), CDX and KHV (Chinese Dai in Xishuangbanna, China; and Kinh in Ho Chi Minh City, Vietnam), IBS and TSI (Iberian Populations in Spain; and Toscani in Italy), ACB and ASW (African Caribbean in Barbados; and African Ancestry in SW USA). While these groups differ in their sampling and history, supervised learning methods also struggle in distinguishing most of these pairs  (Figure~3A in \citep{romero_diet_2017}). The CDX and KHV (Cluster~2 in Figure \ref{fig:1KGP_pop_colours}) populations are present at opposite ends of one continuous cloud of points. In other words, two groups belonging to one cluster does not mean that the groups are indistinguishable.  Rather, it means that HDBSCAN($\hat{\epsilon}$) could find a relatively continuous path in genetic space linking individuals sampled in one group to individuals sampled in the other. 
+
+Some South Asian populations are split into different clusters, possibly from stronger patterns of relatedness within those groups\citep{diaz-papkovich_umap_2019,reich_reconstructing_2009}. We note the ITU (Indian Telugu in the UK) population is visibly split into two groups in 2D, while clustering carried out in 5D groups them together (Cluster~11). While some clusters will tend to persist across many parametrizations of UMAP and HDBSCAN($\hat{\epsilon}$), others based on more subtle patterns or in populations with more continuous variation will be less stable---though discrete groupings can help us understand data, the delineations are always, to a degree, arbitrary.
+
+Some South Asian populations are split into different clusters, possibly from stronger patterns of relatedness within those groups\citep{diaz-papkovich_umap_2019,reich_reconstructing_2009}. We note the ITU (Indian Telugu in the UK) population is visibly split into two groups in 2D, while clustering carried out in 5D groups them together (Cluster~11). While some clusters will tend to persist across many parametrizations of UMAP and HDBSCAN($\hat{\epsilon}$), others based on more subtle patterns or in populations with more continuous variation will be less stable---though discrete groupings can help us understand data, the delineations are always, to a degree, arbitrary.
+
+\subsection{Correlates between populations and sociodemographic, phenotypic, and environmental variables}
+The UK biobank (UKB) contains $488,377$ genotypes from volunteers with an array of demographic, phenotypic, and biomedical data, with individuals' ages ranging from $40$ to $69$. The demographic data collected for the UKB include Country of Birth (COB) and Ethnic Background (EB), which is selected from a nested set of pre-determined options (see Table~\ref{table:ukb_eb_options}). Participants first select their ``ethnic group'' from a list (e.g. ``White''; ``Black or Black British''), which determines the list of possible ``ethnic background'' (e.g. ``British''; ``Caribbean''). The most common countries of birth in the data set are England, Scotland, Wales, and the Republic of Ireland, comprising $77.8\%$, $8.0\%$, $4.4\%$, and $1.0\%$,  respectively. For EB, $88.3\%$ of participants selected ``White British'', with an additional $5.8\%$ selecting ``White Irish'' or ``Any other white background''. Here we primarily focus on the $28,814$ individuals with other backgrounds.
+
+The biobank is one of the most-used resources for genetic analyses. Despite its multi-ethnic composition, many studies discard non-European samples, sometimes citing concerns related to confounding from population structure\citep{ben-eghan_dont_2020}. The population structure has been deeply explored, though typically focused on British or European individuals\citep{abdellaoui_genetic_2019,gilbert_revealing_2022,chiu_inferring_2022}. Because its sub-populations are numerous, geographically/ancestrally diverse, and of widely varying sizes, clustering the UKB data is challenging, requiring overly broad categorization (e.g. a small number of continental populations \citep{halldorsson_sequences_2022,nagar_socioeconomic_2021}) and/or significant computational resources. The original implementation of HDBSCAN, without the $\hat{\epsilon}$ parameter, discards much of the UKB data as noise and splits populations into hundreds of microclusters that are not interpretable (see Fig~\ref{fig:supp_ukb_hdbscan_original}).
+
+\clearpage
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}[b]{0.3\linewidth}
+    %\includegraphics[width=\linewidth]{images/colour_matched/hdbscan_labels_min25_EPS05_ukbb_pca_with_ids_UMAP_PC25_NC5_NN10_MD001_euclidean_20200214_065646.png}
+\includegraphics[width=\linewidth]{placeholder.png}
+    \caption{}
+    \label{fig:ukb_hdbscan_labels}
+  \end{subfigure}
+   \begin{subfigure}[b]{0.3\linewidth}
+%    \includegraphics[width=\linewidth]{images/colour_matched/hdbscan_labels_min25_EPS05_ukbb_pca_with_ids_UMAP_PC25_NC5_NN10_MD001_euclidean_20200214_065646/selected_clusters_afr_labelled_COB.png}
+\includegraphics[width=\linewidth]{placeholder.png}
+    \caption{}
+    \label{fig:ukb_hdbscan_labels_cob}
+  \end{subfigure}
+     \begin{subfigure}[b]{0.3\linewidth}
+%    \includegraphics[width=\linewidth]{images/colour_matched/hdbscan_labels_min25_EPS05_ukbb_pca_with_ids_UMAP_PC25_NC5_NN10_MD001_euclidean_20200214_065646/selected_clusters_afr_labelled_eth.png}
+\includegraphics[width=\linewidth]{placeholder.png}
+    \caption{}
+    \label{fig:ukb_hdbscan_labels_eth}
+  \end{subfigure}
+  \caption[Clusters of population structure in the UKB]{\textbf{An example of clusters of population structure in the UKB.} The clusters reflect a mixture of demographic history within the UK, the geographic origins of recent immigrants, the colonial history of the British Empire, and ongoing admixture. (a) Left: A 2D UMAP of UKB genotypes coloured by HDBSCAN($\hat{\epsilon}$). This parametrization generated $26$ clusters. (b) Middle: Five clusters are highlighted with word clouds for the most common countries of birth within the cluster. (c) Right: The same five clusters are highlighted with word clouds for the most common EB within the cluster. Admixture proportions for clusters are presented in Figure~\ref{fig:supp_ukb_admix}. Detailed breakdowns of EB and country of birth are presented in Tables~\ref{table:supp_ukb_cluster_cob} and \ref{table:supp_ukb_cluster_sieb}.}
+  \label{fig:ukb_hdbscan_compare}
+\end{figure}
+
+\clearpage
+
+Figure~\ref{fig:ukb_hdbscan_labels} shows $26$ clusters generated by HDBSCAN($\hat{\epsilon}$), placing $99.99\%$ of individuals in clusters. We generated word clouds for COB and EB, shown in Figures~\ref{fig:ukb_hdbscan_labels_cob} and \ref{fig:ukb_hdbscan_labels_eth}, which allow us to illustrate sources of structure without having to impose a label to groups which may be heterogeneous. Individuals in Cluster~10, for example, are mostly born in Somalia ($84\%$), while those in Cluster~23 are mostly born in East Africa (Ethiopia, Sudan, Eritrea; $33\%$, $29\%$, $25\%$, respectively). Those in Cluster 18 are mostly born in sub-Saharan Africa, and $77\%$ chose ``African'' as their EB, while $19\%$ chose ``Other ethnic group''. Figure~\ref{fig:supp_ukb_hdbscan_top} presents word clouds for another subset of data. Individuals in Cluster~0 are mostly born in Japan and South Korea ($84\%$ and $9\%$, respectively), and those in Cluster~15 are mostly born in Nepal ($80\%$). In contrast, individuals in Cluster 13 are born in a variety of East/Southeast Asian jurisdictions; the most common EB was ``Chinese'' ($70\%$), followed by ``Other ethnic group'' ($16\%$) and ``Any other Asian background'' ($11\%$). Tables~\ref{table:supp_ukb_cluster_cob} and \ref{table:supp_ukb_cluster_sieb} provide breakdowns for clusters.
+
+Clusters 14 and 22 both capture structure resulting from recent admixture following immigration and colonial history, with $49\%$ and $66\%$ of their respective populations being born in England (see also Figure~\ref{fig:supp_ukb_admix}). No single EB represents a majority in either cluster; the most common EB in Cluster~14 is ``Any other mixed background'' ($29\%$), while for Cluster~22 it is ``Mixed, White and Black Caribbean'' ($39\%$). 
+
+
+\clearpage
+
+\section{Supporting Information}
+
+\begin{figure}[ht]
+  \centering
+%    \includegraphics[width=0.7\linewidth]{images/original_clusterings/UKBB_UMAP_PC10_NN15_MD05_2018328174511_hdbscan_labels_min15_UKBB_UMAP_PC10_NC5_NN10_MD0001_euclidean_201981322313_clusters.jpeg}
+\includegraphics[width=0.7\linewidth]{placeholder.png}
+  \caption[Clustering the UKB with basic HDBSCAN]{An example of a clustering of the UKB data using HDBSCAN rather than HDBSCAN($\hat{\epsilon}$). The algorithm fails to adequately cluster many of the sub-populations, categorizing $4,197$ individuals as noise and generated $197$ micro-clusters.}
+    \label{fig:supp_ukb_hdbscan_original}  
+\end{figure}
+
+\clearpage
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}[b]{0.45\linewidth}
+%    \includegraphics[width=\linewidth]{images/colour_matched/hdbscan_labels_min25_EPS05_ukbb_pca_with_ids_UMAP_PC25_NC5_NN10_MD001_euclidean_20200214_065646/selected_clusters_labelled_COB.png}
+        \includegraphics[width=\linewidth]{placeholder.png}
+    \caption{}
+    \label{fig:supp_ukb_hdbscan_top1}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.45\linewidth}
+    %\includegraphics[width=\linewidth]{images/colour_matched/hdbscan_labels_min25_EPS05_ukbb_pca_with_ids_UMAP_PC25_NC5_NN10_MD001_euclidean_20200214_065646/selected_clusters_labelled_eth.png}
+        \includegraphics[width=\linewidth]{placeholder.png}
+    \caption{}
+    \label{fig:supp_ukb_hdbscan_top2}
+  \end{subfigure}
+  \caption[Word clouds generated from four clusters in the UKB]{Word clouds generated from four clusters in the UKB from Figure~\ref{fig:ukb_hdbscan_compare}. (a) Left: Word clouds of the most common countries of birth within each cluster. Most individuals in the orange cluster (Cluster~0) were born in Japan, and most in the pink cluster (Cluster~15) were born in Nepal. (b) Right: Word clouds for the most common EB. The most common in the blue cluster (Cluster~13) was ``Chinese'', while those in the green cluster (Cluster~14) select a variety, including ``White British'', ``Chinese'', ``Mixed'', or ``Other''. Detailed breakdowns are available in Tables~\ref{table:supp_ukb_cluster_cob} and \ref{table:supp_ukb_cluster_sieb}.}
+  \label{fig:supp_ukb_hdbscan_top}
+\end{figure}
+
+Notably, significant proportions of majority-African-born clusters identify as ``Other ethnic group''---a respective $24\%$, $19\%$, and $37\%$ in Clusters 10, 18, and 23. This suggests that filtering individuals by EB alone for further analyses could limit sample sizes by discarding relevant data. Cluster 18 captures individuals born in sub-Saharan Africa, while Cluster 19 consists of individuals born in the Caribbean ($31\%$), England ($28\%$), as well as Nigeria ($14\%$) and Ghana ($12\%$). These regions are historically linked to the UK; between the years 1641 and 1808, an estimated $325,311$ Africans from the Bight of Benin, between the coasts of modern-day Ghana and Nigeria, were enslaved by British ships and sent to the British Caribbean\citep{slavevoyages,fortes-lima_anthropological_2021}.
+
+Despite the complexity of the UKB, topological clustering identifies population structure that is interpretable from historical or demographic perspectives and includes all or almost all individuals. Such structure is difficult to infer from a single label such as geography or ethnicity; once it is characterized, it can clarify the genetic structure of the cohort. 
+
+\subsection{Phenotype smoothing and modelling}
+
+Epidemiological research often focuses on observed differences between groups---for example, finding the mean of a phenotype or sociodemographic measure and comparing between populations. Clustering is one method to define groups based on shared demographic history. However, clustering data featuring continuous variation patterns can be sensitive to input parameters, may not reflect true boundaries, and risks encouraging the perception that clusters are more distinct than they really are\citep{lewis_getting_2022}. As an illustration of how topological approaches can help interpret data beyond specific clustering choices, we use HDBSCAN($\hat{\epsilon}$) to define a simple regularization method, defined in Algorithm~\ref{alg:regularization}, that allows us to incorporate alternative parameterizations. We use this smoothing method to examine phenotypic and sociodemographic data with respect to population structure and identify outstanding patterns.
+
+\begin{algorithm}
+\caption{We create a regularized value for each measure by taking the mean of cluster means for each individual. Given a set of parameters $P$ for the clustering algorithm, each parametrization $p$ will result in a set of clusters $C_p$. We use varying cluster assignments across parametrizations to smooth a measured quantity (e.g. phenotype) $m$ for individual $i$.}
+\label{alg:regularization}
+\begin{algorithmic}
+\State Given a set of parametrizations $P$, each with a set of clusters $C_p$, for some measure of interest $m$, we calculate the regularized value $\mu_i$ for each individual $i$.
+\For{$p$ in $P$}
+\For{$c$ in $C_p$}
+\State For each individual $i$ in $C_p$, set the mean value $\mu_{p,i}:=\sum_{i}m_i/\mid C_p \mid $
+\EndFor
+\EndFor
+\State Set $\mu_{i}:=\frac{\sum_{p \in P}\mu_{p,i}}{\mid P \mid}$
+\end{algorithmic}
+\end{algorithm}
+
+
+
+\clearpage
+
+\begin{figure}[ht]
+  \centering
+    %\includegraphics[width=0.8\linewidth]{images/admixture/barplots/admixture_tall_5.png}
+    \includegraphics[width=0.8\linewidth]{placeholder.png}
+    \caption[Admixture proportions for 5 populations]{Admixture proportions for $K=5$ populations on each of the clusters in Figure~\ref{fig:ukb_hdbscan_compare}. Cluster 17 ($n>400,000$) was excluded for computational reasons. Individuals not assigned to a cluster are labelled as $-1$.}
+  \label{fig:supp_ukb_admix}
+\end{figure}
+
+\clearpage
+
+\begin{figure}[ht]
+  \centering
+%    \includegraphics[width=0.9\linewidth]{images/smoothed_phenotypes/daily_smoking_proportion.jpeg}
+    \includegraphics[width=0.9\linewidth]{placeholder.png}
+    \caption[Proportion of daily smokers]{Proportion of daily smokers, smoothed using Algorithm~\ref{alg:regularization}.}
+    \label{fig:supp_ukb_smoking}
+\end{figure}
+
+\clearpage
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}[b]{0.7\linewidth}
+    %\includegraphics[width=\linewidth]{images/pheno_distributions/SR4_FEV1_ridge_prepc.jpeg}
+    \includegraphics[width=\linewidth]{placeholder.png}
+    \caption{}
+    \label{fig:supp_pheno_ridge_fev_pre}
+  \end{subfigure}
+    \begin{subfigure}[b]{0.7\linewidth}
+%    \includegraphics[width=\linewidth]{images/pheno_distributions/SR4_FEV1_ridge_postpc.jpeg}
+\includegraphics[width=\linewidth]{placeholder.png}
+    \caption{}
+    \label{fig:supp_pheno_ridge_fev_post}
+  \end{subfigure}
+  \caption[Distributions of FEV1 adjusted for age and sex stratified by cluster]{Distributions of FEV1 adjusted for age and sex stratified by cluster. Vertical dotted lines represent the mean of the distribution. Cluster labels and colours match those in Figure~\ref{fig:ukb_hdbscan_labels}. Cluster 17 is mostly European-born individuals, Cluster 18 is mostly sub-Saharan African born individuals, Cluster 19 is mostly individuals born in England, the Caribbean, Ghana, and Nigeria, and Cluster 22 is mostly individuals born in England who chose the EB ``White and Black Caribbean'' or ``White and Black African''. (a) Top: Distribution of FEV1 by cluster without adjusting for population structure. (b) Bottom: Distribution of FEV1 by cluster after having adjusted for the top $40$ principal components.}
+  \label{fig:supp_pheno_ridge_fev}
+\end{figure}
+
+\clearpage
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{l|r}
+Abbreviation & Population name\\
+\hline
+ ACB & African Caribbean in Barbados\\
+ \hline
+    ASW & African Ancestry in SW USA \\
+ \hline
+    BEB & Bengali in Bangladesh\\
+ \hline
+    CDX & Chinese Dai in Xishuangbanna, China\\
+ \hline
+    CEU & Utah residents with Northern/Western European ancestry\\
+ \hline
+    CHB & Han Chinese in Beijing, China\\
+ \hline
+    CHS & Han Chinese South\\
+ \hline
+    CLM & Colombian in Medell\'{i}n, Colombia\\
+ \hline
+    ESN & Esan in Nigeria\\
+ \hline
+    FIN & Finnish in Finland\\
+ \hline
+    GBR & British From England and Scotland\\
+ \hline
+    GWD & Gambian in Western Division -- Mandinka\\
+ \hline
+    GIH & Gujarati Indians in Houston, Texas, USA\\
+ \hline
+    IBS & Iberian Populations in Spain\\
+ \hline
+    ITU & Indian Telugu in the UK\\
+ \hline
+    JPT & Japanese in Tokyo, Japan\\
+ \hline
+    KHV & Kinh in Ho Chi Minh City, Vietnam\\
+ \hline
+    LWK & Luhya in Webuye, Kenya\\
+ \hline
+    MSL & Mende in Sierra Leone\\
+ \hline
+    MXL & Mexican Ancestry in Los Angeles, CA, USA\\
+ \hline
+    PEL & Peruvian in Lima, Peru\\
+ \hline
+    PJL & Punjabi in Lahore, Pakistan\\
+ \hline
+    PUR & Puerto Rican in Puerto Rico\\
+ \hline
+    STU & Sri Lankan Tamil in the UK\\
+ \hline
+    TSI & Toscani in Italy\\
+ \hline
+    YRI & Yoruba in Ibadan, Nigeria\\
+\end{tabular}
+\caption{Names and abbreviations of 1KGP populations.}
+\label{table:1kgp_labels} 
+\end{table} 
+
+\clearpage
+
+\begin{table}[ht]
+\centering
+\resizebox{0.6\textwidth}{!}{
+\begin{tabular}{l|r|r|r|r}
+\hline
+1KGP population & Cluster label & 1KGP in cluster & Total in 1KGP & Proportion in cluster\\
+\hline
+ACB & 0 & 122 & 122 & 1.0000000\\
+\hline
+ASW & 0 & 103 & 107 & 0.9626168\\
+\hline
+ASW & 5 & 3 & 107 & 0.0280374\\
+\hline
+ASW & 15 & 1 & 107 & 0.0093458\\
+\hline
+BEB & 1 & 133 & 143 & 0.9300699\\
+\hline
+BEB & 11 & 10 & 143 & 0.0699301\\
+\hline
+CDX & 2 & 104 & 105 & 0.9904762\\
+\hline
+CDX & 4 & 1 & 105 & 0.0095238\\
+\hline
+CEU & 3 & 183 & 183 & 1.0000000\\
+\hline
+CHB & 4 & 105 & 105 & 1.0000000\\
+\hline
+CHS & 4 & 171 & 171 & 1.0000000\\
+\hline
+CLM & 5 & 142 & 146 & 0.9726027\\
+\hline
+CLM & 15 & 4 & 146 & 0.0273973\\
+\hline
+ESN & 6 & 172 & 172 & 1.0000000\\
+\hline
+FIN & 7 & 104 & 104 & 1.0000000\\
+\hline
+GBR & 3 & 105 & 105 & 1.0000000\\
+\hline
+GIH & 8 & 69 & 111 & 0.6216216\\
+\hline
+GIH & 17 & 41 & 111 & 0.3693694\\
+\hline
+GIH & 11 & 1 & 111 & 0.0090090\\
+\hline
+GWD & 9 & 179 & 180 & 0.9944444\\
+\hline
+GWD & 14 & 1 & 180 & 0.0055556\\
+\hline
+IBS & 10 & 162 & 162 & 1.0000000\\
+\hline
+ITU & 11 & 109 & 118 & 0.9237288\\
+\hline
+ITU & 17 & 9 & 118 & 0.0762712\\
+\hline
+JPT & 12 & 104 & 105 & 0.9904762\\
+\hline
+JPT & 4 & 1 & 105 & 0.0095238\\
+\hline
+KHV & 2 & 118 & 121 & 0.9752066\\
+\hline
+KHV & 4 & 3 & 121 & 0.0247934\\
+\hline
+LWK & 13 & 110 & 110 & 1.0000000\\
+\hline
+MSL & 14 & 122 & 122 & 1.0000000\\
+\hline
+MXL & 15 & 97 & 104 & 0.9326923\\
+\hline
+MXL & 10 & 7 & 104 & 0.0673077\\
+\hline
+PEL & 16 & 128 & 129 & 0.9922481\\
+\hline
+PEL & 5 & 1 & 129 & 0.0077519\\
+\hline
+PJL & 17 & 95 & 155 & 0.6129032\\
+\hline
+PJL & 19 & 48 & 155 & 0.3096774\\
+\hline
+PJL & 11 & 12 & 155 & 0.0774194\\
+\hline
+PUR & 18 & 145 & 149 & 0.9731544\\
+\hline
+PUR & 0 & 4 & 149 & 0.0268456\\
+\hline
+STU & 11 & 124 & 128 & 0.9687500\\
+\hline
+STU & 17 & 4 & 128 & 0.0312500\\
+\hline
+TSI & 10 & 111 & 111 & 1.0000000\\
+\hline
+YRI & 20 & 181 & 182 & 0.9945055\\
+\hline
+YRI & 6 & 1 & 182 & 0.0054945\\
+\hline
+\end{tabular}}
+\caption[Cluster assignments for each 1KGP population]{Cluster assignments for each 1KGP population, showing how many individuals from each population ended up in each cluster.}
+\label{table:1kgp_clusters} 
+\end{table} 
+
+\clearpage
+
+\begin{table}[ht]
+\centering
+\resizebox{0.60\textwidth}{!}{
+\begin{tabular}{l|l|r|r}
+\hline
+Cluster & 1KGP population & 1KGP population in cluster & Proportion\\
+\hline
+0 & ACB & 122 & 0.5327511\\
+\hline
+0 & ASW & 103 & 0.4497817\\
+\hline
+0 & PUR & 4 & 0.0174672\\
+\hline
+1 & BEB & 133 & 1.0000000\\
+\hline
+2 & CDX & 104 & 0.4684685\\
+\hline
+2 & KHV & 118 & 0.5315315\\
+\hline
+3 & CEU & 183 & 0.6354167\\
+\hline
+3 & GBR & 105 & 0.3645833\\
+\hline
+4 & CDX & 1 & 0.0035587\\
+\hline
+4 & CHB & 105 & 0.3736655\\
+\hline
+4 & CHS & 171 & 0.6085409\\
+\hline
+4 & JPT & 1 & 0.0035587\\
+\hline
+4 & KHV & 3 & 0.0106762\\
+\hline
+5 & ASW & 3 & 0.0205479\\
+\hline
+5 & CLM & 142 & 0.9726027\\
+\hline
+5 & PEL & 1 & 0.0068493\\
+\hline
+6 & ESN & 172 & 0.9942197\\
+\hline
+6 & YRI & 1 & 0.0057803\\
+\hline
+7 & FIN & 104 & 1.0000000\\
+\hline
+8 & GIH & 69 & 1.0000000\\
+\hline
+9 & GWD & 179 & 1.0000000\\
+\hline
+10 & IBS & 162 & 0.5785714\\
+\hline
+10 & MXL & 7 & 0.0250000\\
+\hline
+10 & TSI & 111 & 0.3964286\\
+\hline
+11 & BEB & 10 & 0.0390625\\
+\hline
+11 & GIH & 1 & 0.0039062\\
+\hline
+11 & ITU & 109 & 0.4257812\\
+\hline
+11 & PJL & 12 & 0.0468750\\
+\hline
+11 & STU & 124 & 0.4843750\\
+\hline
+12 & JPT & 104 & 1.0000000\\
+\hline
+13 & LWK & 110 & 1.0000000\\
+\hline
+14 & GWD & 1 & 0.0081301\\
+\hline
+14 & MSL & 122 & 0.9918699\\
+\hline
+15 & ASW & 1 & 0.0098039\\
+\hline
+15 & CLM & 4 & 0.0392157\\
+\hline
+15 & MXL & 97 & 0.9509804\\
+\hline
+16 & PEL & 128 & 1.0000000\\
+\hline
+17 & GIH & 41 & 0.2751678\\
+\hline
+17 & ITU & 9 & 0.0604027\\
+\hline
+17 & PJL & 95 & 0.6375839\\
+\hline
+17 & STU & 4 & 0.0268456\\
+\hline
+18 & PUR & 145 & 1.0000000\\
+\hline
+19 & PJL & 48 & 1.0000000\\
+\hline
+20 & YRI & 181 & 1.0000000\\
+\hline
+\end{tabular}}
+\caption[Composition of each cluster broken down by 1KGP population]{Composition of each cluster broken down by 1KGP population.}
+\label{table:1kgp_populations} 
+\end{table} 
+
+\newpage
+\begin{table}[ht]
+\centering
+\resizebox{0.60\textwidth}{!}{
+\begin{tabular}{l|l|r|r}
+\hline
+Ethnic group & Ethnic background \\
+\hline
+White & British \\
+\hline
+White & Irish \\
+\hline
+White & Any other white background \\
+\hline 
+Mixed & White and Black Caribbean \\
+\hline
+Mixed & White and Black African \\
+\hline
+Mixed & White and Asian \\
+\hline
+Mixed & Any other mixed background \\
+\hline
+Asian or Asian British & Indian \\
+\hline
+Asian or Asian British & Pakistani \\
+\hline
+Asian or Asian British & Bangladeshi \\
+\hline
+Asian or Asian British & Any other Asian background \\
+\hline
+Black or Black British & Caribbean \\
+\hline
+Black or Black British & African \\
+\hline
+Black or Black British & Any other Black background \\
+\hline
+Chinese & \\
+\hline
+Other ethnic group & \\
+\hline
+Do not know & \\
+\hline
+Prefer not to answer \\
+\hline
+\end{tabular}}
+\caption[Possible values for ethnic background in the UKB]{Possible values for ethnic background in the UKB (Data-Field 21000). Participants are first asked ``What is your ethnic group?'' and then asked ``What is your ethnic background?'' For ``Chinese'', there is no second question. Participants may also select ``Prefer not to answer'' for the second question; it is possible to have ethnic background recorded as ethnic group (e.g. just ``White'' or ``Mixed''. Excluding ``Do not know'', ``Prefer not to answer'', and ``Not available'', there were $20$ unique values of ethnic background.}
+\label{table:ukb_eb_options} 
+\end{table} 
+
+\clearpage
+
+\begin{table}[ht]
+\tiny
+\centering
+\resizebox{\textwidth}{!}{
+\begin{tabular}[t]{rlrr}
+  \hline
+Cluster & COB & Count & Proportion \\ 
+  \hline
+ n/a & England &  18 & 0.51 \\ 
+   n/a & Morocco &   3 & 0.09 \\ 
+   n/a & Sudan &   3 & 0.09 \\ 
+   n/a & Libya &   2 & 0.06 \\ 
+   n/a & Wales &   2 & 0.06 \\ 
+    0 & Japan & 242 & 0.84 \\ 
+    0 & South Korea &  26 & 0.09 \\ 
+    1 & Italy &  35 & 0.83 \\ 
+    1 & England &   6 & 0.14 \\ 
+    2 & Finland & 136 & 0.92 \\ 
+    3 & England & 1707 & 0.82 \\ 
+    4 & England & 2418 & 0.76 \\ 
+    4 & Scotland & 181 & 0.06 \\ 
+    4 & USA & 170 & 0.05 \\ 
+    5 & Iran & 502 & 0.31 \\ 
+    5 & Iraq & 303 & 0.19 \\ 
+    5 & England & 169 & 0.10 \\ 
+    5 & Cyprus & 163 & 0.10 \\ 
+    5 & Turkey & 135 & 0.08 \\ 
+    6 & Egypt &  72 & 0.22 \\ 
+    6 & Algeria &  70 & 0.21 \\ 
+    6 & Morocco &  66 & 0.20 \\ 
+    6 & Libya &  37 & 0.11 \\ 
+    7 & India & 3019 & 0.33 \\ 
+    7 & Pakistan & 1344 & 0.15 \\ 
+    7 & Kenya & 1067 & 0.12 \\ 
+    7 & England & 743 & 0.08 \\ 
+    7 & Sri Lanka & 644 & 0.07 \\ 
+    8 & India & 140 & 0.33 \\ 
+    8 & Kenya & 124 & 0.29 \\ 
+    8 & Uganda &  81 & 0.19 \\ 
+    8 & England &  31 & 0.07 \\ 
+    8 & Tanzania &  24 & 0.06 \\ 
+    9 & England & 553 & 0.60 \\ 
+    9 & India & 190 & 0.21 \\ 
+   10 & Somalia &  76 & 0.84 \\ 
+   10 & Prefer not to answer &   7 & 0.08 \\ 
+   11 & England &  50 & 0.58 \\ 
+   11 & Wales &  10 & 0.12 \\ 
+   11 & France &   7 & 0.08 \\ 
+   11 & Egypt &   5 & 0.06 \\ 
+    & & & \\
+    & & & \\
+      \hline
+     \end{tabular}
+   \begin{tabular}[t]{rlrr}
+  \hline
+Cluster & COB & Count & Proportion \\ 
+  \hline
+   12 & Peru &  35 & 0.29 \\ 
+   12 & Ecuador &  24 & 0.20 \\ 
+   12 & Mexico &  21 & 0.17 \\ 
+   12 & Bolivia &  13 & 0.11 \\ 
+   12 & Colombia &  13 & 0.11 \\ 
+   13 & Hong Kong & 459 & 0.22 \\ 
+   13 & China & 373 & 0.18 \\ 
+   13 & Philippines & 321 & 0.16 \\ 
+   13 & Malaysia & 314 & 0.15 \\ 
+   14 & England & 194 & 0.49 \\ 
+   14 & Myanmar (Burma) &  24 & 0.06 \\ 
+   14 & Hong Kong &  23 & 0.06 \\ 
+   15 & Nepal & 123 & 0.80 \\ 
+   15 & Prefer not to answer &  11 & 0.07 \\ 
+   16 & Spain & 330 & 0.39 \\ 
+   16 & Portugal & 282 & 0.33 \\ 
+   16 & England &  56 & 0.07 \\ 
+   17 & England & 355844 & 0.82 \\ 
+   17 & Scotland & 37490 & 0.09 \\ 
+   18 & Zimbabwe & 258 & 0.26 \\ 
+   18 & Congo & 144 & 0.14 \\ 
+   18 & Uganda & 126 & 0.13 \\ 
+   18 & Kenya & 111 & 0.11 \\ 
+   18 & Zambia &  56 & 0.06 \\ 
+   18 & South Africa &  53 & 0.05 \\ 
+   19 & Caribbean & 2268 & 0.31 \\ 
+   19 & England & 2077 & 0.28 \\ 
+   19 & Nigeria & 1017 & 0.14 \\ 
+   19 & Ghana & 867 & 0.12 \\ 
+   20 & England & 3528 & 0.87 \\ 
+   21 & England & 8338 & 0.54 \\ 
+   21 & Germany & 970 & 0.06 \\ 
+   21 & Scotland & 938 & 0.06 \\ 
+   22 & England & 697 & 0.66 \\ 
+   22 & Caribbean &  79 & 0.08 \\ 
+   23 & Ethiopia &  57 & 0.33 \\ 
+   23 & Sudan &  50 & 0.29 \\ 
+   23 & Eritrea &  44 & 0.25 \\ 
+   24 & England & 3178 & 0.62 \\ 
+   25 & England &  74 & 0.21 \\ 
+   25 & South Africa &  69 & 0.20 \\ 
+   25 & Mauritius &  63 & 0.18 \\ 
+   25 & Caribbean &  36 & 0.10 \\ 
+   \hline
+\end{tabular}
+}
+\caption[Frequency of country of birth by cluster]{Frequency of country of birth by cluster for Figure~\ref{fig:ukb_hdbscan_labels}. Proportion refers to the proportion within the cluster. Categories with proportion below $0.05$ are not listed.}
+\label{table:supp_ukb_cluster_cob} 
+\end{table} 
+
+\clearpage
+
+\begin{table}[ht]
+
+\centering
+\resizebox{\textwidth}{!}{
+\begin{tabular}[t]{rlrr}
+  \hline
+Cluster & EB & Count & Proportion \\ 
+  \hline
+n/a & Mixed, White and Black African &  10 & 0.29 \\ 
+   n/a & Mixed, Any other mixed background &   7 & 0.20 \\ 
+   n/a & Other ethnic group, Other ethnic group &   6 & 0.17 \\ 
+   n/a & White, British &   6 & 0.17 \\ 
+   n/a & White, Any other white background &   3 & 0.09 \\ 
+   n/a & Black or Black British, African &   2 & 0.06 \\ 
+    0 & Other ethnic group, Other ethnic group & 220 & 0.76 \\ 
+    0 & Asian or Asian British, Any other Asian background &  54 & 0.19 \\ 
+    1 & White, Any other white background &  39 & 0.93 \\ 
+    2 & White, Any other white background & 145 & 0.98 \\ 
+    3 & White, British & 1585 & 0.76 \\ 
+    3 & White, Any other white background & 407 & 0.20 \\ 
+    4 & White, British & 1880 & 0.59 \\ 
+    4 & White, Any other white background & 993 & 0.31 \\ 
+    4 & Other ethnic group, Other ethnic group & 239 & 0.08 \\ 
+    5 & Other ethnic group, Other ethnic group & 751 & 0.46 \\ 
+    5 & White, Any other white background & 435 & 0.27 \\ 
+    5 & Asian or Asian British, Any other Asian background & 229 & 0.14 \\ 
+    5 & White, British & 103 & 0.06 \\ 
+    6 & Other ethnic group, Other ethnic group & 223 & 0.68 \\ 
+    6 & White, Any other white background &  47 & 0.14 \\ 
+    6 & Mixed, White and Black African &  18 & 0.05 \\ 
+    7 & Asian or Asian British, Indian & 5177 & 0.57 \\ 
+    7 & Asian or Asian British, Pakistani & 1726 & 0.19 \\ 
+    7 & Asian or Asian British, Any other Asian background & 1049 & 0.12 \\ 
+    7 & Other ethnic group, Other ethnic group & 498 & 0.06 \\ 
+    8 & Asian or Asian British, Indian & 419 & 0.99 \\ 
+    9 & Mixed, White and Asian & 432 & 0.47 \\ 
+    9 & White, British & 141 & 0.15 \\ 
+    9 & Asian or Asian British, Indian &  84 & 0.09 \\ 
+    9 & Mixed, Any other mixed background &  76 & 0.08 \\ 
+    9 & Other ethnic group, Other ethnic group &  53 & 0.06 \\ 
+   10 & Black or Black British, African &  67 & 0.74 \\ 
+   10 & Other ethnic group, Other ethnic group &  22 & 0.24 \\ 
+   11 & Mixed, Any other mixed background &  30 & 0.35 \\ 
+   11 & White, British &  20 & 0.23 \\ 
+   11 & White, Any other white background &  13 & 0.15 \\ 
+   11 & Mixed, White and Asian &   9 & 0.10 \\ 
+   11 & Other ethnic group, Other ethnic group &   7 & 0.08 \\ 
+    & & & \\
+    & & & \\
+   \hline
+   \end{tabular}
+   \begin{tabular}[t]{rlrr}
+  \hline
+Cluster & EB & Count & Proportion \\ 
+  \hline
+12 & Other ethnic group, Other ethnic group &  90 & 0.74 \\ 
+   12 & Mixed, Any other mixed background &  15 & 0.12 \\ 
+   12 & White, Any other white background &  11 & 0.09 \\ 
+   13 & Chinese, Chinese & 1454 & 0.70 \\ 
+   13 & Other ethnic group, Other ethnic group & 323 & 0.16 \\ 
+   13 & Asian or Asian British, Any other Asian background & 232 & 0.11 \\ 
+   14 & Mixed, Any other mixed background & 114 & 0.29 \\ 
+   14 & Mixed, White and Asian &  93 & 0.23 \\ 
+   14 & Other ethnic group, Other ethnic group &  61 & 0.15 \\ 
+   14 & Asian or Asian British, Any other Asian background &  44 & 0.11 \\ 
+   14 & Chinese, Chinese &  31 & 0.08 \\ 
+   14 & White, British &  31 & 0.08 \\ 
+   15 & Asian or Asian British, Any other Asian background &  63 & 0.41 \\ 
+   15 & Other ethnic group, Other ethnic group &  63 & 0.41 \\ 
+   15 & Not Available &  22 & 0.14 \\ 
+   16 & White, Any other white background & 753 & 0.89 \\ 
+   16 & White, British &  53 & 0.06 \\ 
+   17 & White, British & 412206 & 0.95 \\ 
+   18 & Black or Black British, African & 773 & 0.77 \\ 
+   18 & Other ethnic group, Other ethnic group & 190 & 0.19 \\ 
+   19 & Black or Black British, Caribbean & 4143 & 0.56 \\ 
+   19 & Black or Black British, African & 2225 & 0.30 \\ 
+   19 & Other ethnic group, Other ethnic group & 602 & 0.08 \\ 
+   20 & White, British & 3778 & 0.93 \\ 
+   20 & White, Any other white background & 221 & 0.05 \\ 
+   21 & White, British & 7848 & 0.51 \\ 
+   21 & White, Any other white background & 7020 & 0.45 \\ 
+   22 & Mixed, White and Black Caribbean & 408 & 0.39 \\ 
+   22 & Mixed, White and Black African & 254 & 0.24 \\ 
+   22 & Mixed, Any other mixed background & 111 & 0.11 \\ 
+   22 & Black or Black British, Caribbean & 106 & 0.10 \\ 
+   22 & Other ethnic group, Other ethnic group &  69 & 0.07 \\ 
+   23 & Black or Black British, African &  95 & 0.54 \\ 
+   23 & Other ethnic group, Other ethnic group &  64 & 0.37 \\ 
+   24 & White, British & 3416 & 0.67 \\ 
+   24 & White, Any other white background & 646 & 0.13 \\ 
+   24 & Other ethnic group, Other ethnic group & 285 & 0.06 \\ 
+   25 & Other ethnic group, Other ethnic group & 100 & 0.29 \\ 
+   25 & Mixed, Any other mixed background &  83 & 0.24 \\ 
+   25 & Mixed, White and Black African &  24 & 0.07 \\ 
+   25 & Black or Black British, Caribbean &  23 & 0.07 \\ 
+   \hline
+\end{tabular}
+}
+\caption[Frequency of selected EB by cluster]{Frequency of selected EB by cluster for Figure~\ref{fig:ukb_hdbscan_labels}. Proportions refer to the proportion within the cluster. Categories with proportions below $0.05$ are not listed.}
+\label{table:supp_ukb_cluster_sieb} 
+\end{table} 
