@@ -1,25 +1,29 @@
 We have presented a method of nonlinear dimensionality reduction that is compatible with the scale and composition of modern biobanks. With UMAP and HDBSCAN($\hat{\epsilon}$) we have uncovered a wide variety of patterns of fine-scale population structure in every biobank studied. Since the publication of \hyperref[chap:chapter1]{Chapter~1} , UMAP has become a standard method for visualization and exploratory data analysis in population genetics. Given the demand for cluster extraction noted in \hyperref[chap:chapter3]{Chapter~3}, it is possible that HDBSCAN($\hat{\epsilon}$)---or some other density clustering method---could see similar adoption.
 
-The timing of UMAP coincides fortuitously with the growth of biobanks and the genomic revolution. Writing in his review of TDA in 2018, Wasserman asked, ``is it possible to derive low dimensional embedding methods that explicitly preserve topological features of the data? This is an interesting open question.''\citep{wasserman_topological_2018} This review was published in the same year that UMAP was released. Topological analysis and density clustering seem especially well-suited to the task of understanding population structure in diverse biobanks.
+The timing of UMAP coincides fortuitously with the growth of biobanks and the genomic revolution. Writing in his review of TDA in 2018, Wasserman asked, ``is it possible to derive low dimensional embedding methods that explicitly preserve topological features of the data? This is an interesting open question.''\citep{wasserman_topological_2018} This review was published in the same year that UMAP, an explicitly topological method, was released. Topological analysis and density clustering seem especially well-suited to the task of understanding population structure in diverse biobanks.
 
 \section{The value of visualization}
 
 In \hyperref[chap:chapter2]{Chapter~2} we describe the relationship between dimensionality reduction and biological data as analogous to that of microscopes and biological samples. This analogy has been made before with respect to mathematics in general\citep{cohen_mathematics_2004}. Though analyses, inferences, and models can shed light on the biological world, there is an inherent value to being able to literally see your data and understand its structure. Among the most cited papers in population genetics is ``Genes mirror geography within Europe''\citep{novembre2008europe}---although isolation-by-distance had been characterized almost a century earlier, the figure of the top principal components superimposed over Europe was an elegant illustration of the geographical distribution of human genetic variation.
 
-With UMAP, we are able to map complex genetic structure down to $2$ or $3$ dimensions for visualization. Using auxiliary data---geographic data, population labels, phenotypic information, environmental variables, etc.---we can visually scan for patterns and generate hypotheses. 
+With UMAP, we are able to map complex genetic structure down to $2$ or $3$ dimensions for visualization, examine the fine-scale structure that a method like PCA compresses, while preserving interesting signal in the data. Using auxiliary data---geographic data, population labels, phenotypic information, environmental variables, etc.---we can visually scan for patterns and generate hypotheses. In \hyperref[chap:chapter1]{Chapter~1} we present a variety of visualization methods, including using colouring points by admixture levels to uncover gradients in ancestry and converting 3D UMAP coordinates to RGB colour levels for colouring maps. One common method used in single-cell studies is to colour UMAP plots by gene expression levels (e.g. \citep{jessa_stalled_2019} Figure~4h). A similar approach could be used in exploring allele distributions by clusters to see whether they are relatively more common in different populations---one such method, called the Allele Dispersion Score, was proposed by Correard et al. in 2022\citep{correard_allele_2022}. Though UMAP figures are now standard in genetic studies, most are limited to a simple 2D scatterplot coloured by some population label---in every biobank, there is certainly value in exploring deeper and using other variables.
 
-ADS\citep{correard_allele_2022}
+There is also value in going beyond static $2$D figures. Software libraries such as plotly\citep{plotly} can generate interactive figures, are available for Python and R, and are straightforward to implement. Interactive exploration can assess how individual points fit within larger projections, rapidly identifying patterns or using them for diagnostics. Working in $3$D is much easier when the figures are interactive, and we have found value in, e.g., exploring the relationships between individuals and populations in the UKB. Finally, as noted in \hyperref[chap:chapter3]{Chapter~3}, data where $D > 2$ extracts clusters very well---while it can be tempting to delineate clusters from $2$D figures along, the jump from $3$ to $2$ dimensions can lose key information about how points are related to one another topologically. There is value in using information from higher dimensions to aid visualization in lower dimensions and, despite UMAP's now-widespread use, its ability to work in $3$ or more dimensions is, in the view of the author, underappreciated.
 
-%Mathematics itself has been described as biology's ``next microscope''\citep{cohen_mathematics_2004}. However, t
+\section{The philosophy of clustering}
 
- Echoing a point from Chapter 2, dimensionality reduction is to data what the microscope is to biology. We could certainly do biological research purely through statistical inference and clever theory, but it would not be nearly as fast or fruitful or creative. People like looking at interesting figures---draw the attention of the eye and you can provoke interesting questions.
+Unlike problems like classification, clustering does not have a well-defined ground truth, and even the most basic definition---such as ``similar points are grouped together and dissimilar points are grouped separately''---can be self-contradictory\citep{ben-david_clustering_2018}. Taking the example of an admixed population
 
+One of the questions around clustering is whether we have found ``true clusters''; that is, whether they reflect some ``truth''. 
+
+This is a question of epistemology---
+
+There is no universal definition of a ``cluster'', and the idea of a ``good'' clustering will be domain-specific\citep{hennig_what_2015}.
+
+- discrete groupings are useful, like models --- and like models, they are prone to reification: the territory is not the map
 - the philosophy of unsupervised learning and clustering in general
 - we're finding something, it's probably not nothing
 
-Creative uses like colouring maps
-
-\section{The philosophy of clustering}
 
 \clearpage
 
@@ -71,6 +75,9 @@ genetics of participants may not match non-participants
 \citep{benonisdottir_studying_2023}
 
 The UKB's nested structure, and how definitions shape our perceptions.
+
+\subsection{Labels and how data are situated}
+
 
 
 \section{Equitability in the genomic revolution}
