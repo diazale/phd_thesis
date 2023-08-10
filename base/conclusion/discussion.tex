@@ -10,7 +10,7 @@ With UMAP, we are able to map complex genetic structure down to $2$ or $3$ dimen
 
 There is also value in going beyond static $2$D figures. Software libraries such as plotly\citep{plotly} can generate interactive figures, are available for Python and R, and are straightforward to implement. Interactive exploration can assess how individual points fit within larger projections, rapidly identifying patterns or using them for diagnostics. Working in $3$D is much easier when the figures are interactive, and we have found value in, e.g., exploring the relationships between individuals and populations in the UKB. Finally, as noted in \hyperref[chap:chapter3]{Chapter~3}, clustering works well in dimensions abvoe $2$---while it can be tempting to delineate clusters from $2$D figures alone, the jump from $3$ to $2$ dimensions can lose information about how points are related to one another topologically. There is value in using information from higher dimensions to aid visualization in lower dimensions and, despite UMAP's now-widespread use, its ability to work in $3$ or more dimensions is, in the view of the author, underappreciated.
 
-\section{Clustering in human genetics}
+\section{The philosophy of clustering}
 
 Unlike problems like classification, clustering does not have a well-defined ground truth, and even the most basic definition, such as ``similar points are grouped together and dissimilar points are grouped separately'', can be self-contradictory\citep{ben-david_clustering_2018}. In a genetic cluster from \hyperref[chap:chapter3]{Chapter~3}, individuals in may be closely related to their immediate neighbours, but not to those in a far end of a cluster; they are grouped by similarity in one sense, but not separated by dissimilarity. Different algorithms and parametrizations will yield different results. Though various quality metrics exist, it has been argued that even untrained humans are better at assessing the quality of an arbitrary $2$D clustering\citep{lewis_human_2012}---there is an element of ``I know it when I see it''. 
 
@@ -42,6 +42,9 @@ There is no universal definition of a ``cluster'', and the idea of a ``good'' cl
 - the philosophy of unsupervised learning and clustering in general
 - we're finding something, it's probably not nothing
 
+The way we talk about clusters percolates into the public conciousness. Using Wikipedia as an example, there are $20$ pages in the category ``Genetics by ethnicity'', including a further $8$ pages in the subcategory ``Jewish genetics''.
+
+
 
 \clearpage
 
@@ -65,6 +68,8 @@ There is no universal definition of a ``cluster'', and the idea of a ``good'' cl
 \end{figure}
 
 Though genetic variation exists on a multidimensional continuum, defining discrete populations can be useful, e.g. for modelling ancestry\citep{pritchard_inference_2000}. In inferential statistics, we also require a definition of ``population''\citep{statcan2003}. To establish the scope of a study, we define the ``target population'' (the group to which research applies) and the ``survey population'' (the group which is covered by the study and, ideally, is very similar to the target population). The survey population is ultimately chosen from the survey frame, which provides the means to sample the individuals from the population. Figure~\ref{fig:statistical_populations} provides a schematic of this concept, as well as a schematic of when the study population is not drawn from the target population.
+
+
 
 Pgh1: Biobanks are the sources of biomedical studies, but how do they define their study populations and how do they define their target populations? Also point out that the studies done are not random samples from the target population but volunteer-based non-random samples. Then mention some of the associates found between markers and participationi n the UKB.
 
@@ -93,6 +98,8 @@ genetics of participants may not match non-participants
 \citep{benonisdottir_studying_2023}
 
 The UKB's nested structure, and how definitions shape our perceptions.
+
+How PC adjustment affects GWAS.
 
 \subsection{Labels and how data are situated}
 

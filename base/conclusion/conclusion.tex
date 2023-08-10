@@ -1,6 +1,26 @@
 \section{Future directions}
 
+TDA has proven a useful addition to the population geneticist's toolbox. The work done in this thesis has been on genotypic data, and usually using the top principal components for computational reasons. Since the publication of the manuscripts, multi-threaded versions of UMAP and HDBSCAN($\hat{\epsilon}$) have been released. One avenue for future research is to work directly with genotype data that has not been processed with PCA. We explored this briefly in \hyperref[chap:chapter1]{Chapter~1} using 1KGP data; the improvement in compute time with multi-threading should make this investigation more feasible.
+
+There are possible connections between genetic topology and IBD. As noted in \hyperref[chap:chapter3]{Chapter~3}, UMAP and HDBSCAN($\hat{\epsilon}$) extract population structure that appears similar in scale to IBD studies of diverse biobanks; the two methods may capture similar information but via different routes. Clusters extracted by our TDA approach likely contain substructure themselves, and a clustering approach that breaks clusters down further may reveal finer details.
+
+Studying different subsets of populations or genetic data may be illuminating. We have noted studies in \hyperref[chap:chapter2]{Chapter~2} that use, e.g., structural variants rather than genotype data. Sex-bias in admixture has been noted in other studies (e.g. \citep{ongaro_evaluating_2021,korunes_sex,marcheco-teruel_cuba_2014}), whereas all of the analyses presented here have been on autosomal data and combining the sexes. Each of these approaches seems likely to uncover interesting patterns.
+
+Within the biomedical realm, the confounding of GWAS and transferability of PGS are perennial areas of research. We presented a method of visualization in \hyperref[chap:chapter3]{Chapter~3} that illustrates how PCA adjustment affects populations across an entire biobank, with an additional analysis that studied the transferability of PGS.
+
+-combine with ADS?
+-assess transferability?
+-the bar must be low these days
 
 
 \section{Final Conclusion}
-This thesis has introduced a methodology for applying TDA to high-dimensional population genetic data. 
+This thesis has introduced a methodology for TDA of high-dimensional population genetic data. This methodology is now widely applied in the field and has 
+
+
+\begin{itemize}
+\item To apply topological data analysis to human genetic data
+\item To use nonlinear dimensionality reduction and density clustering to characterize population structure in a variety of biobanks, focusing on using UMAP and HDBSCAN($\hat{\epsilon}$)
+\item To provide a framework for a new methodology for population genetics and will demonstrate its utility to the field
+\item To relate population structure to other collected data in biobanks, such as population labels, phenotypic information, geographic coordinates, demographic history, genetic ancestry, and other variables
+\item To study the implications of our results to GWAS and PGS
+\end{itemize}
