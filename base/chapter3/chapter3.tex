@@ -258,8 +258,69 @@ In Figure~\ref{fig:smoothed_phenos}, we visualize the smoothing across $604$ par
 
 To test if smoothed cluster estimates have explanatory power for these admixed individuals, we carried out an $80-20$ split and compared simple linear models for phenotype prediction using the top $40$ PCs versus using the smoothed estimates made from residuals after removing the effects of the top $40$ PCs. We compared the models for populations that selected ``Mixed'' as their EB in the UKB questionnaire and found that for individuals who selected ``White and Black Caribbean'' ($n=573$) or ``White and Black African'' ($n=389$), the smoothed cluster estimates indeed outperformed the PCA model, with an improved mean squared error across several phenotypes (see Figure~\ref{fig:pheno_models}; full table of MSE values in Tables~\ref{table:supp_mse1} and \ref{table:supp_mse2}).
 
+Analysis based on topological components can help to visualize the impact of covariate adjustment in the context of population structure and to identify residual heterogeneity in phenotype distributions and environmental data (e.g. smoking rates in Figure~\ref{fig:supp_ukb_smoking}).
 
 \clearpage
+
+\subsection{Evaluating transferability of polygenic scores}
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}[b]{0.6\linewidth}
+%    \includegraphics[width=\linewidth]{images/fst_vs_r2_weighted_plink_20200214_065646/HEIGHT_mean_r2_vs_fst.png}
+\includegraphics[width=0.6\linewidth]{placeholder.png}
+    \caption{}
+    \label{fig:fst_vs_r2_height}
+  \end{subfigure}
+    \begin{subfigure}[b]{0.6\linewidth}
+%    \includegraphics[width=\linewidth]{images/fst_vs_r2_weighted_plink_20200214_065646/LDL_mean_r2_vs_fst.png}
+\includegraphics[width=0.6\linewidth]{placeholder.png}
+    \caption{}
+    \label{fig:fst_vs_r2_ldl}
+  \end{subfigure}
+  \caption[PGS accuracy by $F_{ST}$]{\textbf{PGS accuracy by $F_{ST}$ for standing height and LDL.}  A plot of the mean $R^2$ of a PGS against the difference in $F_{ST}$ from the White British in the UKB. We use clusters extracted using HDBSCAN($\hat{\epsilon}$). There is a negative linear relationship between $F_{ST}$ from the largest cluster and PGS accuracy. (a) Top: A PGS of height shows a strong decay between $R^2$ and $F_{ST}$, as expected. (b) Bottom: A PGS of LDL-cholesterol has an unclear relationship between $R^2$ and $F_{ST}$. Cluster $18$ has the largest $F_{ST}$ but one of the highest $R^2$ values; the cluster also has the highest frequency of the $rs7412$ and $rs4420638$ alleles.} 
+  \label{fig:fst_vs_r2}
+\end{figure}
+
+Most investigations of PGS transferability are done at a population-level using large-scale geographical groups (e.g. ``African'', ``European'', ``Asian''). However, these broad populations themselves exhibit population structure\citep{kamiza_transferability_2022}. Instead, we use our $26$ cluster labels from Figure~\ref{fig:ukb_hdbscan_labels}, and compared the transferability of PGS across them. 
+
+Using UKB data, we estimated effect sizes of SNPs using VIPRS\citep{zabad_fast_2023}. As a training population, we used individuals who selected ``White British'' as their EB to mimic the well-documented overrepresentation of European-ancestry individuals in GWAS. We estimated phenotypes for individuals and calculated the values of the fixation index ($F_{ST}$) between the clusters. In Figure~\ref{fig:fst_vs_r2}, we plot the PGS accuracy for two phenotypes---standing height and low-density lipoprotein cholesterol (LDL)---against the $F_{ST}$ for each cluster relative to Cluster~17, a cluster with over $400,000$ individuals and with significant overlap with the training population ($>95\%$ selected ``White British'' as their EB). We observe for height (Figure~\ref{fig:fst_vs_r2_height}) that as the $F_{ST}$ between populations grows, the predictive value of the PGS decreases; such a decrease is expected, due to factors like population-specific causal variants, gene-by-environment interaction, differences in allele frequencies, and linkage disequilibrium between assayed SNPs and causal variants\citep{wang_theoretical_2020}.
+
+However, we see no such relationship for LDL (Figure~\ref{fig:fst_vs_r2_ldl}). Cluster~18, composed mostly of individuals born in sub-Saharan Africa and of whom $77\%$ selected the EB ``Black African'', has one of the best PGS predictions despite its large $F_{ST}$ from the training population. This may be because there are a few variants with large effect sizes; in contrast to height, LDL has been noted for its relatively low polygenicity\citep{ding_polygenic_2023}. Since $F_{ST}$ compares genome-wide variation, the accuracy of a PGS constructed from relatively few variants with strong effects is not expected to correlate as strongly with $F_{ST}$.
+
+To test if the frequencies of certain alleles impacted the PGS estimates, we modelled the $R^2$ from the VIPRS estimates for each cluster against minor allele frequencies (MAF) of the top $100$ SNPs and found the two strongest results were for $rs4420638$ and $rs7412$ (Tables~\ref{table:supp_rs4420638_lm} and \ref{table:supp_rs7412_lm}; Figures~\ref{fig:supp_rs4420638_lm} and \ref{fig:supp_rs7412_lm}, respectively).  Both have their highest frequencies in Cluster~18 and both markers are in the apolipoprotein E (APOE) gene cluster; $rs7412$ had the largest overall effect size ($\hat{\beta}=-0.1812$), while $rs4420638$ had the second largest effect size in the opposite direction ($\hat{\beta}=0.02813$). The $rs7412$ allele has been linked to LDL\citep{bennet_pleiotropy_2010} and was found to explain significant variation in LDL in African Americans\citep{rasmussen-torvik_high_2012}. The $rs4420638$ allele was associated with LDL even in the presence of the $rs7412$ allele in a study of Sardinian, Norwegian, and Finnish individuals\citep{sanna_fine_2011}; it was also found to affect LDL in studies with of children in Germany\citep{breitling_genetic_2015} and China\citep{wang_associations_2022}.
+
+The relationship between PGS accuracy and fine-scale population structure is complex and will vary by phenotype. It is not immediately obvious whether a PGS will transfer when there is a large degree of differentiation between the estimand and training populations. However, an approach like UMAP-HDBSCAN($\hat{\epsilon}$) can provide a detailed picture of the likely performance of a PGS in various genetic subgroups.
+
+\clearpage
+
+\subsection{Quality control for complex multi-ethnic cohorts}
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}[b]{0.95\linewidth}
+%  \includegraphics[width=\linewidth]{images/cartagene_naf_cluster_wc.png}
+  \includegraphics[width=0.5\linewidth]{placeholder.png}
+  \end{subfigure}
+  \caption[Clustering identifies data collection errors in CaG]{\textbf{Clustering can identify data collection errors.} A 2D UMAP of CARTaGENE data coloured by clusters extracted using HDBSCAN($\hat{\epsilon}$). The highlighted cluster was found to have most of its individuals born in North Africa. A word cloud shows that a significant minority of individuals were born in American Samoa, which was found to be a coding error.}
+    \label{fig:ctg}
+\end{figure}
+
+Generally the fine-scale structure of biobank data is not known in advance. The structure of under-represented groups in particular, such as minority populations or those with complex histories of recent migration and admixture, can also be intricate and poorly understood, at least by geneticists. Individuals with uncommon combinations of ancestral, geographic, and ethnic descriptors are present in all biobanks. These combinations can be real and represent the completely different nature of genetic ancestry and ethnicity; they may also represent clerical errors\citep{macleod_principles_2009}. Distinguishing the two is especially relevant when biobanks are used as sample frames for deeper sequencing or for follow-up studies, and when variables like country of birth and ethnicity are used as selection criteria. Using HDBSCAN$(\hat{\epsilon})$ to explore the relationship between clusters membership and auxiliary variables can detect data collection errors before sample selection is carried out, preventing serious methodology problems or unnecessary exclusion of individuals.
+
+CARTaGENE is a biobank of residents from Quebec, Canada, that has recently genotyped $29,337$ individuals\citep{awadalla_cohort_2013}. We were interested in identifying populations of North African descent for further study. In Figure~\ref{fig:ctg}, we identified a cluster of $446$ people born largely in North Africa with $51$ individuals ($11.4\%$) recorded as being born in American Samoa, an American island territory in the South Pacific Ocean with fewer than $50,000$ inhabitants. After researching possible historical explanations (e.g. migration between American Samoa and North Africa), we traced the result to a coding error from different country codes used over the course of data collection; the actual birth country was corrected to Algeria. The same coding error was found in other clusters, affecting $266$ individuals born in $43$ countries. While this error was easy to discover using \hdbe, it is not obvious whether or how it would have been identified otherwise given that it affected less than $1\%$ of the cohort. Efficient data exploration, aided by visualization and clustering, remains one of our best tools to combat the dual evils of bookkeeping errors and batch effects.
+
+\section{Discussion}
+
+We present UMAP-HDBSCAN($\hat{\epsilon}$), a new approach to capturing population structure that approximates the topology of high-dimensional genetic data and detects dense clusters in a low-dimensional space. This approach does not assume a specific number of populations, nor does it assume that there is a type genome for a given population. Our method requires neither reference panels nor \emph{a priori} definitions of populations, but can use auxiliary data such as population labels, country of birth, ethnicity, geographic coordinates, etc., to characterize the clusters \emph{a posteriori} and learn about their history or origins. With tools like PCA and UMAP already common in population genetics\citep{diaz-papkovich_review_2021}, it integrates easily with existing analysis pipelines. Given UMAP data from the UKB---a matrix of dimension ($488,377 \times 5$)---HDBSCAN($\hat{\epsilon}$) takes under $60$ seconds to execute on a single core, making it tractable for large-scale data. Being robust to the presence of many populations of widely varying sizes, it is a powerful and flexible method and is well-suited to modern biobanks.
+
+Stratification is important in data exploration and analysis, and many stratification strategies have been proposed. Using self-identification is common, and can be appropriate if the outcome of interest is tied to identity. It is however an inconsistent measure of genetic ancestry, and is limited to identities that are available in questionnaire data. Its use in genetic screening has led to missed carriers in at-risk populations\citep{kaseniit_genetic_2020}, and a report from the US National Academies of Sciences, Engineering, and Medicine has recommended against using such variables as proxies for genetic variation\citep{committee_2023}. 
+
+% Supplementary material
+
+\clearpage
+
+\section{Supplementary Information}
 
 \begin{figure}[ht]
   \centering

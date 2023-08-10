@@ -14,10 +14,16 @@ There is also value in going beyond static $2$D figures. Software libraries such
 
 Unlike problems like classification, clustering does not have a well-defined ground truth, and even the most basic definition, such as ``similar points are grouped together and dissimilar points are grouped separately'', can be self-contradictory\citep{ben-david_clustering_2018}. In a genetic cluster from \hyperref[chap:chapter3]{Chapter~3}, individuals in may be closely related to their immediate neighbours, but not to those in a far end of a cluster; they are grouped by similarity in one sense, but not separated by dissimilarity. Different algorithms and parametrizations will yield different results. Though various quality metrics exist, it has been argued that even untrained humans are better at assessing the quality of an arbitrary $2$D clustering\citep{lewis_human_2012}---there is an element of ``I know it when I see it''. 
 
-The question of the appropriateness of a given clustering can be framed as whether it is useful in its context: whether it helps to find interesting patterns (without necessarily assigning interpretation); whether it simplifies data; investigation correlations with other variables, etc\citep{hennig_what_2015}. The choice of clustering method is often arbitrary, e.g. ``we use the standard method in the field''\citep{ben-david_clustering_2018}, and this has resulted in standards that exclude individuals from analyses\citep{ding_polygenic_2023}. We have demonstrated that density clustering successfully includes all or almost all individuals in several biobanks and that the clusters generated reflect logical groupings.
+The question of the appropriateness of a given clustering can be framed as whether it is useful in its context: whether it identifies interesting patterns (without necessarily assigning interpretation); whether it simplifies data; investigation correlations with other variables, etc\citep{hennig_what_2015}. The choice of clustering method is often arbitrary, e.g. ``we use the standard method in the field''\citep{ben-david_clustering_2018}, and this has resulted in standards that exclude individuals from analyses\citep{ding_polygenic_2023}. We have demonstrated that density clustering successfully includes all or almost all individuals in several biobanks and that the clusters generated reflect logical groupings.
 \citep{hennig_what_2015}
 
+[Some image of two clusters]
+``Ceci n'est pas une population.''
+
+Though UMAP appears to preserve structure, at least visually, it is only one representation of very complex high-dimensional data points and the relationships between them. HDBSCAN($\hat{\epsilon}$) extracts clusters that correspond to our knowledge of population structure, but again they are only an abstraction and should not be reified. They are abstractions that, ideally, represent some underlying truth---they are maps of an unknown (unknowable?) territory; this map cannot be confused with the territory itself. 
+
 There are no ``true'' clusters; the idea of ``underlying truth'' or ``natural kinds''
+
 
 
 One of the questions around clustering is whether we have found ``true clusters''; that is, whether they reflect some ``truth''. 
