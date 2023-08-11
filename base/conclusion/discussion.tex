@@ -10,7 +10,16 @@ With UMAP, we are able to map complex genetic structure down to $2$ or $3$ dimen
 
 There is also value in going beyond static $2$D figures. Software libraries such as plotly\citep{plotly} can generate interactive figures, are available for Python and R, and are straightforward to implement. Interactive exploration can assess how individual points fit within larger projections, rapidly identifying patterns or using them for diagnostics. Working in $3$D is much easier when the figures are interactive, and we have found value in, e.g., exploring the relationships between individuals and populations in the UKB. Finally, as noted in \hyperref[chap:chapter3]{Chapter~3}, clustering works well in dimensions abvoe $2$---while it can be tempting to delineate clusters from $2$D figures alone, the jump from $3$ to $2$ dimensions can lose information about how points are related to one another topologically. There is value in using information from higher dimensions to aid visualization in lower dimensions and, despite UMAP's now-widespread use, its ability to work in $3$ or more dimensions is, in the view of the author, underappreciated.
 
+\clearpage
+
 \section{The philosophy of clustering}
+
+\begin{figure}[h]
+\centering
+    \includegraphics[width=0.75\linewidth]{main_figures/discussion/magritte.png}
+\caption[The treachery of clustering]{\textbf{Clusters are only an abstraction, but they can be useful as abstractions.} Often we speak of clusters and populations interchangeably---however, we must remember that clusters and even the idea of a population are concepts that help us understand reality, but are not reality itself.}
+\label{fig:magritte}
+\end{figure}
 
 Unlike problems like classification, clustering does not have a well-defined ground truth, and even the most basic definition, such as ``similar points are grouped together and dissimilar points are grouped separately'', can be self-contradictory\citep{ben-david_clustering_2018}. In a genetic cluster from \hyperref[chap:chapter3]{Chapter~3}, individuals in may be closely related to their immediate neighbours, but not to those in a far end of a cluster; they are grouped by similarity in one sense, but not separated by dissimilarity. Different algorithms and parametrizations will yield different results. Though various quality metrics exist, it has been argued that even untrained humans are better at assessing the quality of an arbitrary $2$D clustering\citep{lewis_human_2012}---there is an element of ``I know it when I see it''. 
 
