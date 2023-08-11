@@ -316,11 +316,84 @@ We present UMAP-HDBSCAN($\hat{\epsilon}$), a new approach to capturing populatio
 
 Stratification is important in data exploration and analysis, and many stratification strategies have been proposed. Using self-identification is common, and can be appropriate if the outcome of interest is tied to identity. It is however an inconsistent measure of genetic ancestry, and is limited to identities that are available in questionnaire data. Its use in genetic screening has led to missed carriers in at-risk populations\citep{kaseniit_genetic_2020}, and a report from the US National Academies of Sciences, Engineering, and Medicine has recommended against using such variables as proxies for genetic variation\citep{committee_2023}. 
 
-% Supplementary material
+The most commonly used metrics for fine-scale genetic community identification are based on recent relatedness. One such approach is identity-by-descent (IBD; see e.g. \citep{freyman_fast_2021,shemirani_rapid_2021,qian_efficient_2014,lawson_inference_2012}), which has been used for downstream clustering (e.g. characterizing demographic history in \citep{han_clustering_2017} and identifying selection within populations in \citep{nait_saada_identity-by-descent_2020}). An IBD-based approach in ATLAS, for example, recently identified associations between genetic clusters and genetic, clinical, and environmental data\citep{caggiano_disease_2023}. The ability of IBD clustering to identify fine-scale structure can be due to two effects. First, it focuses on recent relatedness between individuals, which may be helpful in identifying recent demographic effects. Second, because it is by nature pairwise, it encourages the use of clustering methods that focus less on archetypes and more on genetic neighbourhoods, i.e., on more topological approaches.  
+
+The topological approach presented here only uses overall genetic similarity--- which reflects both recent and background relatedness---to capture population structure. Since it bypasses the need to perform phasing and IBD calling, it requires fewer analytical tools and computational resources. Because IBD clustering is demanding, and because researchers are often interested in identifying clusters they see in PCA or UMAP space (which may not relate to IBD clusters) researchers commonly rely on hand-selected delineations of dimensionally-reduced data (e.g. \citep{halldorsson_sequences_2022,sakaue_dimensionality_2020}). The approach we propose is faster, less arbitrary, identifies structure at a finer scale, and takes advantage of the higher-dimensional nature of the data to identify structure more consistently.
+
+A recent publication on polygenic scoring by Ding et al\citep{ding_polygenic_2023} suggested moving entirely away from stratification based on genetic clusters. Instead, they argued in favour of individual-level measures. They cite three issues with clusters: (i) clustering algorithms fail to capture populations without reference panels, such as those that are relatively small or recently admixed; (ii) clusters ignore inter-individual variation; and (iii) clustering results change based on algorithms and reference panels. We believe that these criticisms are valid for the type of stratification they considered: Ding et al clustered UKB data based on proximity to an archetype in PCA-space---if an individual fell within a certain distance of one of nine pre-defined population centroids, they were considered a member of a cluster; otherwise, their ancestry was considered unknown.
+
+We believe that the first two objections can be resolved by topological approaches. In the UKB, $91\%$ of participants were placed into clusters in \citep{ding_polygenic_2023}. In contrast, across $604$ parametrizations, the median percentage of individuals placed in a cluster was $99.99\%$ (Figure~\ref{fig:supp_num_unclustered}), with the three worst-performing runs of UMAP-HDBSCAN($\hat{\epsilon}$) respectively assigning $99.11\%$, $99.69\%$, and $99.86\%$  of individuals in the UKB to a cluster. The clusters reflect groups that have shared genetic and geographic histories, including for relatively small and recently admixed groups which were often excluded based on prior approaches\citep{ding_polygenic_2023,martschenko_including_2023}. 
+We achieved similar results with CaG and 1KGP data, suggesting that our approach is robust to the idiosyncratic composition of a biobank.  
+
+\subsection{Applications}
+
+Understanding the population structure of a biobank is a necessary precursor to many analyses. In the 1KGP, the source of its structure is largely the sampling scheme, which is reflected in Figure~\ref{fig:1000GP}---to ensure diversity in the data, the populations were deliberately sampled from multiple locations around the world with similar sample sizes. The sources of population structure of the UKB, on the other hand, reflect a complex history of migrations at different geographic and time scales, including isolation by distance within the UK and recent immigration and admixture between populations from regions of the former British Empire.
+
+We chose the clustering in Figure~\ref{fig:ukb_hdbscan_labels} based on its suitability for examining PGS transferability and examining allele frequency versus PGS accuracy. Alternative parameterizations highlight structure at different scales. In Figure~\ref{fig:supp_ukb_alt}, for example, we see the large cluster of mostly European-born individuals is split into three smaller clusters. The structure of a typical biobank is more similar to the UKB than the 1KGP, as the recruitment methodology is often based on residence within a jurisdiction. Examples include municipal (ATLAS in Los Angeles\citep{caggiano_disease_2023}, Bio\emph{Me} in New York City\citep{belbin_toward_2021}), regional (CARTaGENE in Quebec\citep{awadalla_cohort_2013}) and national (Million Veterans Project (MVP),\citep{hunter-zinck_genotyping_2020}, CANPATH\citep{dummer_canadian_2018}) biobanks. Leveraging these diverse cohorts can improve variant discovery\citep{wojcik_genetic_2019,lin_admixed_2021}.
+
+Though population labels like ethnicity can be useful, individuals may identify as ``Other'' or ``Unknown'', leading to incomplete data. In the MVP, missing data were imputed using a support vector machine trained on race/ethnicity data to harmonize genetic data with labels for an ethnicity-specific GWAS\citep{fang_harmonizing_2019}. A similar supervised approach with random forests was used by gnomAD\citep{karczewski_mutational_2020}. Rather than assigning ethnicities to individuals, we constructed clusters from genetic data and investigated the distributions of auxiliary variables within clusters, including missing values. We found word clouds to be well-suited for describing data without imposing a reductive label.   
+
+The goal of genetic stratification is in no way to replace self-declared variables in contexts where they are relevant. In fact, genetic stratification revealed interesting trends in self-declared variables. For example, in Cluster~17 of Figure~\ref{fig:ukb_hdbscan_labels}, $97.6\%$ of individuals were born in Britain and Ireland and $99.5\%$ chose an ethnic group label; in contrast, $18.9\%$ of those in Cluster~18 (mostly born in sub-Saharan Africa) and $36.5\%$ in Cluster~23 (mostly born in the Horn of Africa) chose ``Other'', highlighting differential completeness of questionnaire data. As mentioned above, UKB strata with ``mixed'' ethnic backgrounds as their mode featured multiple ethnic background labels, likely reflecting both the fact that (genetically) admixed individuals may have a diversity of ethnic backgrounds, and the fact that individuals with both mixed genetic and cultural heritage may have to choose among potentially inadequate labels (see, e.g., discussion in \citep{martschenko_including_2023}). The presence or absence of a label in data collection can critically influence how people identify: Canadian demographers noted that between the 2011 National Household Survey and the 2016 Census, there was a $53.6\%$ drop in people who identified as ``Jewish''---this result was traced to the list of ethnicities not presenting the label as an example in 2016\citep{government_of_canada_technical_2019}. 
+
+\subsection{Considerations}
+
+Unlike archetype-based methods, HDBSCAN($\hat{\epsilon}$) identifies groups that can be created by linking nearby individuals---it is possible to have a very long chain containing many individuals who are each closely related to those near them within a cluster but not to those at the distant end. In this way, admixed populations can form a single cluster even though individuals within the cluster can differ as much as individuals from the different ancestral ``source'' populations. In a sense, HDBSCAN($\hat{\epsilon}$) identifies groups of individuals whose distribution in genetic space suggests a common sampling or demographic history, rather than genetic similarity. For this reason, topological stratification may be less conducive to reification of clusters and the notion that population labels reflect a true underlying ``type''.  However, given the weaponization of population genetics research in the past\citep{carlson_counter_2022}, it is worth emphasizing limitations common to all clustering approaches.
+
+No single label is an individual's ``true'' ancestry, race, or ethnicity, as these are complex, multifactorial population descriptors\citep{martschenko_including_2023,roth_multiple_2016}. Thus clustering does not have a well-defined ground truth \citep{ben-david_clustering_2018}, and clusters are most useful as ``helpful constructs that support clarification''\citep{hennig_what_2015}. With real genetic data, there is no ``correct'' number of populations\citep{lawson_tutorial_2018} and discrete groupings provide a flattened view of a high-dimensional landscape\citep{martschenko_including_2023,lewis_getting_2022}. The clusters generated are sensitive to the input samples, since the demographic composition of a biobank will impact the clustering, and they are also affected by the parameters at the filtering, dimensionality reduction, and clustering steps. This is a reflection of the data, as genetic data are not composed of ``natural types''. These clusters can be useful in understanding how genetics relates to health and the environment, but it is worth repeating that variation in phenotypes across genetic clusters does not imply a genetic cause, as differences in environment or systemic discrimination are also expected to produce such variation\citep{vyas_hidden_2020}. Each identified cluster also likely features considerable genetic heterogeneity. The UK biobank clusters of majority sub-Saharan-born individuals, for example, encompass considerable genetic substructure\citep{choudhury_high-depth_2020}. Different choices of metrics for clustering (i.e., genetic relatedness vs. IBD) can emphasize different types of structure. There are no true clusters. 
+
+Ultimately, however, many useful analyses require some definition of ``populations''. For example, an allele frequency can only be calculated and reported within a population. Data exploration and quality control often require investigating relevant subsets of the data to decide whether they likely reflect technical artefacts or meaningful subgroups.  To date there has not been a method of stratification that is tractable, easy to implement, robust to the presence of many populations of many sizes, and that captures all or almost all individuals with complex population histories. We believe our topological approach satisfies these important needs. Looking forward, we expect that topological approaches underlying UMAP and HDBSCAN($\hat{\epsilon}$) also present a promising avenue to move towards a more continuous description of genetic variation in complex cohorts. 
+
+\subsection{Acknowledgements}
+We are grateful to the participants in each biobank who provided their genetic data. We thank the CARTaGENE team for troubleshooting data with us, and C. Bh\'{e}rer, M. L. Spear, and P. Verdu for scientific discussion.
+
+\textbf{Funding:} This research was also supported by the Canadian Institute for Health Research (CIHR) project grant 437576, Natural Sciences and Engineering Research Council of Canada (NSERC) grant RGPIN-2017-04816, the Canada Research Chair program, and the Canada Foundation for Innovation.
+
+\subsection{Materials and Methods}
+Our code is available at \url{https://github.com/diazale/topstrat}. We have provided command line tools to run Python implementations of UMAP and HDBSCAN($\hat{\epsilon}$).
+
+We used three datasets for this analysis: the 1000 Genomes project (1KGP), the UK biobank (UKB), and CARTaGENE (CaG). For the 1KGP we used $3,450$ genotypes using Affy 6.0 genotyping\citep{global_2015}. We generated the principal components using a Python script and have made the top PCs available in the repository to demonstrate the code. We used the genotype file \verb|ALL.wgs.nhgri_coriell_affy_6.20140825.genotypes_has_ped.vcf.gz| and population labels \verb|affy_samples.20141118.panel 20131219.populations.tsv|,  available at \url{http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/supporting/hd_genotype_chip/}.
+
+For the UKB, we limited our analyses to the $488,377$ individuals with genotype data. We used the UKB's top 40 pre-computed PCs (Data-Field 22009), blood cell counts (Data-Fields 30000, 30010, 30120, 30130, 30140, 30150, 30160), lung function measures (Data-Fields 3062, 3063), age (Data-Field 21003), sex (Data-Field 31), standing height (Data-Field 50), weight (Data-Field 21002), BMI (Data-Field 21001), smoking status (Data-Field 20116), country of birth (Data-Fields 1647, 20115), and ethnic group/background (Data-Field 21000). Ethnic group/background is a hierarchical item in which participants are prompted to select from a pre-populated list of options for Ethnic Group (e.g. ``White'') and, if available, a secondary option for Ethnic Background (e.g. ``British''). Phenotypes used in analyses were normalized with respect to variables $sex$, $age$, and $age^2$. Access to the UKB can be granted at 
+\url{https://www.ukbiobank.ac.uk/scientists-3/genetic-data/}.
+
+% HLA range: 6 25000000 33500000
+For CARTaGENE, we used $29,337$ individuals with genotype data. We generated the PCs using PLINK\citep{purcell_plink_2007} after filtering for linkage disequilibrium and HLA (chromosome 6, $25000000\textbf{--}33500000$ ). The options used were:
+\begin{itemize}
+\item \verb|indep-pairwise 1000 50 0.1| (PLINK2)
+\item \verb|maf 0.05|
+\item \verb|mind 0.1|
+\item \verb|geno 0.1|
+\item \verb|hwe 1e-6|.
+\end{itemize}
+
+We used the Python implementations of UMAP\citep{mcinnes_umap_2020} (0.3.6) and HDBSCAN (0.8.24), integrating the updates from Malzer and Baum\citep{malzer_hybrid_2020}. To calculate PGS, we used VIPRS\citep{zabad_fast_2023}.
+
+\subsection{Supporting information}
+
+For visualization, we reduce our data to 2D via UMAP and set a relatively high minimum distance ($MD$; usually between $0.3$ and $0.5$); this enables us to view fine-scale patterns of structure. We find satisfactory results with the number of neighbours ($NN$) varying from $15$ to $50$; higher values will require more computational resources, but they increase the connectivity between points in the data, as discussed in \citep{diaz-papkovich_review_2021}. For clustering, we set a low value of minimum distance (equal to or close to $0$) and reduce the number of dimensions to at least $3$---in our analyses, we used $3$, $4$, and $5$ dimensions. The low minimum distance encourages dimensionally-reduced data to form dense clusters, while keeping the dimensionality at $\geq3$ preserves the complexities of data that can be lost because of artificial tearing in the drop from $3$ to $2$ dimensions. The number of neighbours will vary depending on what is a reasonable expectation for the data. For the 1KGP data, which consists of geographically diverse samples of roughly similar size, $50$ neighbours capture the structure well. For biobank data, it is common for structure to arise from a handful of individuals; we found $10$ to $25$ neighbours to work best. Lower neighbourhood values (e.g. $NN=5$) will create smaller clusters, but can also highlight highly-localized structure within larger populations. $2D$ visualizations can give intuition as to the presence and sizes of clusters. If pre-processing the data with PCA, more PCs tend to reveal finer-scale structure (see e.g. the relationship with geographical coordinates in Figures~S17 and S18 in \citep{diaz-papkovich_umap_2019}). For the 1KGP clusters in Figure~\ref{fig:1000GP} we used the top $16$ PCs; for the UKB in Figure~\ref{fig:ukb_hdbscan_labels} and CaG in Figure~\ref{fig:ctg} we used the top $25$.
+
+In parametrizing HDBSCAN($\hat{\epsilon}$), the parameter $\hat{\epsilon}$ defines a threshold at which clusters are merged or split. We find values of $\hat{\epsilon}$ ranging from $0.3$ to $0.5$ to be effective at ensuring all or almost all individuals are clustered while still identifying fine-scale structure. The minimum number of points ($MP$) should not be significantly higher than the number of neighbours used in the associated UMAP. If $MP$ is high and $NN$ is low, it can result in a large number of points being classified as noise since the UMAP data will tend to form small clusters; e.g. a UMAP parametrized with $NN=10$ and HDBSCAN($\hat{\epsilon}$) with $MP=100$ may return poor results.
+
+Changing parameters will result in different clusters being generated. Given the low computational costs of UMAP and HDBSCAN($\hat{\epsilon}$), we recommend running a grid search for visualization and exploratory analysis. Clusters can then be characterized using auxiliary data, such as country of birth, geographical location, population label, self-identification, etc. We selected the clustering for the UKB for its suitability for comparing PGS results by $F_{ST}$ from the training population. For CaG, we selected one of the clustering runs that generated a cluster of individuals with North African ancestry.
+
+We calculated pairwise $F_{ST}$ for UKB clusters using PLINK\citep{purcell_plink_2007}. We calculated admixture proportions using ADMIXTURE 1.3.0\citep{alexander_fast_2009}. For computational reasons, for the UKB we calculated admixture proportions on individuals not falling into Cluster~17 (the largest cluster, containing around $400,000$ individuals) in Figure~\ref{fig:ukb_hdbscan_labels}.
+
+Visualizations and statistical analyses were done in R (3.5.3)\citep{r_2018}. We used ggplot2\citep{wickham_2016} for graphics and ggwordcloud for word clouds, and stargazer\citep{Hlavac2018-fy} to generate tables.
+
+For phenotype smoothing, we removed the effects of the top $40$ PCs using linear regression, working with the residuals. For phenotype $p$ and individuals $i=1 \dots I$, we use the model:
+
+$$ y_{p,i} = \beta_{p,0} + \sum_{j=1}^{40}\beta_{p,j}PC_{j,i} + \epsilon_{p,i},  \epsilon_{p,i} \sim N(0,\sigma^2_{p}) $$
+
+We visualize the data in Figure~\ref{fig:smoothed_phenos} with the values $ e_{p,i} = y_{p,i} - (\hat{\beta_{p,0}} + \sum_{j=1}^{40}\hat{\beta_{p,j}}PC_{j,i}) $
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                       Supplementary material
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \clearpage
 
-\section{Supplementary Information}
+\section{Supplementary figures and tables}
 
 \begin{figure}[ht]
   \centering
@@ -388,6 +461,114 @@ Stratification is important in data exploration and analysis, and many stratific
     \includegraphics[width=0.9\linewidth]{placeholder.png}
   \caption{Cluster 22 from Figure~\ref{fig:ukb_hdbscan_labels} highlighted coloured in on a plot of PC1 and PC2.}
   \label{fig:supp_cluster_22_pca}
+\end{figure}
+
+\clearpage
+
+\begin{figure}[!ht]
+  \centering
+    %\includegraphics[width=0.9\linewidth]{images/fst_vs_r2_weighted_plink_20200214_065646/LDL_median_r2_vs_maf_rs4420638.png}
+    \includegraphics[width=0.4\linewidth]{placeholder.png}
+  \caption[Regression line of PGS vs MAF of rs4420638]{Regression line of the $R^2$ of a PGS generated by VIPRS versus the minor allele frequency $rs4420638$, labelled by clusters from Figure~\ref{fig:ukb_hdbscan_labels}. The regression summary is presented in Table~\ref{table:supp_rs4420638_lm}.}
+  \label{fig:supp_rs4420638_lm}
+\end{figure}
+
+\begin{table}[!htbp] \centering 
+\scriptsize
+\begin{tabular}{@{\extracolsep{5pt}}lc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{1}{c}{\textit{Dependent variable:}} \\ 
+\cline{2-2} 
+\\[-1.8ex] & R2 \\ 
+\hline \\[-1.8ex] 
+ MAF & 0.401$^{***}$ \\ 
+  & (0.100) \\ 
+  & \\ 
+ Constant & 0.018 \\ 
+  & (0.016) \\ 
+  & \\ 
+\hline \\[-1.8ex] 
+Observations & 26 \\ 
+R$^{2}$ & 0.402 \\ 
+Adjusted R$^{2}$ & 0.378 \\ 
+Residual Std. Error & 0.025 (df = 24) \\ 
+F Statistic & 16.163$^{***}$ (df = 1; 24) \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{1}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\end{tabular}
+  \caption[Linear regression summary of PGS against MAF of rs4420638]{Linear regression model between minor allele frequency (MAF) of $rs4420638$ within each cluster from Figure~\ref{fig:ukb_hdbscan_labels} and the $R^2$ of a PGS for LDL generated by VIPRS using the clusters from Figure~\ref{fig:ukb_hdbscan_labels}. The plot of the regression is present in Figure~\ref{fig:supp_rs4420638_lm}.} 
+  \label{table:supp_rs4420638_lm} 
+\end{table} 
+
+\clearpage
+
+\begin{figure}[!ht]
+  \centering
+    %\includegraphics[width=0.9\linewidth]{images/fst_vs_r2_weighted_plink_20200214_065646/LDL_median_r2_vs_maf_rs7412.png}
+    \includegraphics[width=0.4\linewidth]{placeholder.png}
+  \caption[Line of PGS vs MAF of rs7412]{Regression line of the $R^2$ of a PGS generated by VIPRS versus the minor allele frequency $rs7412$, labelled by clusters from Figure~\ref{fig:ukb_hdbscan_labels}. The regression summary is presented in Table~\ref{table:supp_rs7412_lm}.}
+  \label{fig:supp_rs7412_lm}
+\end{figure}
+
+\begin{table}[!htbp] \centering 
+\scriptsize
+\begin{tabular}{@{\extracolsep{5pt}}lc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{1}{c}{\textit{Dependent variable:}} \\ 
+\cline{2-2} 
+\\[-1.8ex] & R2 \\ 
+\hline \\[-1.8ex] 
+ MAF & 0.609$^{***}$ \\ 
+  & (0.202) \\ 
+  & \\ 
+ Constant & 0.041$^{***}$ \\ 
+  & (0.014) \\ 
+  & \\ 
+\hline \\[-1.8ex] 
+Observations & 26 \\ 
+R$^{2}$ & 0.275 \\ 
+Adjusted R$^{2}$ & 0.245 \\ 
+Residual Std. Error & 0.027 (df = 24) \\ 
+F Statistic & 9.126$^{***}$ (df = 1; 24) \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{1}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\end{tabular} 
+\caption[Regression summary of PGS vs MAF of rs7412]{Linear regression model between minor allele frequency (MAF) of $rs7412$ within each cluster from Figure~\ref{fig:ukb_hdbscan_labels} and the $R^2$ of a PGS for LDL generated by VIPRS using the clusters from Figure~\ref{fig:ukb_hdbscan_labels}. The plot of the regression is present in Figure~\ref{fig:supp_rs7412_lm}.} 
+\label{table:supp_rs7412_lm} 
+\end{table} 
+
+\clearpage
+
+\begin{figure}[ht]
+  \centering
+\begin{subfigure}[b]{0.4\linewidth}
+    %\includegraphics[width=\linewidth]{images/diagnostic_plots/num_unclustered.png}
+    \includegraphics[width=\linewidth]{placeholder.png}
+    \caption{}
+    \label{fig:supp_num_unclustered_1}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.4\linewidth}
+    %\includegraphics[width=\linewidth]{images/diagnostic_plots/num_unclustered_filtered.png}
+    \includegraphics[width=\linewidth]{placeholder.png}
+    \caption{}
+    \label{fig:supp_num_unclustered_2}
+  \end{subfigure}
+  \caption[Measuring the number of individuals not clustered]{For each of the $604$ runs of UMAP-HDBSCAN($\hat{\epsilon}$) on the UKB, we count the number of individuals not assigned to a cluster. (a) Top: Across all  $604$ runs. (b) Bottom: To improve the scale of the figure, we remove $3$ outlier runs in which $684$, $1,535$, and $4,346$ individuals were not assigned to a cluster.}
+  \label{fig:supp_num_unclustered}
+\end{figure}
+
+\clearpage
+
+\begin{figure}[!ht]
+  \centering
+    %\includegraphics[width=0.7\linewidth]{images/colour_matched/hdbscan_labels_min25_EPS05_ukbb_pca_with_ids_UMAP_PC25_NC5_NN5_MD00_euclidean_20200215_162944.png}
+\includegraphics[width=0.7\linewidth]{placeholder.png}
+  \caption[Alternative clustering of the UKB]{An alternative clustering of UKB data. Compared to Figure~\ref{fig:ukb_hdbscan_labels}, the largest cluster (Cluster~17 in that figure) has been split into three smaller clusters (Clusters $14$, $24$, $25$ in this figure). Other clusters have been split or merged, while some remain the same between runs.}
+  \label{fig:supp_ukb_alt}
 \end{figure}
 
 \clearpage
@@ -919,3 +1100,94 @@ Cluster & EB & Count & Proportion \\
 \caption[Frequency of selected EB by cluster]{Frequency of selected EB by cluster for Figure~\ref{fig:ukb_hdbscan_labels}. Proportions refer to the proportion within the cluster. Categories with proportions below $0.05$ are not listed.}
 \label{table:supp_ukb_cluster_sieb} 
 \end{table} 
+
+\clearpage
+
+\begin{landscape}
+
+\begin{table}[!htbp] \centering 
+\tiny 
+%\rowcolors{1}{gray}{white}
+\rowcolors{5}{}{lightgray}
+%\begin{tabular}{@{\extracolsep{5pt}} ccccccccccc} 
+\begin{tabular}{ ccccccccccc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+Phenotype & Model & Caribbean & Indian & African & Any other Asian background & Not available & White & White and Black African & White and Black Caribbean & Bangladeshi \\ 
+\hline \\[-1.8ex] 
+FVC & PCA & 0.886 (n=78623) & 1.021 (n=134) & 1.601 (n=320) & 1.215 (n=293) & 0.83 (n=2876) & 1.329 (n=330) & 0.969 (n=2365) & 0.844 (n=197) & 1.081 (n=737) \\ 
+FVC & CLS & 0.891 (n=78623) & 1.029 (n=134) & 1.972 (n=320) & 1.209 (n=293) & 0.874 (n=2876) & 1.32 (n=330) & 0.969 (n=2365) & 0.844 (n=197) & 1.316 (n=737) \\ 
+FEV1 & PCA & 0.913 (n=78623) & 1.092 (n=134) & 1.612 (n=320) & 1.035 (n=293) & 0.854 (n=2876) & 1.21 (n=330) & 1.056 (n=2365) & 0.809 (n=197) & 0.981 (n=737) \\ 
+FEV1 & CLS & 0.917 (n=78623) & 1.085 (n=134) & 1.896 (n=320) & 0.997 (n=293) & 0.884 (n=2876) & 1.173 (n=330) & 1.058 (n=2365) & 0.791 (n=197) & 1.213 (n=737) \\ 
+Standing height & PCA & 0.951 (n=85995) & 1.03 (n=144) & 0.98 (n=350) & 0.831 (n=310) & 0.945 (n=3139) & 0.957 (n=348) & 0.916 (n=2606) & 0.913 (n=214) & 0.93 (n=809) \\ 
+Standing height & CLS & 0.965 (n=85995) & 0.969 (n=144) & 1.059 (n=350) & 0.806 (n=310) & 1.054 (n=3139) & 0.873 (n=348) & 0.922 (n=2606) & 0.972 (n=214) & 1.099 (n=809) \\ 
+BMI & PCA & 0.986 (n=85902) & 0.903 (n=144) & 1.181 (n=347) & 0.683 (n=310) & 0.956 (n=3136) & 1 (n=348) & 0.964 (n=2604) & 1.156 (n=214) & 1.067 (n=805) \\ 
+BMI & CLS & 0.989 (n=85902) & 0.823 (n=144) & 1.18 (n=347) & 0.666 (n=310) & 0.966 (n=3136) & 0.976 (n=348) & 0.964 (n=2604) & 1.197 (n=214) & 1.2 (n=805) \\ 
+Weight & PCA & 0.983 (n=85934) & 1.046 (n=144) & 1.129 (n=347) & 0.752 (n=310) & 0.967 (n=3136) & 0.929 (n=348) & 0.97 (n=2605) & 1.125 (n=214) & 1.122 (n=807) \\ 
+Weight & CLS & 0.984 (n=85934) & 0.943 (n=144) & 1.132 (n=347) & 0.728 (n=310) & 0.977 (n=3136) & 0.9 (n=348) & 0.972 (n=2605) & 1.138 (n=214) & 1.347 (n=807) \\ 
+Leukocyte count & PCA & 0.991 (n=83649) & 0.874 (n=142) & 1.176 (n=333) & 1.13 (n=302) & 0.909 (n=3050) & 0.843 (n=346) & 1.064 (n=2544) & 0.959 (n=210) & 1.021 (n=798) \\ 
+Leukocyte count & CLS & 0.992 (n=83649) & 0.827 (n=142) & 1.124 (n=333) & 1.041 (n=302) & 0.917 (n=3050) & 0.836 (n=346) & 1.063 (n=2544) & 0.871 (n=210) & 1.087 (n=798) \\ 
+Erythrocyte count & PCA & 0.971 (n=83652) & 0.844 (n=142) & 0.969 (n=333) & 1.525 (n=302) & 1.011 (n=3050) & 1.483 (n=346) & 1.004 (n=2544) & 1.113 (n=210) & 1.344 (n=798) \\ 
+Erythrocyte count & CLS & 0.975 (n=83652) & 0.803 (n=142) & 0.98 (n=333) & 1.505 (n=302) & 1.025 (n=3050) & 1.433 (n=346) & 1.004 (n=2544) & 0.957 (n=210) & 1.381 (n=798) \\ 
+Lymphocyte count & PCA & 0.982 (n=83505) & 0.874 (n=142) & 1.073 (n=333) & 1.061 (n=302) & 0.908 (n=3046) & 0.895 (n=345) & 1.042 (n=2539) & 0.763 (n=209) & 0.958 (n=794) \\ 
+Lymphocyte count & CLS & 0.983 (n=83505) & 0.831 (n=142) & 1.081 (n=333) & 0.959 (n=302) & 0.914 (n=3046) & 0.866 (n=345) & 1.039 (n=2539) & 0.778 (n=209) & 0.963 (n=794) \\ 
+Monocyte count & PCA & 0.995 (n=83505) & 1.808 (n=142) & 0.908 (n=333) & 0.908 (n=302) & 0.902 (n=3046) & 1.144 (n=345) & 1.049 (n=2539) & 1.752 (n=209) & 0.895 (n=794) \\ 
+Monocyte count & CLS & 0.995 (n=83505) & 1.848 (n=142) & 0.883 (n=333) & 0.851 (n=302) & 0.905 (n=3046) & 1.137 (n=345) & 1.048 (n=2539) & 1.747 (n=209) & 0.932 (n=794) \\ 
+Neutrophil count & PCA & 0.984 (n=83505) & 0.974 (n=142) & 1.19 (n=333) & 1.188 (n=302) & 0.909 (n=3046) & 0.939 (n=345) & 1.058 (n=2539) & 1.224 (n=209) & 1.102 (n=794) \\ 
+Neutrophil count & CLS & 0.985 (n=83505) & 0.922 (n=142) & 1.178 (n=333) & 1.11 (n=302) & 0.916 (n=3046) & 0.919 (n=345) & 1.053 (n=2539) & 1.127 (n=209) & 1.192 (n=794) \\ 
+Eosinophil count & PCA & 0.982 (n=83505) & 1.249 (n=142) & 0.997 (n=333) & 1.155 (n=302) & 0.892 (n=3046) & 1.992 (n=345) & 0.999 (n=2539) & 1.206 (n=209) & 1.136 (n=794) \\ 
+Eosinophil count & CLS & 0.982 (n=83505) & 1.101 (n=142) & 1.03 (n=333) & 1.111 (n=302) & 0.888 (n=3046) & 1.988 (n=345) & 0.996 (n=2539) & 1.091 (n=209) & 1.126 (n=794) \\ 
+Basophil count & PCA & 0.997 (n=83505) & 0.657 (n=142) & 0.736 (n=333) & 0.957 (n=302) & 0.757 (n=3046) & 1.209 (n=345) & 1.103 (n=2539) & 1.185 (n=209) & 1.122 (n=794) \\ 
+Basophil count & CLS & 0.998 (n=83505) & 0.618 (n=142) & 0.722 (n=333) & 0.956 (n=302) & 0.754 (n=3046) & 1.206 (n=345) & 1.097 (n=2539) & 1.114 (n=209) & 1.101 (n=794) \\ 
+\hline \\[-1.8ex] 
+\end{tabular} 
+\caption{Comparing two phenotype models split by EB. One model (PCA) uses the top $40$ PCs to estimate phenotypes, while the other (CLS) uses a cluster-smoothed phenotype estimate from Algorithm~\ref{alg:regularization} in addition to the top $40$ PCs.}
+  \label{table:supp_mse1} 
+\end{table} 
+
+\end{landscape}
+
+\clearpage
+
+\begin{landscape}
+
+\begin{table}[!htbp] \centering 
+\tiny 
+\rowcolors{5}{}{lightgray}
+%\begin{tabular}{@{\extracolsep{5pt}} ccccccccccc} 
+\begin{tabular}{ ccccccccccc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+Phenotype & Model & Caribbean & Indian & African & Any other Asian background & Not available & White & White and Black African & White and Black Caribbean & Bangladeshi \\ 
+\hline \\[-1.8ex] 
+FVC & PCA & 1.364 (n=788) & 1.127 (n=1010) & 1.548 (n=589) & 1.106 (n=329) & 1.792 (n=76) & 1.576 (n=91) & 0.962 (n=84) & 1.17 (n=97) &  \\ 
+FVC & CLS & 1.365 (n=788) & 1.149 (n=1010) & 1.573 (n=589) & 1.214 (n=329) & 1.943 (n=76) & 1.411 (n=91) & 0.841 (n=84) & 1.16 (n=97) &  \\ 
+FEV1 & PCA & 1.071 (n=788) & 1.007 (n=1010) & 1.232 (n=589) & 1.127 (n=329) & 1.419 (n=76) & 1.92 (n=91) & 1.022 (n=84) & 1.044 (n=97) &  \\ 
+FEV1 & CLS & 1.085 (n=788) & 1.034 (n=1010) & 1.262 (n=589) & 1.243 (n=329) & 1.917 (n=76) & 1.687 (n=91) & 0.84 (n=84) & 1.051 (n=97) &  \\ 
+Standing height & PCA & 1.012 (n=868) & 0.992 (n=1073) & 0.987 (n=642) & 0.942 (n=358) & 1.171 (n=88) & 1.404 (n=103) & 0.83 (n=88) & 1.288 (n=111) & 0.884 (n=52) \\ 
+Standing height & CLS & 1.023 (n=868) & 1.011 (n=1073) & 0.993 (n=642) & 0.943 (n=358) & 1.17 (n=88) & 1.308 (n=103) & 0.872 (n=88) & 1.113 (n=111) & 0.864 (n=52) \\ 
+BMI & PCA & 1.23 (n=867) & 0.898 (n=1071) & 1.057 (n=641) & 0.842 (n=358) & 1.164 (n=86) & 1.212 (n=103) & 1.9 (n=87) & 1.357 (n=110) & 1.258 (n=52) \\ 
+BMI & CLS & 1.204 (n=867) & 0.889 (n=1071) & 1.055 (n=641) & 0.819 (n=358) & 1.061 (n=86) & 1.208 (n=103) & 1.691 (n=87) & 1.213 (n=110) & 0.775 (n=52) \\ 
+Weight & PCA & 1.241 (n=871) & 0.916 (n=1094) & 1.081 (n=642) & 0.828 (n=360) & 1.053 (n=86) & 1.264 (n=103) & 1.799 (n=87) & 1.211 (n=110) & 1.262 (n=52) \\ 
+Weight & CLS & 1.234 (n=871) & 0.922 (n=1094) & 1.108 (n=642) & 0.852 (n=360) & 0.988 (n=86) & 1.233 (n=103) & 1.579 (n=87) & 1.109 (n=110) & 0.823 (n=52) \\ 
+Leukocyte count & PCA & 1.14 (n=828) & 0.892 (n=1061) & 0.926 (n=636) & 0.993 (n=354) & 1.136 (n=84) & 1.262 (n=103) & 1.526 (n=89) & 1.155 (n=107) & 0.893 (n=50) \\ 
+Leukocyte count & CLS & 1.148 (n=828) & 0.884 (n=1061) & 0.914 (n=636) & 0.962 (n=354) & 1.205 (n=84) & 0.919 (n=103) & 1.25 (n=89) & 1.02 (n=107) & 0.596 (n=50) \\ 
+Erythrocyte count & PCA & 1.826 (n=828) & 1.301 (n=1061) & 1.504 (n=636) & 0.952 (n=354) & 1.026 (n=84) & 0.868 (n=103) & 1.355 (n=89) & 1.446 (n=107) & 2.186 (n=50) \\ 
+Erythrocyte count & CLS & 1.81 (n=828) & 1.306 (n=1061) & 1.507 (n=636) & 0.937 (n=354) & 0.955 (n=84) & 0.881 (n=103) & 1.185 (n=89) & 1.217 (n=107) & 1.156 (n=50) \\ 
+Lymphocyte count & PCA & 1.014 (n=826) & 1.138 (n=1060) & 0.93 (n=636) & 1.176 (n=354) & 0.893 (n=84) & 1.048 (n=103) & 1.053 (n=89) & 1.086 (n=107) & 1.356 (n=50) \\ 
+Lymphocyte count & CLS & 1.004 (n=826) & 1.135 (n=1060) & 0.914 (n=636) & 1.168 (n=354) & 0.801 (n=84) & 1.016 (n=103) & 1.041 (n=89) & 1.055 (n=107) & 0.549 (n=50) \\ 
+Monocyte count & PCA & 1.008 (n=826) & 1.069 (n=1060) & 0.944 (n=636) & 1.391 (n=354) & 0.986 (n=84) & 0.984 (n=103) & 1.004 (n=89) & 1.347 (n=107) & 1.817 (n=50) \\ 
+Monocyte count & CLS & 0.993 (n=826) & 1.063 (n=1060) & 0.929 (n=636) & 1.352 (n=354) & 0.922 (n=84) & 0.834 (n=103) & 0.93 (n=89) & 1.24 (n=107) & 1.242 (n=50) \\ 
+Neutrophil count & PCA & 1.223 (n=826) & 0.879 (n=1060) & 1.058 (n=636) & 0.992 (n=354) & 1.179 (n=84) & 1.177 (n=103) & 1.58 (n=89) & 1.147 (n=107) & 0.83 (n=50) \\ 
+Neutrophil count & CLS & 1.232 (n=826) & 0.878 (n=1060) & 1.027 (n=636) & 0.95 (n=354) & 1.27 (n=84) & 0.836 (n=103) & 1.287 (n=89) & 0.988 (n=107) & 0.678 (n=50) \\ 
+Eosinophil count & PCA & 1.277 (n=826) & 1.529 (n=1060) & 1.561 (n=636) & 1.616 (n=354) & 1.355 (n=84) & 0.838 (n=103) & 1.099 (n=89) & 1.131 (n=107) & 2.652 (n=50) \\ 
+Eosinophil count & CLS & 1.291 (n=826) & 1.514 (n=1060) & 1.543 (n=636) & 1.646 (n=354) & 1.412 (n=84) & 0.729 (n=103) & 0.904 (n=89) & 1.078 (n=107) & 2.28 (n=50) \\ 
+Basophil count & PCA & 0.954 (n=826) & 0.766 (n=1060) & 1.607 (n=636) & 0.532 (n=354) & 0.945 (n=84) & 2.296 (n=103) & 0.764 (n=89) & 0.942 (n=107) & 0.436 (n=50) \\ 
+Basophil count & CLS & 0.943 (n=826) & 0.767 (n=1060) & 1.622 (n=636) & 0.505 (n=354) & 0.955 (n=84) & 0.67 (n=103) & 0.675 (n=89) & 0.724 (n=107) & 0.399 (n=50) \\ 
+\hline \\[-1.8ex] 
+\end{tabular} 
+\caption{Comparing two phenotype models split by EB. One model (PCA) uses the top $40$ PCs to estimate phenotypes, while the other (CLS) uses a cluster-smoothed phenotype estimate from Algorithm~\ref{alg:regularization} in addition to the top $40$ PCs.}
+  \label{table:supp_mse2} 
+\end{table} 
+
+\end{landscape}
