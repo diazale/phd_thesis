@@ -17,7 +17,7 @@ There is also value in going beyond static $2$D figures. Software libraries such
 \begin{figure}[h]
 \centering
     \includegraphics[width=0.75\linewidth]{main_figures/discussion/magritte.png}
-\caption[The treachery of clustering]{\textbf{Clusters are only an abstraction, but they can be useful as abstractions.} Often we speak of clusters and populations interchangeably---however, we must remember that clusters and even the idea of a population are concepts that help us understand reality, but are not reality itself.}
+\caption[The treachery of clustering]{\textbf{Clusters are only an abstraction, but they can be useful as abstractions.} Often we speak of clusters and populations interchangeably---however, clusters and even the idea of a population are concepts that help us understand reality, but are not reality itself.}
 \label{fig:magritte}
 \end{figure}
 
@@ -25,9 +25,6 @@ Unlike problems like classification, clustering does not have a well-defined gro
 
 The question of the appropriateness of a given clustering can be framed as whether it is useful in its context: whether it identifies interesting patterns (without necessarily assigning interpretation); whether it simplifies data; investigation correlations with other variables, etc\citep{hennig_what_2015}. The choice of clustering method is often arbitrary, e.g. ``we use the standard method in the field''\citep{ben-david_clustering_2018}, and this has resulted in standards that exclude individuals from analyses\citep{ding_polygenic_2023}. We have demonstrated that density clustering successfully includes all or almost all individuals in several biobanks and that the clusters generated reflect logical groupings.
 \citep{hennig_what_2015}
-
-[Some image of two clusters]
-``Ceci n'est pas une population.''
 
 Though UMAP appears to preserve structure, at least visually, it is only one representation of very complex high-dimensional data points and the relationships between them. HDBSCAN($\hat{\epsilon}$) extracts clusters that correspond to our knowledge of population structure, but again they are only an abstraction and should not be reified. They are abstractions that, ideally, represent some underlying truth---they are maps of an unknown (unknowable?) territory; this map cannot be confused with the territory itself. 
 
@@ -144,9 +141,10 @@ Algorithmic colonialism, helicopter/imperialistic research,
 
 \section{Limitations}
 
--Interpretability
--Aritificial tears and stretching
--Global structure---how well is it preserved? Alternate methods \citep{moon2019visualizing}
+Dimensionality reduction necessarily sacrifices information. To help us navigate the physical world, we use two-dimensional Euclidean maps of a three-dimensional spherical planet. This transformation introduces artificial tearing and distortion into world maps---PCA, $t$-SNE, UMAP, and density clustering are no different. We may see patterns or clusters that are artefactual, arising from unidentified batch effects or the distribution of genetic variants particular to a biobank. Patterns may also form from noise. 
+
+UMAP represents topology by approximating the local structure of the data. By patching together many local topological representations, it achieves a semblance of the global structure of data; however, the distances themselves do not have meaningful interpretations. PCA, which explicitly models global variation in data, has been interpreted in connection to TMRCA and F-statistics\citep{mcvean2009genealogical,peter_geometric_2022}. Several other non-linear dimensionality reduction methods aim to balance global and local structure (e.g. diffusion PHATE\citep{moon2019visualizing}, POPVAE\citep{battey_visualizing_2021}). UMAP captures topology, not geometry; it approximates the shapes of data, but now how the shapes are positioned relative to one another. Consider three nested hollow spheres in $3$D: each sphere forms one connected shape, but a $2$D UMAP would represent them as three disconnected clusters\citep{herrmann_enhancing_2022}. This correctly identifies the three connected components but not their relationships to each other.
+
 
 \section{Etc}
 
