@@ -1,0 +1,788 @@
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}{\textwidth}
+    %\includegraphics[width=\textwidth]{images/megamontage_PC2_9.pdf}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \end{subfigure}
+    \caption[Montage of t-SNE and UMAP on up to 9 PCs of 1KGP data]{\textbf{Montage of t-SNE and UMAP on up to 9 PCs of 1KGP data.} UMAP (left two columns) and t-SNE (right two columns) applied to the top principal components of the 1KGP labelled by the number of components used. Adding more components results in progressively finer population clusters using both methods.}
+    \label{fig:supp_megamontage_pc2_9}  
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}{0.95\textwidth}
+    %\includegraphics[width=0.95\textwidth]{images/megamontage_PC10_50.pdf}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \end{subfigure}
+    \caption[Montage of t-SNE and UMAP on 10 to 50 PCs of 1KGP data]{\textbf{Montage of t-SNE and UMAP on 10 to 50 PCs of 1KGP data.} UMAP (left two columns) and t-SNE (right two columns) applied to the top principal components of the 1KGP labelled by the number of components used. Results are similar until approximately 11 components, where t-SNE breaks apart clusters of South Asian (in green) and Central and South American populations (in pink) while UMAP preserves them. At approximately 30 components populations begin to drift together with UMAP and disperse with t-SNE.}
+    \label{fig:supp_megamontage_pc10_50}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}{0.95\textwidth}
+    %\includegraphics[width=0.95\textwidth]{images/montage_1KGP_umap_convergence_resize.jpeg}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \end{subfigure}
+    \caption[Montage of UMAP on progressively more PCs of 1KGP data]{\textbf{Montage of UMAP on progressively more PCs of 1KGP data.} UMAP applied to the first few hundred principal components of the 1KGP data with the amount of variance explained in parentheses. As more components are added, the figure begins to resemble that of UMAP carried out on the full genotype dataset.}
+    \label{fig:supp_montage_1kgp_converge}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}{0.95\textwidth}
+    %\includegraphics[width=0.95\textwidth]{images/1KGP_UMAP_PCS100_PCE3450_NC2_NN15_MD05_201944185843.jpeg}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \end{subfigure}
+    \caption[UMAP on PCs 100 to 3350 of 1KGP data]{\textbf{UMAP on PCs 100 to 3350 of 1KGP data.} UMAP applied the last 3350 principal components of the 1KGP, which explain 78.7\% of the variation. The colour scheme is the same as in \ref{fig:fig1}.}
+    \label{fig:supp_1kgp_3350}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}{\textwidth}
+    %\includegraphics[width=0.52\textwidth]{images/1KGP_UMAP_PC15_families.png}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \end{subfigure}
+    \caption[Number of neighbours and families forming disjoint clusters]{\textbf{Number of neighbours and families forming disjoint clusters.} UMAP applied to the first 15 principal components of the 1KGP, with the number of neighbours set to 5 (top) and 15 (bottom). Six members of one Southern Han Chinese family are highlighted: HG00656 (grandfather), HG00657 (grandmother), HG00658 (uncle, mother's brother), HG00701 (mother), HG00702 (father), HG00703 (child). When using UMAP with five neighbours, the father (in blue) is projected to the cluster of the Southern Han Chinese population while the rest of the family members (in red) form their own disjoint cluster. Using 15 neighbours, the family still clusters together, but as part of the Southern Han Chinese population rather than a separate cluster.}
+    \label{fig:supp_1kgp_families}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}{0.95\textwidth}
+    %\includegraphics[width=0.75\textwidth]{images/HRS_1000G_NP1_UMAP_PC10_NC2_NN15_MD05_pca_1kgp_onto_hrs_umap_1kgp_onto_hrs_2018112221116_race_hisp_mex_labels.pdf}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \end{subfigure}
+    \caption[UMAP on HRS data coloured by ethnicity]{\textbf{UMAP on HRS data coloured by ethnicity.} UMAP applied to the first 10 principal components of HRS data. Points coloured by self-identified race, Hispanic status, and Mexican-American status. The cluster on the left is mostly people who identify as neither Black nor White and were born outside the contiguous United States or in the Pacific census region. Clustering with the 1KGP data places them with Asian-identified populations. BNH, Black (not Hispanic); BHO, Black (Hispanic, Other); WNH, White (not Hispanic); WHM, White (Hispanic, Mexican-American); WHO, White Hispanic (Other); ONH, Other (not Hispanic); OHM, Other (Hispanic, Mexican-American); OHO, Other (Hispanic, Other).}
+    \label{fig:supp_umap_hrs_eth}
+\end{figure}
+
+\newpage
+
+\begin{figure}
+\centering
+   %\includegraphics[width=0.6\linewidth]{images/HRS_1000G_NP1_UMAP_PC10_NC2_NN15_MD05_pca_1kgp_onto_hrs_umap_1kgp_onto_hrs_2018112221116_admix.jpeg}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+   \caption[UMAP on HRS data coloured by admixture]{\textbf{UMAP on HRS data coloured by admixture.} UMAP on the first 10 principal components of HRS data. colouring individuals by estimated admixture from three ancestral populations reveals considerable diversity in the Hispanic population. This projection coloured by self-identified race and Hispanic status is presented in \ref{fig:supp_umap_hrs_eth}. Admixture proportions for each individual were estimated in (Baharian 2016) by assuming ancestral African, Asian, and European populations using RFMIX. We have scaled each of the three proportions to values between 0 and 255 (with 100\% corresponding to 255), to colour individual points by their estimated admixture represented by RGB where red, green, and blue respectively correspond to African, European, and Asian/Native American ancestry. An alternate colouring is provided in \ref{fig:umap_hrs_admix_alt}.}
+    \label{fig:umap_hrs_admix}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}{\textwidth}
+    %\includegraphics[width=0.9\textwidth]{images/HRS_1000G_NP1_UMAP_PC10_NC2_NN15_MD05_pca_1kgp_onto_hrs_umap_1kgp_onto_hrs_2018112221116_born.jpeg}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \end{subfigure}
+    \caption[UMAP on HRS data coloured by birth region]{\textbf{UMAP on HRS data coloured by birth region.} UMAP on the top 10 principal components of the HRS dataset, coloured by Census Bureau birth region. Each colour represents one of the 10 birth regions. There is no obvious pattern in the clusters of majority ``White Not Hispanic'' individuals.}
+    \label{fig:supp_hrs_born}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}{\textwidth}
+    %\includegraphics[width=\textwidth]{images/HRS_1000G_NP1_UMAP_PC10_NC2_NN15_MD05_pca_1kgp_onto_hrs_umap_1kgp_onto_hrs_2018112221116_custom_label.pdf}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \end{subfigure}
+    \caption[UMAP on HRS data with 1KGP data overlaid]{\textbf{UMAP on HRS data with 1KGP data overlaid.} UMAP on the top 10 principal components of the HRS data, with 1KGP data projected onto the embedding. Individuals from the HRS are grey. British (GBR) and other European (CEU) individuals are scattered throughout the ``White Not Hispanic'' clusters. Finns (FIN) form clear groupings. Spanish (IBS) and Italian (TSI) individuals cluster near the Hispanic grouping. There are sub-groups in the Hispanic cluster formed of Puerto Ricans (PUR), Colombians (CLM), Mexicans (MXL), and Peruvians (PEL). Populations with African ancestry (AFR) appear with Black individuals. East Asian (EAS) populations comprising Chinese, Kinh, and Japanese individuals cluster together with what appears in \ref{fig:umap_hrs_admix} as a population of mostly Asian ancestry. South Asian (SAS) populations with Indian, Pakistani, and Sri Lankan ancestry cluster in a separate area. One ``White Not Hispanic'' cluster at the bottom does not cluster with any 1KGP populations.}
+    \label{fig:supp_hrs_1kgp_projected}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}{\textwidth}
+    %\includegraphics[width=\textwidth]{images/HRS_PCGRID_8.pdf}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \end{subfigure}
+    \caption[Pairwise plots of PCs of Hispanic HRS data]{\textbf{Pairwise plots of PCs of Hispanic HRS data.} Pairwise plots of the first 8 principal components of the Hispanic subset of the HRS. Those born in the Mountain region are coloured green.}
+    \label{fig:supp_hrs_hisp_grid}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}{\textwidth}
+    %\includegraphics[width=0.7\textwidth]{images/HRS_1000G_NP1_UMAP_PC7_NC2_NN15_MD05_pca_hrshisp_added1kgp_2018115153245_admix.jpeg}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \end{subfigure}
+    \caption[UMAP on Hispanic HRS data coloured by admixture]{\textbf{UMAP on Hispanic HRS data coloured by admixture.} UMAP of the first 7 principal components of the Hispanic population of the HRS, coloured by estimated admixture proportions. Admixture proportions for each individual were estimated in (Baharian, 2016) by assuming ancestral African, Asian, and European populations using RFMIX. We have scaled each of the three proportions to values between 0 and 255 (with 100\% corresponding to 255), to colour individual points by their estimated admixture represented by RGB where red, green, and blue respectively correspond to African, European, and Asian/Native American ancestry. An alternate colouring is provided in \ref{fig:supp_umap_hrs_hisp_admix_alt}.}
+    \label{fig:supp_umap_hrs_hisp_admix}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}{\textwidth}
+    %\includegraphics[width=0.8\textwidth]{images/HRS_1000G_NP1_UMAP_PC7_NC2_NN15_MD05_pca_hrshisp_added1kgp_2018115153245_1kgp_hisp_birthonly.jpeg}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \end{subfigure}
+    \caption[UMAP on Hispanic HRS data coloured by birth region]{\textbf{UMAP on Hispanic HRS data coloured by birth region.} UMAP of the first 7 principal components of the Hispanic population of the HRS, coloured region of birth.}
+    \label{fig:supp_umap_hrs_hisp_birth}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}{\textwidth}
+    %\includegraphics[width=0.8\textwidth]{images/Asthma_FullAsian_PC_QC_new_UMAP_PC5_NC2_NN15_MD05_201931173256.jpeg}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \end{subfigure}
+    \caption[UMAP on Asian UKBB data coloured by self-identified ethnicity]{\textbf{UMAP on Asian UKBB data coloured by self-identified ethnicity.} UMAP of the first 8 principal components of the Asian population in the UKBB coloured by self-identified ethnicity. This is an alternate colouring of \ref{fig:fig2}B.}
+    \label{fig:supp_umap_ukbb_asian_eth}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}{0.8\textwidth}
+    %\includegraphics[width=\textwidth]{images/UKBB_UMAP_PC10_NN15_MD05_eth_cob_resized.jpeg}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \end{subfigure}
+    \caption[UMAP on UKBB data with some countries of birth identified]{\textbf{UMAP on UKBB data with some countries of birth identified.} Using country of birth data, some of the larger unidentified groups from \ref{fig:fig3}B were identified as being born mostly in Japan, the Philippines, North Africa, the Middle East, and Central and South America. The large cluster of ``Any other Asian Background'' were mostly born in Sri Lanka.}
+    \label{fig:supp_ukbb_cob}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}{0.9\textwidth}
+    %\includegraphics[width=0.9\textwidth]{images/UKBB_UMAP_PC10_NN15_MD05_2018328174511_london_permuted_10nn_sd10_base1_maxdist200_2019625172227_resize.jpeg}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \end{subfigure}
+    \caption[UMAP on UKBB data coloured by distance from London]{\textbf{UMAP on UKBB data coloured by distance from London.} UMAP on UKBB data, coloured by distance from London, with red representing those living closer to London and blue representing those living farther from London. A 200km radius extends roughly to Cardiff, and a 100km radius extends roughly to cities such as Leicester and Bath, and contains cities such as Oxford, Cambridge, and Peterborough. Data has been randomized as explained in the materials and methods section.}
+    \label{fig:supp_london_distance}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}{0.95\textwidth}
+    %\includegraphics[width=0.95\textwidth]{images/default_clean_size10_alpha60_flip.jpeg}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \end{subfigure}
+    \caption[Montage of UMAP on top 40 PCs of UKBB data coloured by ethnicity]{\textbf{Montage of UMAP on top 40 PCs of UKBB data coloured by ethnicity.} UMAP on UKBB data, coloured by self-identified ethnic background. Images are labelled by the number of components included.}
+    \label{fig:supp_montage_ukbb_eth}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}{0.95\textwidth}
+    %\includegraphics[width=0.95\textwidth]{images/default_clean_size10_alpha60_ns.jpeg}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \end{subfigure}
+    \caption[Montage of UMAP on top 40 PCs of UKBB data coloured by northing]{\textbf{Montage of UMAP on top 40 PCs of UKBB data coloured by northing.} UMAP on UKBB data, coloured by northing values, with more blue representing more northern coordinates and more red representing more southern coordinates. Images are labelled by the number of components included. Data has been randomized as explained in the materials and methods section.}
+    \label{fig:supp_montage_ukbb_ns}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}{\textwidth}
+    %\includegraphics[width=\textwidth]{images/default_clean_size10_alpha60_ew.jpeg}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \end{subfigure}
+    \caption[Montage of UMAP on top 40 PCs of UKBB data coloured by easting]{\textbf{Montage of UMAP on top 40 PCs of UKBB data coloured by easting.} UMAP on UKBB data, coloured by easting values, with more yellow representing more eastern coordinates and more pink representing more western coordinates. Images are labelled by the number of components included. Data has been randomized as explained in the materials and methods section.}
+    \label{fig:supp_montage_ukbb_ew}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}{\textwidth}
+    %\includegraphics[width=\textwidth]{images/meanAsiaMap.jpg}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \end{subfigure}
+    \caption[Map of Asia coloured by 3D UMAP coordinates of UKBB data]{\textbf{Map of Asia coloured by 3D UMAP coordinates of UKBB data.} Fig 5b, zoomed in on Asia. Geographic distribution of UMAP coordinates. Using the country of birth of individuals in the UKBB, we colour countries by the closeness in 3D UMAP space of those born there. Broad patterns of similarity appear in East Asia, South Asia, North African and the Middle East, West Africa, and South America. Differences between neighbouring countries can reflect both ancient population structure and recent differences in migration history. Evidence of migrations related to colonialism are visible with, e.g., European ancestry in South Africa and South Asian ancestry in Kenya and Tanzania. Because of the large number of White British individuals born abroad, to avoid skewing the colour scale they were not included unless they were born in the UK, Europe, Australia, Canada, or the United States, where UKBB participants already tended to have European ancestry.}
+    \label{fig:supp_umap_ukbb_asia}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}{\textwidth}
+    %\includegraphics[width=\textwidth]{images/meanCarribeanMap.jpg}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \end{subfigure}
+    \caption[Map of Caribbean coloured by 3D UMAP coordinates of UKBB data]{\textbf{Map of Caribbean coloured by 3D UMAP coordinates of UKBB data.} Fig 5b, zoomed in on the Caribbean. Geographic distribution of UMAP coordinates. Using the country of birth of individuals in the UKBB, we colour countries by the closeness in 3D UMAP space of those born there. Broad patterns of similarity appear in East Asia, South Asia, North African and the Middle East, West Africa, and South America. Differences between neighbouring countries can reflect both ancient population structure and recent differences in migration history. Evidence of migrations related to colonialism are visible with, e.g., European ancestry in South Africa and South Asian ancestry in Kenya and Tanzania. Because of the large number of White British individuals born abroad, to avoid skewing the colour scale they were not included unless they were born in the UK, Europe, Australia, Canada, or the United States, where UKBB participants already tended to have European ancestry.}
+    \label{fig:supp_umap_ukbb_car}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}{\textwidth}
+    %\includegraphics[width=\textwidth]{images/meanEuroMap.jpg}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \end{subfigure}
+    \caption[Map of Europe coloured by 3D UMAP coordinates of UKBB data]{\textbf{Map of Europe coloured by 3D UMAP coordinates of UKBB data.} Fig 5b, zoomed in on Europe. Geographic distribution of UMAP coordinates. Using the country of birth of individuals in the UKBB, we colour countries by the closeness in 3D UMAP space of those born there. Broad patterns of similarity appear in East Asia, South Asia, North African and the Middle East, West Africa, and South America. Differences between neighbouring countries can reflect both ancient population structure and recent differences in migration history. Evidence of migrations related to colonialism are visible with, e.g., European ancestry in South Africa and South Asian ancestry in Kenya and Tanzania. Because of the large number of White British individuals born abroad, to avoid skewing the colour scale they were not included unless they were born in the UK, Europe, Australia, Canada, or the United States, where UKBB participants already tended to have European ancestry.}
+    \label{fig:supp_umap_ukbb_eur}
+\end{figure}
+
+\newpage
+
+\begin{figure}[!htb]
+    \centering
+    %\includegraphics[width=0.95\columnwidth]{images/UKBB_TSNE_10PCs_DefaultPerplexity_eth.pdf}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \caption[t-SNE on UKBB data coloured by self-identified ethinicity]{\textbf{t-SNE on UKBB data coloured by self-identified ethinicity.} t-SNE applied to the top 10 principal components of the UKBB, coloured by ethnic background. The unbalanced populations resulted in many individuals and populations being orphaned along the periphery of the main cluster.}
+    \label{fig:supp_ukbb_tsne}
+\end{figure}
+
+%%%%% UKBB phenotype plots
+\begin{figure}[ht]
+    \centering
+    %\includegraphics[width=0.4\columnwidth]{images/UKBB_UMAP_PC10_NN15_MD05_2018328174511_201871417039_basophill_count_pct5_f.pdf}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \caption[UMAP on UKBB data coloured by basophil count (female)]{\textbf{UMAP on UKBB data coloured by basophil count (female).} UMAP on the top 10 principal components of the UKBB coloured by basophil count (female). Data has been randomized as explained in the materials and methods section.}
+    \label{fig:supp_ukbb_basophill_f}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    %\includegraphics[width=0.4\columnwidth]{images/UKBB_UMAP_PC10_NN15_MD05_2018328174511_201871417039_basophill_count_pct5_m.pdf}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \caption[UMAP on UKBB data coloured by basophil count (male)]{\textbf{UMAP on UKBB data coloured by basophil count (male).} UMAP on the top 10 principal components of the UKBB coloured by basophil count (male). Data has been randomized as explained in the materials and methods section.}
+    \label{fig:supp_ukbb_basophill_m}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    %\includegraphics[width=0.4\columnwidth]{images/UKBB_UMAP_PC10_NN15_MD05_2018328174511_201871417720_eosinophill_count_pct5_f.pdf}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \caption[UMAP on UKBB data coloured by eosinphil count (female)]{\textbf{UMAP on UKBB data coloured by eosinphil count (female).} UMAP on the top 10 principal components of the UKBB coloured by eosinophil count (female). Data has been randomized as explained in the materials and methods section.}
+    \label{fig:supp_ukbb_eosinophill_f}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    %\includegraphics[width=0.4\columnwidth]{images/UKBB_UMAP_PC10_NN15_MD05_2018328174511_201871417720_eosinophill_count_pct5_m.pdf}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \caption[UMAP on UKBB data coloured by eosinphil count (male)]{\textbf{UMAP on UKBB data coloured by eosinphil count (male).} UMAP on the top 10 principal components of the UKBB coloured by eosinophil count (male). Data has been randomized as explained in the materials and methods section.}
+    \label{fig:supp_ukbb_eosinophill_m}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    %\includegraphics[width=0.4\columnwidth]{images/UKBB_UMAP_PC10_NN15_MD05_2018328174511_201871416305_3063_0_0_pct1_f.pdf}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \caption[UMAP on UKBB data coloured by FEV1 (female)]{\textbf{UMAP on UKBB data coloured by FEV1 (female).} UMAP on the top 10 principal components of the UKBB coloured by FEV1 (female). Data has been randomized as explained in the materials and methods section.}
+    \label{fig:supp_ukbb_fev_f}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    %\includegraphics[width=0.4\columnwidth]{images/UKBB_UMAP_PC10_NN15_MD05_2018328174511_201871416305_3063_0_0_pct1_m.pdf}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \caption[UMAP on UKBB data coloured by FEV1 (male)]{\textbf{UMAP on UKBB data coloured by FEV1 (male).} UMAP on the top 10 principal components of the UKBB coloured by FEV1 (male). Data has been randomized as explained in the materials and methods section.}
+    \label{fig:supp_ukbb_fev_m}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    %\includegraphics[width=0.4\columnwidth]{images/UKBB_UMAP_PC10_NN15_MD05_2018328174511_2018714161841_Height_res_pct1_f.pdf}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \caption[UMAP on UKBB data coloured by height (female)]{\textbf{UMAP on UKBB data coloured by height (female).} UMAP on the top 10 principal components of the UKBB coloured by height (female). Data has been randomized as explained in the materials and methods section.}
+    \label{fig:supp_ukbb_height_f}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    %\includegraphics[width=0.4\columnwidth]{images/UKBB_UMAP_PC10_NN15_MD05_2018328174511_2018714161841_Height_res_pct1_m.pdf}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \caption[UMAP on UKBB data coloured by height (male)]{\textbf{UMAP on UKBB data coloured by height (male).} UMAP on the top 10 principal components of the UKBB coloured by height (male). Data has been randomized as explained in the materials and methods section.}
+    \label{fig:supp_ukbb_height_m}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    %\includegraphics[width=0.4\columnwidth]{images/UKBB_UMAP_PC10_NN15_MD05_2018328174511_201871416519_leukocyte_count_pct5_f.pdf}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \caption[UMAP on UKBB data coloured by leukocyte count (female)]{\textbf{UMAP on UKBB data coloured by leukocyte count (female).} UMAP on the top 10 principal components of the UKBB coloured by leukocyte count (female). Data has been randomized as explained in the materials and methods section.}
+    \label{fig:supp_ukbb_leukocyte_f}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    %\includegraphics[width=0.4\columnwidth]{images/UKBB_UMAP_PC10_NN15_MD05_2018328174511_201871416519_leukocyte_count_pct5_m.pdf}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \caption[UMAP on UKBB data coloured by leukocyte count (male)]{\textbf{UMAP on UKBB data coloured by leukocyte count (male).} UMAP on the top 10 principal components of the UKBB coloured by leukocyte count (male). Data has been randomized as explained in the materials and methods section.}
+    \label{fig:supp_ukbb_leukocyte_m}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    %\includegraphics[width=0.4\columnwidth]{images/UKBB_UMAP_PC10_NN15_MD05_2018328174511_2018714165614_neutrophill_count_pct5_f.pdf}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \caption[UMAP on UKBB data coloured by neutrophil count (female)]{\textbf{UMAP on UKBB data coloured by neutrophil count (female).} UMAP on the top 10 principal components of the UKBB coloured by neutrophil count (female). Data has been randomized as explained in the materials and methods section.}
+    \label{fig:supp_ukbb_neutrophill_f}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    %\includegraphics[width=0.4\columnwidth]{images/UKBB_UMAP_PC10_NN15_MD05_2018328174511_2018714165614_neutrophill_count_pct5_m.pdf}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \caption[UMAP on UKBB data coloured by neutrophil count (male)]{\textbf{UMAP on UKBB data coloured by neutrophil count (male).} UMAP on the top 10 principal components of the UKBB coloured by neutrophil count (male). Data has been randomized as explained in the materials and methods section.}
+    \label{fig:supp_ukbb_neutrophill_m}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}{\textwidth}
+    %\includegraphics[width=\textwidth]{images/female_height_boxplot_annotated.pdf}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \end{subfigure}
+    \caption[Box plots of height in the UKBB by self-identified ethnicity (female)]{\textbf{Box plots of height in the UKBB by self-identified ethnicity (female).} Height by sex and ethnic group, annotated with p-values. Asterisks indicate significant difference from the White British group with a Bonferroni correction for 12 groups.}
+    \label{fig:supp_box_height_f}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}{\textwidth}
+    %\includegraphics[width=\textwidth]{images/male_height_boxplot_annotated.pdf}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \end{subfigure}
+    \caption[Box plots of height in the UKBB by self-identified ethnicity (male)]{\textbf{Box plots of height in the UKBB by self-identified ethnicity (male).} Height by sex and ethnic group, annotated with p-values. Asterisks indicate significant difference from the White British group with a Bonferroni correction for 12 groups.}
+    \label{fig:supp_box_height_m}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}{\textwidth}
+    %\includegraphics[width=\textwidth]{images/female_fev_boxplot_annotated.pdf}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \end{subfigure}
+    \caption[Box plots of FEV1 in the UKBB by self-identified ethnicity (female)]{\textbf{Box plots of FEV1 in the UKBB by self-identified ethnicity (female).} FEV1 by sex and ethnic group, annotated with p-values. Asterisks indicate significant difference from the White British group with a Bonferroni correction for 12 groups.}
+    \label{fig:supp_box_fev_f}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}{\textwidth}
+    %\includegraphics[width=\textwidth]{images/male_fev_boxplot_annotated.pdf}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \end{subfigure}
+    \caption[Box plots of FEV1 in the UKBB by self-identified ethnicity (male)]{\textbf{Box plots of FEV1 in the UKBB by self-identified ethnicity (male).} FEV1 by sex and ethnic group, annotated with p-values. Asterisks indicate significant difference from the White British group with a Bonferroni correction for 12 groups.}
+    \label{fig:supp_box_fev_m}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}{\textwidth}
+    %\includegraphics[width=\textwidth]{images/montage_fev1_height_afr_permuted.pdf}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \end{subfigure}
+    \caption[Subset (left) of UKBB UMAP projection coloured by height, FEV1, and self-identified ethnicity]{\textbf{Subset (left) of UKBB UMAP projection coloured by height, FEV1, and self-identified ethnicity.} Individuals of Black African, Black Caribbean, and mixed backgrounds (primarily White and Black Caribbean/African) coloured by self-identified ethnic background (left, from \ref{fig:fig3}B), FEV1 (middle), and age-adjusted height (right). An arrow points to an area where the FEV1 distribution appears to change, corresponding to where the clusters contain more people with self-identified mixed backgrounds.}
+    \label{fig:supp_comparison_fev_afr}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}{\textwidth}
+    %\includegraphics[width=\textwidth]{images/montage_fev1_height_chi_eur_permuted.png}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \end{subfigure}
+    \caption[Subset (top) of UKBB UMAP projection coloured by height, FEV1, and self-identified ethnicity]{\textbf{Subset (top) of UKBB UMAP projection coloured by height, FEV1, and self-identified ethnicity.} Zoomed in section of \ref{fig:fig3}B, focused on individuals with Chinese (CHI), White British (GBR), any other white background, or any other ethnic group (OEG) coloured by ethnicity (left), FEV1 (middle), and age-adjusted height (right). The OEG cluster next to the Chinese cluster appears redder on the middle panel, suggesting higher levels of FEV1.}
+    \label{fig:supp_comparison_fev_chi_eur}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}{0.5\textwidth}
+    %\includegraphics[width=0.5\textwidth]{images/east_asia_population_colours.png}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \end{subfigure}
+    \caption[East Asian individuals from UKBB UMAP projection selected for FEV1 investigation]{\textbf{East Asian individuals from UKBB UMAP projection selected for FEV1 investigation.} Individuals from the zoomed in section in \ref{fig:supp_comparison_fev_chi_eur} used in statistical testing, coloured the same as in \ref{fig:supp_fev_ridgeplots}. Brown, blue, and green represent those born in the Philippines, Malaysia, and Japan; pink represents those who self-identify as Chinese. The Chinese individuals were those who self-identified their ethnic background as Chinese, and the remaining populations were determined based on country of birth; the categorizations are mutually exclusive.}
+    \label{fig:supp_fev_test_pops}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}{\textwidth}
+    %\includegraphics[width=\textwidth]{images/east_asia_ridgeplots_fev.png}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \end{subfigure}
+    \caption[Ridge plots of East Asian individuals from UKBB UMAP projection selected for FEV1 investigation]{\textbf{Ridge plots of East Asian individuals from UKBB UMAP projection selected for FEV1 investigation.} Plots of the distributions of residual FEV1 by sex for East Asian populations, after adjusting for height, age, age$^2$, and sex through linear regression. Individuals were limited to those in the ``Chinese/Other Ethnic Group'' cluster from \ref{fig:supp_comparison_fev_chi_eur}. The Chinese individuals were those who self-identified their ethnic background as Chinese, and the remaining populations were determined based on country of birth; the categorizations are mutually exclusive. Asterisks indicate significant difference from the Japanese population, using Welch's unpaired t-test with a Bonferroni correction for 3 groups. The dashed lines are the means of the distributions, and Japanese populations have consistently higher means.}
+    \label{fig:supp_fev_ridgeplots}
+\end{figure}
+
+\newpage
+
+\begin{figure}[!htb]
+    \centering
+    %\includegraphics[width=0.95\columnwidth]{images/tsne_umap_graph_ukbb.jpeg}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \caption[Comparison of t-SNE error by initialization on UKBB data]{\textbf{Comparison of t-SNE error by initialization on UKBB data.} Comparing the error terms of standard t-SNE versus t-SNE initialized with a UMAP embedding and no early exaggeration. Done on the UKBB dataset with 20000 iterations. The UMAP-initialized graph has been shifted by 230 iterations to approximate the 230 epochs UMAP uses for large datasets ($n>10,000$).}
+    \label{fig:supp_tsne_umap_compare_ukbb_graph}
+\end{figure}
+
+\newpage
+
+\begin{figure}[!htb]
+    \centering
+    %\includegraphics[width=0.95\columnwidth]{images/ukbb_tsne_umap.jpeg}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \caption[Comparing visualizations of t-SNE and UMAP of UKBB data by initialization]{\textbf{Comparing visualizations of t-SNE and UMAP of UKBB data by initialization.} Comparing the visualizations of UMAP, standard t-SNE, and t-SNE initialized with a UMAP projection, on the top 10 principal components of the UKBB. t-SNE used 20000 iterations.}
+    \label{fig:supp_tsne_umap_compare_ukbb}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    %\includegraphics[width=0.4\columnwidth]{images/ukbb_pcs_2019410184041_Height_res_pct1_f.jpeg}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \caption[PCs 1 and 2 of the UKBB coloured by height (female)]{\textbf{PCs 1 and 2 of the UKBB coloured by height (female).} Principal components 1 and 2 from the UKBB, coloured by age-adjusted residual height (female). Data has been randomized as explained in the materials and methods section.}
+    \label{fig:supp_ukbb_pca_height_res_f}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    %\includegraphics[width=0.4\columnwidth]{images/ukbb_pcs_201941019249_3063_0_0_pct1_f.jpeg}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \caption[PCs 1 and 2 of the UKBB coloured by FEV1 (female)]{\textbf{PCs 1 and 2 of the UKBB coloured by FEV1 (female).} Principal components 1 and 2 from the UKBB, coloured by FEV1 (female). Data has been randomized as explained in the materials and methods section.}
+    \label{fig:supp_ukbb_pca_fev_f}
+\end{figure}
+
+\clearpage
+\begin{figure}[ht]
+    \centering
+    %\includegraphics[width=0.4\columnwidth]{images/UKBB_TSNE_10PCs_DefaultPerplexity_2019410184913_Height_res_pct1_f.jpeg}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \caption[t-SNE projection of UKBB data coloured by height (female)]{\textbf{t-SNE projection of UKBB data coloured by height (female).} t-SNE on the first 10 principal components from the UKBB, coloured by age-adjusted residual height (female). Data has been randomized as explained in the materials and methods section.}
+    \label{fig:supp_ukbb_tsne_height_res_f}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    %\includegraphics[width=0.4\columnwidth]{images/UKBB_TSNE_10PCs_DefaultPerplexity_2019410191255_3063_0_0_pct1_f.jpeg}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \caption[t-SNE projection of UKBB data coloured by FEV1 (female)]{\textbf{t-SNE projection of UKBB data coloured by FEV1 (female).} t-SNE on the first 10 principal components from the UKBB, coloured by FEV1 (female). Data has been randomized as explained in the materials and methods section.}
+    \label{fig:supp_ukbb_tsne_fev_f}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}{0.8\textwidth}
+    %\includegraphics[width=\textwidth]{images/UKBB_UMAP_PC10_NN15_MD05_eth_combined_resized.pdf}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \end{subfigure}
+    \caption[Zoomed in views of UMAP projection of UKBB data, coloured by self-identified ethnicity]{\textbf{Zoomed in views of UMAP projection of UKBB data, coloured by self-identified ethnicity.} Zoomed in areas of \ref{fig:fig3}B. Sections (i) and (ii) respectively focus on the African and Asian superpopulations, and section (iii) focuses on an area with individuals from many ethnic backgrounds. Noticeable clusters of unidentified ethnic backgrounds appear and are labelled ``OEG'' (``Other Ethnic Group'').}
+    \label{fig:supp_ukbb_zoom}
+\end{figure}
+
+\newpage
+
+\begin{figure}[!htb]
+    \centering
+    %\includegraphics[width=0.95\columnwidth]{images/1KGP_tsne_umap.jpeg}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \caption[Comparing visualizations of t-SNE and UMAP of 1KGP data by initialization]{\textbf{Comparing visualizations of t-SNE and UMAP of 1KGP data by initialization.} Comparing the visualizations of UMAP, standard t-SNE, and t-SNE initialized with a UMAP projection, on the top 10 principal components of the 1KGP. t-SNE used 5000 iterations. Initializing t-SNE with UMAP breaks the continuous structure of the projection and instead forms many small clusters.}
+    \label{fig:supp_tsne_umap_compare_1kgp}
+\end{figure}
+
+\newpage
+
+\begin{figure}[!htb]
+    \centering
+    %\includegraphics[width=0.95\columnwidth]{images/HRS_tsne_umap.jpeg}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \caption[Comparing visualizations of t-SNE and UMAP of HRS data by initialization]{\textbf{Comparing visualizations of t-SNE and UMAP of HRS data by initialization.} Comparing the visualizations of UMAP, standard t-SNE, and t-SNE initialized with a UMAP projection, on the top 10 principal components of the HRS. t-SNE used 5000 iterations.}
+    \label{fig:supp_tsne_umap_compare_hrs}
+\end{figure}
+
+\newpage
+
+\begin{figure}[!htb]
+    \centering
+    %\includegraphics[width=0.95\columnwidth]{images/tsne_umap_graph_1kgp.jpeg}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \caption[Comparison of t-SNE error by initialization on 1KGP data]{\textbf{Comparison of t-SNE error by initialization on 1KGP data.} Comparing the error terms of standard t-SNE versus t-SNE initialized with a UMAP embedding and no early exaggeration. Done on the 1KGP dataset with 5000 iterations. The UMAP-initialized graph has been shifted by 600 iterations to approximate the 600 epochs UMAP uses for small datasets ($n<=10,000$).}
+    \label{fig:supp_tsne_umap_compare_1kgp_graph}
+\end{figure}
+
+\newpage
+
+\begin{figure}[!htb]
+    \centering
+    %\includegraphics[width=0.95\columnwidth]{images/tsne_umap_graph_hrs.jpeg}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \caption[Comparison of t-SNE error by initialization on HRS data]{\textbf{Comparison of t-SNE error by initialization on HRS data.} Comparing the error terms of standard t-SNE versus t-SNE initialized with a UMAP embedding and no early exaggeration. Done on the HRS dataset with 5000 iterations. The UMAP-initialized graph has been shifted by 230 iterations to approximate the 230 epochs UMAP uses for large datasets ($n>10,000$).}
+    \label{fig:supp_tsne_umap_compare_hrs_graph}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}{\textwidth}
+    %\includegraphics[width=\textwidth]{images/female_basophill_boxplot_annotated.pdf}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \end{subfigure}
+    \caption[Box plots of basophil count in the UKBB by self-identified ethnicity (female)]{\textbf{Box plots of basophil count in the UKBB by self-identified ethnicity (female).} Basophil counts by sex and ethnic group, annotated with p-values. Asterisks indicate significant difference from the White British group with a Bonferroni correction for 12 groups.}
+    \label{fig:supp_box_basophill_f}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}{\textwidth}
+    %\includegraphics[width=\textwidth]{images/male_basophill_boxplot_annotated.pdf}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \end{subfigure}
+    \caption[Box plots of basophil count in the UKBB by self-identified ethnicity (male)]{\textbf{Box plots of basophil count in the UKBB by self-identified ethnicity (male).} Basophil counts by sex and ethnic group, annotated with p-values. Asterisks indicate significant difference from the White British group with a Bonferroni correction for 12 groups.}
+    \label{fig:supp_box_basophill_m}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}{\textwidth}
+    %\includegraphics[width=\textwidth]{images/female_eosinophill_boxplot_annotated.pdf}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \end{subfigure}
+    \caption[Box plots of eosinophil count in the UKBB by self-identified ethnicity (female)]{\textbf{Box plots of eosinophil count in the UKBB by self-identified ethnicity (female).} Eeosinophil counts by sex and ethnic group, annotated with p-values. Asterisks indicate significant difference from the White British group with a Bonferroni correction for 12 groups.}
+    \label{fig:supp_box_eosinophill_f}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}{\textwidth}
+    %\includegraphics[width=\textwidth]{images/male_eosinophill_boxplot_annotated.pdf}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \end{subfigure}
+    \caption[Box plots of eosinophil count in the UKBB by self-identified ethnicity (male)]{\textbf{Box plots of eosinophil count in the UKBB by self-identified ethnicity (male).} Eosinophil counts by sex and ethnic group, annotated with p-values. Asterisks indicate significant difference from the White British group with a Bonferroni correction for 12 groups.}
+    \label{fig:supp_box_eosinophill_m}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}{\textwidth}
+    %\includegraphics[width=\textwidth]{images/female_leukocyte_boxplot_annotated.pdf}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \end{subfigure}
+    \caption[Box plots of leukocyte count in the UKBB by self-identified ethnicity (female)]{\textbf{Box plots of leukocyte count in the UKBB by self-identified ethnicity (female).} Leukocyte counts by sex and ethnic group, annotated with p-values. Asterisks indicate significant difference from the White British group with a Bonferroni correction for 12 groups.}
+    \label{fig:supp_box_leukocyte_f}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}{\textwidth}
+    %\includegraphics[width=\textwidth]{images/male_leukocyte_boxplot_annotated.pdf}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \end{subfigure}
+    \caption[Box plots of leukocyte count in the UKBB by self-identified ethnicity (male)]{\textbf{Box plots of leukocyte count in the UKBB by self-identified ethnicity (male).} Leukocyte counts by sex and ethnic group, annotated with p-values. Asterisks indicate significant difference from the White British group with a Bonferroni correction for 12 groups.}
+    \label{fig:supp_box_leukocyte_m}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}{\textwidth}
+    %\includegraphics[width=\textwidth]{images/female_neutrophil_boxplot_annotated.pdf}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \end{subfigure}
+    \caption[Box plots of neutrophil count in the UKBB by self-identified ethnicity (female)]{\textbf{Box plots of neutrophil count in the UKBB by self-identified ethnicity (female).} Neutrophil counts by sex and ethnic group, annotated with p-values. Asterisks indicate significant difference from the White British group with a Bonferroni correction for 12 groups.}
+    \label{fig:supp_box_neutrophill_f}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}{\textwidth}
+    %\includegraphics[width=\textwidth]{images/male_neutrophil_boxplot_annotated.pdf}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \end{subfigure}
+    \caption[Box plots of neutrophil count in the UKBB by self-identified ethnicity (male)]{\textbf{Box plots of neutrophil count in the UKBB by self-identified ethnicity (male).} Neutrophil counts by sex and ethnic group, annotated with p-values. Asterisks indicate significant difference from the White British group with a Bonferroni correction for 12 groups.}
+    \label{fig:supp_box_neutrophill_m}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}{\textwidth}
+    %\includegraphics[width=\textwidth]{images/HRS_1000G_UMAP_PC10_NC2_NN15_MD05_2018627203416_label.pdf}
+    \includegraphics[width=0.5\textwidth]{placeholder.png}
+    \end{subfigure}
+    \caption[UMAP projection of combined HRS and 1KGP data]{\textbf{UMAP projection of combined HRS and 1KGP data.} UMAP projection of the top 10 principal components of the combined HRS and 1KGP datasets. One cluster (in the box) does not group with any of the 1KGP populations. A cluster of Finnish (FIN) individuals consistently appears in the ``White Not Hispanic'' (WNH) group. Groups of Central and South American populations from the 1KGP (CLM, Colombian; MXL, Mexican; PEL, Peruvian; PUR, Puerto Rican) form nearby or within the HRS Hispanic cluster (HIS). Iberian individuals (IBS) cluster near the Hispanic population. Toscani individuals (TSI) form some small clusters and sometimes appear near the Iberian and Hispanic populations. Individuals with British/Scottish (GBR) or Northern/Western European ancestry (CEU) are scattered throughout the WNH clusters. Individuals with African ancestry from the 1KGP group with Black Americans from the HRS (AFR). Similar population groupings occur with South Asian (SAS) and East Asian (EAS) individuals.}
+    \label{fig:supp_hrs_1000g}
+\end{figure}
+
+\newpage
+
+\begin{figure}
+\centering
+   %\includegraphics[width=0.6\linewidth]{images/HRS_1000G_NP1_UMAP_PC10_NC2_NN15_MD05_pca_1kgp_onto_hrs_umap_1kgp_onto_hrs_2018112221116_admix132.jpeg}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+   \caption[Alternate colouring of \ref{fig:umap_hrs_admix}]{\textbf{Alternate colouring of \ref{fig:umap_hrs_admix}.} An alternate colouring of \ref{fig:umap_hrs_admix}. Here red, green, and blue correspond to African, Asian/Native American, and European ancestry, respectively.}
+    \label{fig:umap_hrs_admix_alt}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}{\textwidth}
+    %\includegraphics[width=0.7\textwidth]{images/HRS_1000G_NP1_UMAP_PC7_NC2_NN15_MD05_pca_hrshisp_added1kgp_2018115153245_admix132_hisp.jpeg}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \end{subfigure}
+    \caption[An alternate colouring of \ref{fig:supp_umap_hrs_hisp_admix}]{\textbf{Alternate colouring of \ref{fig:supp_umap_hrs_hisp_admix}.} An alternate colouring of \ref{fig:supp_umap_hrs_hisp_admix}. Here red, green, and blue correspond to African, Asian/Native American, and European ancestry, respectively.}
+    \label{fig:supp_umap_hrs_hisp_admix_alt}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}{\textwidth}
+    %\includegraphics[width=\textwidth]{images/admixture_plot_highlight_mountain_copy.pdf}
+    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    \end{subfigure}
+    \caption[Admixture plot of Hispanic individuals in the HRS]{\textbf{Admixture plot of Hispanic individuals in the HRS.} Admixture plot of Hispanic individuals in the HRS. Individuals born in the Mountain census region fall between the white lines (indices 48 to 184).}
+    \label{fig:supp_hrs_hisp_admix}
+\end{figure}
+
+\clearpage
+
+\begin{table}[htb!]
+\centering
+ \begin{tabular}{||c c c c||} 
+ \hline
+ Number of PCs & Variance explained & Number of PCs & Variance explained  \\ [0.5ex] 
+ \hline\hline
+ 2 & 13.6\% & 1000 & 57.0\% \\
+\hline
+3 & 14.7\% & 1100 & 60.0\%\\
+\hline
+4 & 15.5\% & 1200 & 62.8\%  \\
+\hline
+5 & 15.7\% & 1300 & 65.4\%\\
+\hline
+6 & 15.8\% & 1400 & 68.0\% \\
+\hline
+7 & 15.9\% & 1500 & 70.5\%\\
+\hline
+8 & 16.0\% & 1600 & 73.0\% \\
+\hline
+9 & 16.1\% & 1700 & 75.3\%\\
+\hline
+10 & 16.2\% & 1800 & 77.5\% \\
+\hline
+11 & 16.2\% & 1900 & 79.7\%\\
+\hline
+12 & 16.3\% & 2000 & 81.8\% \\
+\hline
+13 & 16.4\% & 2100 & 83.8\%\\
+\hline
+14 & 16.5\% & 2200 & 85.8\%\\
+\hline
+15 & 16.5\% & 2300 & 87.6\%\\
+\hline
+30 & 17.5\% & 2400 & 89.4\%\\
+\hline
+50 & 18.6\% & 2500 & 91.1\% \\
+\hline
+100 & 21.3\% & 2600 & 92.7\% \\
+\hline
+200 & 26.4\% & 2700 & 94.2\%\\
+\hline
+300 & 31.1\% & 2800 & 95.3\%\\
+\hline
+400 & 35.5\% & 2900 & 96.3\%\\
+\hline
+500 & 39.7\% & 3000 & 97.1\% \\
+\hline
+600 & 43.7\% & 3100 & 97.8\%\\
+\hline
+700 & 47.4\% & 3200 & 98.5\%\\
+\hline
+800 & 50.8\% & 3300 & 99.2\%\\
+\hline
+900 & 54.0\% & 3400 & 99.7\%\\[1ex] 
+ \hline
+ \end{tabular}
+ \caption{Variance explained in the 1KGP data by the number of principal components used.}
+ \label{table:1KGP_var_exp}
+\end{table}
