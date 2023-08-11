@@ -139,7 +139,7 @@
 \hyphenation{PCA}
 \hyphenation{UMAP}
 
-\setcounter{chapter}{-1}
+%\setcounter{chapter}{-1}
 
 \begin{document}
 
@@ -181,9 +181,9 @@
 %
 %%%%%%%%%%%%%%%%%%%
 
-\chapter*{Abrégé}\markboth{Abrégé}{}
+\chapter*{Résumé}\markboth{Résumé}{}
 	\label{chap:frAbstract}
-		\addcontentsline{toc}{chapter}{Abrégé}  
+		\addcontentsline{toc}{chapter}{Résumé}  
 		\input{content/fr_Abstract.tex}
 
 %%%%%%%%%%%%%%%%%%%
@@ -286,7 +286,7 @@
 \pagebreak
 
 \unchapter{Introduction}
-\chapter*{Introduction}
+\chapter*{Chapter 1: Introduction}
 \input{base/intro/intro.tex}
 \printbibliography[heading=subbibintoc]
 \end{refsection}
@@ -319,24 +319,29 @@
 
 
 \begin{refsection}
-\unchapter{UMAP reveals cryptic population structure and phenotype heterogeneity in large genomic cohorts}
-\chapter*{UMAP reveals cryptic population structure and phenotype heterogeneity in large genomic cohorts}
+%\unchapter{UMAP reveals cryptic population structure and phenotype heterogeneity in large genomic cohorts}
+\unchapter{UMAP reveals cryptic population structure}
+\chapter*{Chapter 2: UMAP reveals cryptic population structure and phenotype heterogeneity in large genomic cohorts}
 \label{chap:chapter1}
+\input{base/chapter1/chapter1_preface.tex}
 \input{base/chapter1/chapter1.tex}
 \printbibliography[heading=subbibintoc]
 \end{refsection}
 
 \begin{refsection}
 \unchapter{A review of UMAP in population genetics}
-\chapter*{A review of UMAP in population genetics}
+\chapter*{Chapter 3: A review of UMAP in population genetics}
 \label{chap:chapter2}
 \input{base/chapter2/chapter2.tex}
 \printbibliography[heading=subbibintoc]
 \end{refsection}
 
 \begin{refsection}
-\unchapter{Topological stratification of continuous genetic variation in large biobanks}
-\chapter*{Topological stratification of continuous genetic variation in large biobanks}
+\unchapter{Topological stratification of continuous genetic variation}
+
+
+
+\chapter*{Chapter 4: Topological stratification of continuous genetic variation in large biobanks}
 \label{chap:chapter3}
 \input{base/chapter3/chapter3.tex}
 \printbibliography[heading=subbibintoc]
@@ -370,12 +375,12 @@
 
 \begin{refsection}
 \unchapter{Discussion}
-\chapter*{Discussion}
+\chapter*{Chapter 5: Discussion}
 \label{chap:discussion}
 \input{base/conclusion/discussion.tex}
 
 \unchapter{Conclusion}
-\chapter*{Conclusion}
+\chapter*{Chapter 6: Conclusion}
 \label{chap:conclusion}
 \input{base/conclusion/conclusion.tex}
 \printbibliography[heading=subbibintoc]
