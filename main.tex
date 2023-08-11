@@ -32,7 +32,7 @@
 \usepackage{fancyhdr}
 \usepackage{lmodern}
 \usepackage{titlesec}
-\usepackage[natbib,style=numeric-comp,backend=biber,sorting=none]{biblatex}
+\usepackage[natbib,style=numeric-comp,backend=biber,sorting=none,doi=false,isbn=false,url=false,eprint=false]{biblatex}
 
 \usepackage{algorithm}
 \usepackage{algpseudocode}
@@ -320,8 +320,9 @@
 
 \begin{refsection}
 %\unchapter{UMAP reveals cryptic population structure and phenotype heterogeneity in large genomic cohorts}
-\unchapter{UMAP reveals cryptic population structure}
-\chapter*{Chapter 2: UMAP reveals cryptic population structure and phenotype heterogeneity in large genomic cohorts}
+\unchapter{UMAP reveals cryptic population structure and phenotype heterogeneity}
+%\chapter*{Chapter 2: UMAP reveals cryptic population structure and phenotype heterogeneity in large genomic cohorts}
+\chapter*{Chapter 2}
 \label{chap:chapter2}
 \input{base/chapter2/chapter2_preface.tex}
 \input{base/chapter2/chapter2.tex}
@@ -330,19 +331,18 @@
 
 \begin{refsection}
 \unchapter{A review of UMAP in population genetics}
-\chapter*{Chapter 3: A review of UMAP in population genetics}
+\chapter*{Chapter 3}
 \label{chap:chapter3}
+\input{base/chapter3/chapter3_preface.tex}
 \input{base/chapter3/chapter3.tex}
 \printbibliography[heading=subbibintoc]
 \end{refsection}
 
 \begin{refsection}
 \unchapter{Topological stratification of continuous genetic variation}
-
-
-
-\chapter*{Chapter 4: Topological stratification of continuous genetic variation in large biobanks}
+\chapter*{Chapter 4}
 \label{chap:chapter4}
+\input{base/chapter4/chapter4_preface.tex}
 \input{base/chapter4/chapter4.tex}
 \printbibliography[heading=subbibintoc]
 \end{refsection}
@@ -400,18 +400,13 @@
 %%%%%%%%%%%%%%%%%%%
 
 
-\chaptermark{{\rm\bfseries Bibliography}}
-\addcontentsline{toc}{chapter}{Bibliography}
+%\chaptermark{{\rm\bfseries Bibliography}}
+%\addcontentsline{toc}{chapter}{Bibliography}
+%\addcontentsline{toc}{chapter}{\numberline{}\rm\bfseries{Bibliography}}
 
-%\bibliographystyle{Science}
-%\bibliographystyle{unsrt}
-%\bibliography{phd_thesis}
 
-\addcontentsline{toc}{chapter}{\numberline{}\rm\bfseries{Bibliography}}
 
-%\begin{onehalfspacing}
-%\input{content/acronyms.tex}
-%\end{onehalfspacing}
+
 
 %\normalsize
 %\printindex
