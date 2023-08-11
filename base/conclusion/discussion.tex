@@ -12,7 +12,7 @@ There is also value in going beyond static $2$D figures. Software libraries such
 
 \clearpage
 
-\section{The philosophy of clustering}
+\section{The meanings of clusters}
 
 \begin{figure}[h]
 \centering
@@ -28,13 +28,7 @@ The question of the appropriateness of a given clustering can be framed as wheth
 
 Though UMAP appears to preserve structure, at least visually, it is only one representation of very complex high-dimensional data points and the relationships between them. HDBSCAN($\hat{\epsilon}$) extracts clusters that correspond to our knowledge of population structure, but again they are only an abstraction and should not be reified. They are abstractions that, ideally, represent some underlying truth---they are maps of an unknown (unknowable?) territory; this map cannot be confused with the territory itself. 
 
-There are no ``true'' clusters; the idea of ``underlying truth'' or ``natural kinds''
 
-
-
-One of the questions around clustering is whether we have found ``true clusters''; that is, whether they reflect some ``truth''. 
-
-It is better to gauge clusters by how useful they are and what they may reflect rather than representing something concrete and tangible. Clusters matching population labels in the 1KGP signified not that the populations were ``real'', but that the algorithm successfully capture the source of structure in the data---i.e. the sampling scheme.
 
 ``Empirical'' is not the same as ``objective''
 
@@ -47,9 +41,6 @@ There is no universal definition of a ``cluster'', and the idea of a ``good'' cl
 - discrete groupings are useful, like models --- and like models, they are prone to reification: the territory is not the map
 - the philosophy of unsupervised learning and clustering in general
 - we're finding something, it's probably not nothing
-
-The way we talk about clusters percolates into the public conciousness. Using Wikipedia as an example, there are $20$ pages in the category ``Genetics by ethnicity'', including a further $8$ pages in the subcategory ``Jewish genetics''.
-
 
 
 \clearpage
@@ -100,6 +91,14 @@ Bigger data is not better data. We cannot just collect our way out of this --- w
 
 Though clustering is often viewed as a statistical or computational method, it has topological underpinnings as well.
 
+
+
+\section{Implications for GWAS and PGS}
+
+One of the promises of genomics is precision medicine: if we understand the genetic architecture of complex traits and diseases, we can treat them more effectively. Unfortunately, the overwhelming majority of studies have been limited to European populations\citep{fatumo_roadmap_2022}\citep{kaplan_polygenic_2022}. Some oft-cited concerns include confounding from population structure and a lack of power from sample size of non-European individuals\citep{ben-eghan_dont_2020}. Methods like k-means or self-identification have been used to try rectify this
+
+used k-means\citep{sun_analyses_2022}
+
 genetics of participants may not match non-participants
 \citep{benonisdottir_studying_2023}
 
@@ -109,15 +108,6 @@ How PC adjustment affects GWAS.
 
 Don't just filter out ``other'' groups
 
-\subsection{Labels and how data are situated}
-
-
-
-\section{Equitability in the genomic revolution}
-
-
-
-PRS more like LOL\citep{kaplan_polygenic_2022}
 
 \section{The genetics-environment interplay}
 
@@ -138,14 +128,8 @@ Algorithmic colonialism, helicopter/imperialistic research,
 \citep{gebru_race_2020}
 
 
-
 \section{Limitations}
 
 Dimensionality reduction necessarily sacrifices information. To help us navigate the physical world, we use two-dimensional Euclidean maps of a three-dimensional spherical planet. This transformation introduces artificial tearing and distortion into world maps---PCA, $t$-SNE, UMAP, and density clustering are no different. We may see patterns or clusters that are artefactual, arising from unidentified batch effects or the distribution of genetic variants particular to a biobank. Patterns may also form from noise. 
 
 UMAP represents topology by approximating the local structure of the data. By patching together many local topological representations, it achieves a semblance of the global structure of data; however, the distances themselves do not have meaningful interpretations. PCA, which explicitly models global variation in data, has been interpreted in connection to TMRCA and F-statistics\citep{mcvean2009genealogical,peter_geometric_2022}. Several other non-linear dimensionality reduction methods aim to balance global and local structure (e.g. diffusion PHATE\citep{moon2019visualizing}, POPVAE\citep{battey_visualizing_2021}). UMAP captures topology, not geometry; it approximates the shapes of data, but now how the shapes are positioned relative to one another. Consider three nested hollow spheres in $3$D: each sphere forms one connected shape, but a $2$D UMAP would represent them as three disconnected clusters\citep{herrmann_enhancing_2022}. This correctly identifies the three connected components but not their relationships to each other.
-
-
-\section{Etc}
-
-Biology is the new physics \citep{hunter_biology_2010}
