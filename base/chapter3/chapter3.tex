@@ -2,364 +2,160 @@
 
 \section{Preface}
 
-One of the chief uses of UMAP in population genetics is to identify clusters and to treat them as populations for downstream analysis. However, there was no effective way to algorithmically extract clusters from UMAP plots. Though it generates clusters visually, it is a dimensionality reduction algorithm and not a clustering algorithm. Centroid- or archetype-based approaches fail to capture many individuals and rely on arbitrary definitions of population groups. Researchers often resorted to hand-delineating clusters, which is limited to $2$D projections and certainly not scalable in the presence of many populations.
+In the two years following the publication of a preprint of \hyperref[chap:chapter2]{Chapter~2}, UMAP gained widespread adoption in population genetics, being applied across many biobanks and to different types of genetic data, such as structural variants and ancient DNA. It had also been applied to animal data to study introgression, conservation genetics, and disease vectors.
 
-We apply HDBSCAN($\hat{\epsilon}$), a hierarchical density-based clustering algorithm to UMAP data. This approach can use UMAP embeddings of arbitrary dimensions---importantly allowing us to work in $3$ or more dimensions. Running on the order of seconds for massive biobanks, it creates topological clusters that reflect the demgraphic histories of populations. We apply the algorithm to three biobanks (the 1KGP, UKB, and CaG cohorts) and demonstrate its effectiveness at capturing population structure, usefulness in analysis of biobank data, potential downstream applications (e.g. for PGS transferability), and its use as a quality control tool.
+In this chapter, we review the applications of UMAP. We discuss the impacts of parametrizations on visualizations, the impacts of data filtering steps for LD and the human leukocyte antigen (HLA) region, and updates to the functionality of the Python implementation. We also discuss the use of UMAP in the context of exploratory data analysis.
 
-This manuscript was released as a preprint on \textit{BioRxiv} in 2023.
+This chapter was originally published in the \textit{Journal of Human Genetics} in 2020.
 
 \clearpage
 
 \section{Abstract}
 
-Biobanks now contain genetic data from millions of individuals. Dimensionality reduction, visualization and stratification are standard when exploring data at these scales; while efficient and tractable methods exist for the first two, stratification remains challenging because of uncertainty about sources of population structure. In practice, stratification is commonly performed by drawing shapes around dimensionally reduced data or assuming populations have a "type" genome. We propose a method of stratifying data with topological analysis that is fast, easy to implement, and integrates with existing pipelines. The approach is robust to the presence of sub-populations of varying sizes and wide ranges of population structure patterns. We demonstrate its effectiveness on genotypes from three biobanks and illustrate how topological genetic strata can help us understand structure within biobanks, evaluate distributions of genotypic and phenotypic data, examine polygenic score transferability, identify potential influential alleles, and perform quality control.
+Uniform manifold approximation and projection (UMAP) has been rapidly adopted by the population genetics community to study population structure. It has become common in visualizing the ancestral composition of human genetic datasets, as well as searching for unique clusters of data, and for identifying geographic patterns. Here we give an overview of applications of UMAP in population genetics, provide recommendations for best practices, and offer insights on optimal uses for the technique.
 
 \section{Introduction}
+One of the primary challenges of genomic data analysis is high dimensionality. The human genome has over three billion base pairs, and many biobanks contain hundreds of thousands of individuals and above. Relationships among individuals are relevant for historical studies as well as for studies that seek to identify genetic roots of diseases. These relationships can be influenced by demography, sampling strategies, and technical variation. A first step in many genomic analyses is dimensionality reduction to visualize the data to identify relevant relatedness patterns. 
 
-Following improvements in genomic technologies, large-scale biobanks have become commonplace. The ﻿Global Biobank Meta-analysis Initiative (GBMI), for example, lists 23 biobanks with genetic data and health records from over 2.2 million individuals﻿\cite{zhou_global_2022}. The growth in sample sizes has led to increased potential for scientific findings; methods like genome-wide association studies (GWAS) and polygenic scores (PGS) have gained widespread popularity, and accordingly thousands of genetic loci have been implicated across numerous phenotypes. Though the growth of biobanks has fuelled discovery, population structure---the  phenomenon in which allele frequencies systematically differ between populations---remains a persistent confounder in GWAS and PGS (e.g. \cite{sakaue_dimensionality_2020,zaidi_demographic_2020}). Many methods in population genetics seek to describe and account for population structure, but the complexity of human history, along with factors like biobank recruitment strategies, preclude model-based approaches from effectively capturing the many determinants of observed genetic variation.
+One of the most common methods of dimensionality reduction is principal component analysis (PCA). PCA identifies directions, in the high-dimensional space, along which data is most variable. The projection of genomic data along these directions provides a low-dimensional representation that captures as much variance as possible. Because PCA projection is a linear operation, it has a relatively straightforward interpretation in terms of demographic events (i.e, distances between populations can be interpreted in terms of times to the most recent common ancestors) \citep{mcvean2009genealogical}.  It is also well-suited to the correction of population structure in genome-wide association studies (GWAS)\citep{patterson2006population}, and is therefore widely used.
 
-Dimensionality reduction and visualization are common in examining both discrete and continuous aspects of genetic variation (e.g. \cite{diaz-papkovich_umap_2019,battey_visualizing_2021}). Within the framework of exploratory-confirmatory data analysis, visualization of complex data enables pattern-recognition and the generation and testing of hypotheses\cite{holmes_modern_2019}. Visualization alone, though, cannot be used for analysis, and data stratification is often necessary. Algorithmic genetic stratification or clustering is often based on principal component analysis (PCA), sometimes using reference panels or assuming a ``type'' genome---e.g., all points within a certain radius in PCA space are classified as ``European''.  In recently admixed populations (i.e., populations who derive ancestry from ``source'' populations who had been in relative isolation), grouping based on inferred admixture proportions is also common, often with the use of a reference panel as a proxy for the source populations. These approaches may not work for populations with no reference panel, or with complex admixture histories, or small sample sizes\citep{ding_polygenic_2023}. Other approaches cluster based on shared identity-by-descent (IBD) segments or recent genetic relatedness (e.g. \citep{freyman_fast_2021,shemirani_rapid_2021}). These approaches typically capture finer scale population structure, but are analytically and computationally demanding. Self-declared variables like race and ethnicity are also sometimes used for genetic stratification but are imperfect indicators of genetic ancestry and are no longer recommend as proxies for it\citep{committee_2023, kaseniit_genetic_2020}.
+Dimensionality reduction requires tradeoffs. Because PCA projection identifies directions of maximal variance in the data and ignores variation along other directions, it tends to obscure finer scale patterns of population structure. Many nonlinear neighbour graph-based dimension reduction algorithms, such as t-SNE\citep{maaten_visualizing_2008}, have been developed over the years to overcome this limitation. Here we focus on uniform manifold approximation and projection (UMAP)\citep{mcinnes_umap_2020}, a method developed in 2018 that has seen widespread use across fields (e.g. single-cell genomics\citep{becht2019dimensionality}). 
 
-Despite the demand, there is not an effective, fast, and tractable method for stratifying biobank data based on patterns of genetic structure. In practice, researchers often manually group participants into discrete ad hoc ``clusters'' that they perceive in low-dimensional visualizations, which they use as strata in downstream analyses regarding, e.g., heterogeneity in ancestry and allele frequencies\citep{halldorsson_sequences_2022}, environmental exposures\citep{diaz-papkovich_umap_2019}, or assessing the performance of PGS\citep{sakaue_dimensionality_2020,martin_clinical_2019}. There are many drawbacks to such ad hoc approaches. For example, in cosmopolitan cohorts, there are many subgroups with distinct ancestral histories, leading researchers to manually distinguish between a ``majority’’ cluster and an ``everybody else’’ cluster---often to be discarded due to its heterogeneity\citep{ben-eghan_dont_2020,martschenko_including_2023}. 
+Rather than trying to preserve large-scale structure, UMAP seeks to preserve local neighbourhoods in a dataset. For each individual in a genetic dataset, UMAP identifies a pre-set number of nearest neighbours and represents distances to these neighbours as a weighted graph where the nearest neighbours are weighted more heavily. The goal is then to find a low-dimensional representation of the data that preserves these neighbourhoods as much as possible. By focusing on preserving neighborhood topology rather than absolute distances, UMAP allows for data-dense regions to be ``stretched out'' in the representation. This can have the benefit of reducing overcrowding of the low-dimensional representation, but comes at the cost of a more challenging interpretation of distances.  This is an important distinction relative to algorithms such as PHATE \citep{moon2019visualizing} that allow nonlinear transformations of the data while seeking to preserve meaningful distances. 
 
-We propose topological data analysis as an alternative approach. Rather than fitting individuals to a pre-defined notion of a population, a topological approach describes the network of neighbourhoods between data points---here, this would be the network of genetic similarity between individuals. It is especially well-suited to describe collections of points in high-dimensional space with smooth distributions but with no clear centre or ``archetype''. We assume that structure in high-dimensional genetic data can be represented topologically, and can be locally approximated and reconstructed in a low-dimensional space. After reconstructing data in the low-dimensional space, we identify dense clusters of data---i.e., the genetic strata. This approach is unsupervised, requiring neither a number of clusters nor a reference panel, and thus fits naturally with population genetic data, which is sparse and contains numerous sub-populations of unknown and varying sizes, often without \emph{a priori} definitions. 
+A consequence of the focus on topology is that the meaning of distances in the reduced space is difficult to interpret. Even though most nonlinear dimension reduction methods allow for some stretching of distances to improve visualization of local structure, UMAP can be thought of as particularly permissive, as it does not penalize uniform stretching. Because of this, UMAP representations can also contain arbitrarily small distances between points. Though such small distances might be a faithful representation of the original data topology, they are not ideal for visualization. UMAP allows for specification of a minimum distance between nearest neighbours in low-dimensional space: higher values are useful for visualization, but values near or equal to zero can be used for downstream analyses, such as clustering.
 
-We demonstrate the effectiveness of this approach on three biobanks, showing that we can consistently and effectively identify and characterize sources of population structure in each cohort, as well as relate many key variables to this structure. We identify subtle population structure quickly, simultaneously identifying structured groups as small as $100$ individuals and as large as $400,000$ within the same cohort. We show that this provides important insight into the relationships between genetic structure, environmental and sociodemographic variables, and phenotype distributions. We use stratification to identify populations for which PCA adjustment fails within a biobank (often admixed populations) and populations for which PGS transferability is poor (often, but not always, populations diverged from the training population). Finally, we illustrate how to use topological modelling as a quality control tool, a critical if less glamorous aspect of the fast-growing biobank space.
+In the context of genetic data, UMAP finds the nearest genetic neighbours for each individual and creates low-dimensional representations that group more closely-related individuals together, and partially preserves longer-range relatedness through intermediary individuals. When used in visualizations, UMAP embeddings uncover many subtle features of data, such as distinct demographic histories and covariation between genetics, geography, and phenotypes\citep{diaz-papkovich_umap_2019}. Figure~\ref{fig:PCA_and_UMAP} compares visualizations of PCA to UMAP using genotype data from the Thousand Genomes Project (1000GP)\citep{global_2015}. PCA flattens the third dimension, obscuring the distinction between South Asian and Central/South American population clusters, whereas UMAP places them in more clearly visible clusters. UMAP has become widely used to study population structure in humans and other species, in conjunction with existing methods. Here we will describe the current state of the use of UMAP in population genetics.
 
-In summary, we argue that topological modelling, which describes data in terms of local neighbourhoods in a high-dimensional space, is a powerful alternative to ancestry-based modelling for the description of genetic variation in complex cohorts.
+\section{Visualizing genomic cohorts}
+The most straightforward and common use of UMAP is for visualization. This has proven useful for data composed of relatively homogeneous populations as well as those with considerable diversity in ancestries. UMAP will dedicate more visual space to larger populations within a cohort, and consequently can illustrate the ancestral composition of a cohort in the context of its population structure as well as the size of the data. Often these data are combined with reference panels such as the 1000GP or the Human Genome Diversity Project (HGDP)\citep{cann2002human}.  As with PCA, researchers can either perform the dimensionality reduction jointly or project one dataset onto UMAP embeddings of reference data. In most surveyed literature, data are restricted to common variants with a minor allele frequency (MAF) greater than some threshold, e.g. $0.01$. This has the benefit of increasing computational speed and reduces possible confounding by false positive variants. Given sufficient power and high quality data, however, UMAP can be run on unfiltered data.
+
+Data cleaning, including LD thinning, is important when performing UMAP. Certain regions, such as the human leukocyte antigen (HLA) region in the genome, can unduly influence clustering and visualization results --- whereas the influence of HLA might be only observed in a higher-order PC, UMAP can identify the clustering of haplotypes at a single, densely typed locus and represent carriers of that haplotype as a distinct cluster (figure~\ref{fig:HLA}). LD thinning addresses this issue. Thus careful data preparation is necessary for UMAP, and researchers should resist the tendency to assign a demographic explanation to each cluster without careful analysis. 
 
 \clearpage
 
-\section{Methods}
-
-\begin{figure}[!ht]
+\begin{figure}[ht]
   \centering
-  \begin{subfigure}[b]{0.9\linewidth}
-%  \includegraphics[width=\linewidth]{images/method_schematic.png}
-\includegraphics[width=\linewidth]{placeholder.png}
-  \end{subfigure}
-  \caption[Overview of visualization and clustering pipeline]{\textbf{Overview of visualization and clustering pipeline.} We use the same genotype data to generate visualizations as well as cluster labels and combine them within one figure. For visualization, we reduce data to 2D and optimize for visual clarity. For clustering, we use higher UMAP dimensions to maximize information and minimize distortions before HDBSCAN($\hat{\epsilon}$) processing. These clusters are then used to colour the 2D plot, where each point is an individual and the cluster is represented by colour. Genotype data is pre-processed with PCA.}
-    \label{fig:method}
+    %\includegraphics[width=\linewidth]{external_images/umap_hla_comparison_highlighted.jpg}
+        \includegraphics[width=0.8\linewidth]{placeholder.png}
+  \caption[UMAP with and without HLA regions filtered]{\textbf{UMAP with (left) and without (right) HLA regions used on the Genizon database.} The cluster in the dotted lines disappears when filtering for HLA and linkage disequilibrium.}
+  \label{fig:HLA}
 \end{figure}
 
 \clearpage
 
-Our method works on structured genotype data, represented by a matrix of allele counts for each individual and genetic variant. To reduce computational burden, we perform analyses using leading principal component (PCs) on the raw genotype data. This approach has the additional benefit that many genetic cohorts have PC coordinates pre-computed as part of standard quality control pipelines. We use uniform manifold approximation and projection (UMAP)\citep{mcinnes_umap_2020}, a dimensionality reduction method, and a clustering algorithm, Hierarchical Density-Based Spatial Clustering of Applications with Noise (HDBSCAN), using an implementation by Malzer and Baum called HDBSCAN($\hat{\epsilon}$)\citep{malzer_hybrid_2020}. Both methods are unsupervised.
-
-UMAP is designed to preserve the topology of high-dimensional data by assuming the data lie on a manifold and then approximating the manifold on a local level\citep{mcinnes_umap_2020}. The algorithm requires three parameter inputs: the target number of dimensions, the number of nearest neighbours (used to define the size of high-dimensional neighbourhoods to approximate), and the minimum distance between points in the low-dimensional space. We have previously explored its use for visualization in $2$ and $3$ dimensions\citep{diaz-papkovich_umap_2019}. Figure~\ref{fig:method} highlights the two distinct roles played by UMAP in this work, each requiring distinct parameters:  
-
-\begin{enumerate}
-\item For visualization, reducing data to $2$ dimensions and using a relatively high minimum distance ($0.3$ to $0.5$), to facilitate human perception and understanding
-\item For clustering, reducing data to $3$ or more dimensions and using a very low minimum distance (near or equal to $0$) to facilitate algorithmic identification of dense clumps of data.
-\end{enumerate}
-
-After reducing genetic data to $3$ or more dimensions with UMAP in step 2, we use HDBSCAN($\hat{\epsilon}$) to extract clusters. HDBSCAN($\hat{\epsilon}$) is a hierarchical density-based clustering algorithm based on predecessors HDBSCAN and DBSCAN*\citep{malzer_hybrid_2020}. It is motivated by situations where we expect data to be in a sparsely populated space with relatively dense clusters throughout. The number of clusters is not known, and the sizes of the clusters are assumed to vary. This describes biobank data particularly well, since it is expected to contain population structure at many different scales, and it is usually difficult to specify in advance a useful number of subgroups to consider. The parameter $\hat{\epsilon}$ allows clusters to have widely varying sizes; we provide more details on parameters in the Supporting Information (SI).
-
-We use UMAP-assisted density-based clustering on data from three biobanks: the Thousand Genomes Project (1KGP), the UK biobank (UKB), and CARTaGENE (CaG). The 1KGP data consists of the genotypes of $3,450$ individuals sampled from $26$ populations from around the world; the populations were decided in advance and their sample sizes are similar, ranging from $104$ to $183$ samples\citep{global_2015}. The UKB is a cohort of $488,377$ individuals from the United Kingdom (UK) with genotypic, phenotypic, and sociodemographic data. UKB participants were recruited by inviting 9 million individuals registered with the National Health Service (NHS) who lived near a testing centre\citep{sudlow_uk_2015}. CaG is a cohort of residents of the Canadian province of Qu\'{e}bec, with genotype data for $29,337$ participants who were recruited using registration data from the R\'{e}gie de l'assurance maladie du Qu\'{e}bec (RAMQ), the provincial health authority, from four metropolitian areas in the province\citep{awadalla_cohort_2013}. Unlike the 1KGP, CaG and the UKB do not have \emph{a priori} populations defined, though they collected information about ethnicity, country of birth, and residential geographic distribution.
+Comparing PCA and UMAP on the 1000GP and UKB datasets shows how the sampling scheme influences UMAP representation. PCA for both datasets presents aspects of genetic variation related to the out-of-Africa expansion, forming a triangle shape with African, East Asian, and European populations at the vertices and admixed populations falling between (Figures~\ref{fig:PCA_and_UMAP} and \ref{fig:UKB}). Since continental ancestry is expected to be the largest source of differences in population structure, PCA will put these populations far apart, and this is useful as a sanity check. In the 1000GP, which sampled individuals from geographically or culturally distinct groups, UMAP forms clusters corresponding to the different groups. By contrast, the UKB performed population-based sampling, and UMAP captures individuals with different levels of admixture from different ancestries. UMAP identifies admixture ``bridges'' between the different clusters and arguably provides a more detailed representation of the relationships among study participants. 
 
 \clearpage
 
-\section{Results}
-
-\subsection{Clustering captures population structure from sample design}
-\begin{figure}[!ht]
+\begin{figure}[h!]
   \centering
   \begin{subfigure}[b]{0.45\linewidth}
-%    \includegraphics[width=\linewidth]{images/1KGP_no_colours.png}
-\includegraphics[width=\linewidth]{placeholder.png}
+    %\includegraphics[width=\linewidth]{code/images/1KGP_PCA.jpeg}
+    \includegraphics[width=\linewidth]{placeholder.png}
     \caption{}
-    \label{fig:1KGP_no_colours}
+    \label{fig:PCA}
   \end{subfigure}
   \begin{subfigure}[b]{0.45\linewidth}
-%    \includegraphics[width=\linewidth]{images/1KGP_population_colours.png}
-\includegraphics[width=\linewidth]{placeholder.png}
+    %\includegraphics[width=\linewidth]{code/images/1KGP_genotype_UMAP.jpeg}
+        \includegraphics[width=\linewidth]{placeholder.png}
     \caption{}
-    \label{fig:1KGP_pop_colours}
+    \label{fig:UMAP}
   \end{subfigure}
-    \begin{subfigure}[b]{0.49\linewidth}
-%    \includegraphics[width=\linewidth]{images/1KGP_cluster_colours.png}
-\includegraphics[width=\linewidth]{placeholder.png}
-    \caption{}
-    \label{fig:1KGP_cluster_colours}
-  \end{subfigure}
-    \begin{subfigure}[b]{0.49\linewidth}
-%    \includegraphics[height=15em,keepaspectratio]{images/1KGP_heatmap.png}
-\includegraphics[width=\linewidth]{placeholder.png}
-    \caption{}
-    \label{fig:1KGP_heatmap}
-  \end{subfigure}
-  \caption[Clusters generated from 1KGP genotype data reflect its population sampling]{\textbf{Clusters generated from 1KGP genotype data reflect its population sampling.} (A) UMAP embedding of data without labels. (B) UMAP embedding of data, coloured by population label. (C) UMAP embedding of data, coloured by clusters derived from HDBSCAN($\hat{\epsilon}$) applied to a 5D UMAP embedding. (D) Proportions of each 1KGP population contained within a given cluster. Most populations fall almost entirely within a single cluster, with a few splitting into multiple clusters. Population labels are provided in Table~\ref{table:1kgp_labels}.}
-  \label{fig:1000GP}
+  \caption[PCA compared to UMAP of the 1KGP]{\textbf{Visualizations of data from the 1000GP.} The first two principal components (left) versus a two-dimensional UMAP embedding (right).}
+  \label{fig:PCA_and_UMAP}
 \end{figure}
 
 \clearpage
 
-The 1KGP's relatively balanced global sample design makes it useful for testing algorithms to identify population structure. We have previously shown that UMAP results in clear visual clusters from 1KGP data in two dimensions\citep{diaz-papkovich_umap_2019}. Figure~\ref{fig:1000GP} shows a UMAP representation of the 1KGP. Figure~\ref{fig:1KGP_no_colours} shows the data without population labels (to mimic data with unknown populations), Figure~\ref{fig:1KGP_pop_colours} shows the data with corresponding population labels from the 1KGP, and Figure~\ref{fig:1KGP_cluster_colours} shows the data with cluster labels generated by HDBSCAN($\hat{\epsilon}$) run on a $5D$ UMAP.
-
-The major source of genetic structure in 1KGP data is its sampling scheme, which selected individuals from geographically diverse populations. The clusters formed by UMAP and extracted by HDBSCAN($\hat{\epsilon}$) largely reflect this sampling strategy, with some exceptions noted below. Figure~\ref{fig:1KGP_heatmap} shows that there is strong agreement between population label and cluster label, with full breakdowns provided in Tables~\ref{table:1kgp_clusters} and \ref{table:1kgp_populations}. These results are comparable to a supervised neural network approach to predict sampled population label (e.g. Figure~3 in \citep{romero_diet_2017}), though our approach is unsupervised and runs on the order of seconds.
-
-\clearpage
-
-\begin{figure}[ht]
+\begin{figure}[h!]
   \centering
-%    \includegraphics[width=0.75\linewidth]{images/1kgp_ternary.png}
-\includegraphics[width=0.75\linewidth]{placeholder.png}
-  \caption[Clusters capture structure in populations with overlapping admixture proportions in the 1KGP]{\textbf{Clusters capture structure in populations with overlapping admixture proportions in the 1KGP.} A ternary plot of the PUR, PEL, MXL, and CLM populations from the 1KGP with axes corresponding to global ancestry proportions estimated using ADMIXTURE ($K=3$). Shapes indicate 1KGP label, colours indicate cluster label and match Figure~\ref{fig:1KGP_cluster_colours}; bolded points with a + symbol overlaid indicate individuals who are not members of the modal cluster of their 1KGP population (full results given in Tables~\ref{table:1kgp_clusters} and \ref{table:1kgp_populations}). Many individuals from the populations have similar admixture proportions; UMAP-HDBSCAN($\hat{\epsilon}$) clusters reflect structure from the sample populations, while clusters based on inferred admixture proportions would not.}
-  \label{fig:1000GP_ternary}
+%    \includegraphics[width=\linewidth]{code/ukb/images/ukbb_montage.jpeg}
+    \includegraphics[width=0.8\linewidth]{placeholder.png}
+  \caption[PCA compared to UMAP of the UKB]{\textbf{PCA (left) and UMAP (right) projections of the UKB data, coloured by self-identified ethnic background.} Unlike PCA, UMAP focuses on preserving local relationships and emphasizes fine-scale patterns in data. Groups in the UMAP projection are less compressed showing, for example, the relative size of the British and Irish populations in the UKB, alongside populations of other ancestries, while simultaneously showing the population structure between and within groups.}
+  \label{fig:UKB}
 \end{figure}
 
 \clearpage
 
-One benefit of the unsupervised approach is that we do not require \emph{a priori} assumptions about the origins of structure, making it possible to capture meaningful clusters despite considerable within-cluster heterogeneity, including in admixed populations. The Central and South American clusters largely match their 1KGP labels despite overlapping distributions in ADMIXTURE-estimated continental ancestry within each group (Figure~\ref{fig:1000GP_ternary}). Some populations are clustered together: GBR and CEU (British From England and Scotland; and Utah residents with Northern/Western European ancestry), CDX and KHV (Chinese Dai in Xishuangbanna, China; and Kinh in Ho Chi Minh City, Vietnam), IBS and TSI (Iberian Populations in Spain; and Toscani in Italy), ACB and ASW (African Caribbean in Barbados; and African Ancestry in SW USA). While these groups differ in their sampling and history, supervised learning methods also struggle in distinguishing most of these pairs  (Figure~3A in \citep{romero_diet_2017}). The CDX and KHV (Cluster~2 in Figure \ref{fig:1KGP_pop_colours}) populations are present at opposite ends of one continuous cloud of points. In other words, two groups belonging to one cluster does not mean that the groups are indistinguishable.  Rather, it means that HDBSCAN($\hat{\epsilon}$) could find a relatively continuous path in genetic space linking individuals sampled in one group to individuals sampled in the other. 
-
-Some South Asian populations are split into different clusters, possibly from stronger patterns of relatedness within those groups\citep{diaz-papkovich_umap_2019,reich_reconstructing_2009}. We note the ITU (Indian Telugu in the UK) population is visibly split into two groups in 2D, while clustering carried out in 5D groups them together (Cluster~11). While some clusters will tend to persist across many parametrizations of UMAP and HDBSCAN($\hat{\epsilon}$), others based on more subtle patterns or in populations with more continuous variation will be less stable---though discrete groupings can help us understand data, the delineations are always, to a degree, arbitrary.
-
-Some South Asian populations are split into different clusters, possibly from stronger patterns of relatedness within those groups\citep{diaz-papkovich_umap_2019,reich_reconstructing_2009}. We note the ITU (Indian Telugu in the UK) population is visibly split into two groups in 2D, while clustering carried out in 5D groups them together (Cluster~11). While some clusters will tend to persist across many parametrizations of UMAP and HDBSCAN($\hat{\epsilon}$), others based on more subtle patterns or in populations with more continuous variation will be less stable---though discrete groupings can help us understand data, the delineations are always, to a degree, arbitrary.
-
-\subsection{Correlates between populations and sociodemographic, phenotypic, and environmental variables}
-The UK biobank (UKB) contains $488,377$ genotypes from volunteers with an array of demographic, phenotypic, and biomedical data, with individuals' ages ranging from $40$ to $69$. The demographic data collected for the UKB include Country of Birth (COB) and Ethnic Background (EB), which is selected from a nested set of pre-determined options (see Table~\ref{table:ukb_eb_options}). Participants first select their ``ethnic group'' from a list (e.g. ``White''; ``Black or Black British''), which determines the list of possible ``ethnic background'' (e.g. ``British''; ``Caribbean''). The most common countries of birth in the data set are England, Scotland, Wales, and the Republic of Ireland, comprising $77.8\%$, $8.0\%$, $4.4\%$, and $1.0\%$,  respectively. For EB, $88.3\%$ of participants selected ``White British'', with an additional $5.8\%$ selecting ``White Irish'' or ``Any other white background''. Here we primarily focus on the $28,814$ individuals with other backgrounds.
-
-The biobank is one of the most-used resources for genetic analyses. Despite its multi-ethnic composition, many studies discard non-European samples, sometimes citing concerns related to confounding from population structure\citep{ben-eghan_dont_2020}. The population structure has been deeply explored, though typically focused on British or European individuals\citep{abdellaoui_genetic_2019,gilbert_revealing_2022,chiu_inferring_2022}. Because its sub-populations are numerous, geographically/ancestrally diverse, and of widely varying sizes, clustering the UKB data is challenging, requiring overly broad categorization (e.g. a small number of continental populations \citep{halldorsson_sequences_2022,nagar_socioeconomic_2021}) and/or significant computational resources. The original implementation of HDBSCAN, without the $\hat{\epsilon}$ parameter, discards much of the UKB data as noise and splits populations into hundreds of microclusters that are not interpretable (see Fig~\ref{fig:supp_ukb_hdbscan_original}).
+Since its strength is in revealing fine-scale population structure, UMAP is well-suited to data with a high number of significant PCs, and can also extract population structure signal from the collection of high-order PCs. \citep{diaz-papkovich_umap_2019}.  Figures~\ref{fig:gnomAD_UMAP} and \ref{fig:BBJ_UMAP} visualize, respectively, the Genome Aggregation Database (gnomAD v3) from the Broad Institute\citep{karczewski_mutational_2020} and Biobank Japan (BBJ)\citep{nagai2017overview,sakaue_dimensionality_2020}, each of which contains over $100,000$ individuals. When applied to ethnically diverse groups such as the UKB, Bio\textit{Me}\citep{belbin_towards_2019} and the Million Veterans Program (MVP) \citep{hunter-zinck_genotyping_2020}, UMAP tends to highlight groups with different international migration and admixture histories. In relatively more homogeneous populations such as BBJ, it highlights clusters related to geographic features such as island populations.
 
 \clearpage
 
-\begin{figure}[ht]
+\begin{figure}[h!]
   \centering
-  \begin{subfigure}[b]{0.3\linewidth}
-    %\includegraphics[width=\linewidth]{images/colour_matched/hdbscan_labels_min25_EPS05_ukbb_pca_with_ids_UMAP_PC25_NC5_NN10_MD001_euclidean_20200214_065646.png}
-\includegraphics[width=\linewidth]{placeholder.png}
-    \caption{}
-    \label{fig:ukb_hdbscan_labels}
+  \begin{subfigure}[b]{0.4\linewidth}
+%    \includegraphics[width=\linewidth]{external_images/gnomAD_umap.jpeg}
+    \includegraphics[width=\linewidth]{placeholder.png}
+    \caption{\textbf{gnomADv3 data visualized using UMAP.}}
+    \label{fig:gnomAD_UMAP}
   \end{subfigure}
-   \begin{subfigure}[b]{0.3\linewidth}
-%    \includegraphics[width=\linewidth]{images/colour_matched/hdbscan_labels_min25_EPS05_ukbb_pca_with_ids_UMAP_PC25_NC5_NN10_MD001_euclidean_20200214_065646/selected_clusters_afr_labelled_COB.png}
-\includegraphics[width=\linewidth]{placeholder.png}
-    \caption{}
-    \label{fig:ukb_hdbscan_labels_cob}
+
+  \begin{subfigure}[b]{0.4\linewidth}
+%    \includegraphics[width=\linewidth]{external_images/BBJ_UMAP.jpeg}
+    \includegraphics[width=\linewidth]{placeholder.png}
+    \caption{BBJ data visualized using UMAP.}
+    \label{fig:BBJ_UMAP}
   \end{subfigure}
-     \begin{subfigure}[b]{0.3\linewidth}
-%    \includegraphics[width=\linewidth]{images/colour_matched/hdbscan_labels_min25_EPS05_ukbb_pca_with_ids_UMAP_PC25_NC5_NN10_MD001_euclidean_20200214_065646/selected_clusters_afr_labelled_eth.png}
-\includegraphics[width=\linewidth]{placeholder.png}
-    \caption{}
-    \label{fig:ukb_hdbscan_labels_eth}
-  \end{subfigure}
-  \caption[Clusters of population structure in the UKB]{\textbf{An example of clusters of population structure in the UKB.} The clusters reflect a mixture of demographic history within the UK, the geographic origins of recent immigrants, the colonial history of the British Empire, and ongoing admixture. (a) Left: A 2D UMAP of UKB genotypes coloured by HDBSCAN($\hat{\epsilon}$). This parametrization generated $26$ clusters. (b) Middle: Five clusters are highlighted with word clouds for the most common countries of birth within the cluster. (c) Right: The same five clusters are highlighted with word clouds for the most common EB within the cluster. Admixture proportions for clusters are presented in Figure~\ref{fig:supp_ukb_admix}. Detailed breakdowns of EB and country of birth are presented in Tables~\ref{table:supp_ukb_cluster_cob} and \ref{table:supp_ukb_cluster_sieb}.}
-  \label{fig:ukb_hdbscan_compare}
+  \caption[UMAP of gnomAD and Biobank Japan]{\textbf{The Genome Aggregation Database (gnomAD, top) and Biobank Japan (BBJ, bottom) visualized using UMAP.} UMAP illustrates the ancestral diversity of gnomAD, showing many the relationships between populations on continental and subcontinental levels. For the relatively more homogeneous BBJ data, it splits data geographically into the large mainland cluster (consisting of Hokkaido, Tohoku, Kanto-Koshinetsu, Chubu-Hokuriku, Kinki, and Kyushu regions), and smaller non-mainland clusters. The gnomAD image is reproduced from \citep{karczewski_mutational_2020}, and the BBJ image is reproduced from \citep{sakaue_dimensionality_2020}.
+  }
+  \label{fig:external_UMAP}
 \end{figure}
 
 \clearpage
 
-Figure~\ref{fig:ukb_hdbscan_labels} shows $26$ clusters generated by HDBSCAN($\hat{\epsilon}$), placing $99.99\%$ of individuals in clusters. We generated word clouds for COB and EB, shown in Figures~\ref{fig:ukb_hdbscan_labels_cob} and \ref{fig:ukb_hdbscan_labels_eth}, which allow us to illustrate sources of structure without having to impose a label to groups which may be heterogeneous. Individuals in Cluster~10, for example, are mostly born in Somalia ($84\%$), while those in Cluster~23 are mostly born in East Africa (Ethiopia, Sudan, Eritrea; $33\%$, $29\%$, $25\%$, respectively). Those in Cluster 18 are mostly born in sub-Saharan Africa, and $77\%$ chose ``African'' as their EB, while $19\%$ chose ``Other ethnic group''. Figure~\ref{fig:supp_ukb_hdbscan_top} presents word clouds for another subset of data. Individuals in Cluster~0 are mostly born in Japan and South Korea ($84\%$ and $9\%$, respectively), and those in Cluster~15 are mostly born in Nepal ($80\%$). In contrast, individuals in Cluster 13 are born in a variety of East/Southeast Asian jurisdictions; the most common EB was ``Chinese'' ($70\%$), followed by ``Other ethnic group'' ($16\%$) and ``Any other Asian background'' ($11\%$). Tables~\ref{table:supp_ukb_cluster_cob} and \ref{table:supp_ukb_cluster_sieb} provide breakdowns for clusters.
+UMAP has also been successfully used with ancient DNA samples combined with modern and contemporary populations to identify shared population structure\citep{margaryan_population_2019}, as well as animal populations to study spatial introgression in mussels\citep{simon_local_2019}, genetic bottlenecks in the white rhino population\citep{sanchez-barreiro_historical_2020}, and the geographic origin of disease-carrying mosquitoes\citep{consortium_genome_2020}\citep{schmidt2020population}. 
 
-Clusters 14 and 22 both capture structure resulting from recent admixture following immigration and colonial history, with $49\%$ and $66\%$ of their respective populations being born in England (see also Figure~\ref{fig:supp_ukb_admix}). No single EB represents a majority in either cluster; the most common EB in Cluster~14 is ``Any other mixed background'' ($29\%$), while for Cluster~22 it is ``Mixed, White and Black Caribbean'' ($39\%$). 
+In all these applications, data points were colored using categorical variables such as geographic origin or self-reported ancestry to help with interpretation. We have also found it informative to colour visualizations by continuous variables such as geographical coordinates, phenotype values, or global admixture proportions as in \citep{diaz-papkovich_umap_2019}, \citep{dai_population_2020}, and \citep{spear2020recent}.
 
-Notably, significant proportions of majority-African-born clusters identify as ``Other ethnic group''---a respective $24\%$, $19\%$, and $37\%$ in Clusters 10, 18, and 23. This suggests that filtering individuals by EB alone for further analyses could limit sample sizes by discarding relevant data. Cluster 18 captures individuals born in sub-Saharan Africa, while Cluster 19 consists of individuals born in the Caribbean ($31\%$), England ($28\%$), as well as Nigeria ($14\%$) and Ghana ($12\%$). These regions are historically linked to the UK; between the years 1641 and 1808, an estimated $325,311$ Africans from the Bight of Benin, between the coasts of modern-day Ghana and Nigeria, were enslaved by British ships and sent to the British Caribbean\citep{slavevoyages,fortes-lima_anthropological_2021}.
+\section{Supporting analyses: What do I do with a UMAP projection?}
+Within Tukey's paradigm of exploratory data analysis, visualization with UMAP can be one of the first steps to the interrogation of complex data\citep{holmes_modern_2019}. UMAP is useful for identifying clusters in genetic data when the number of clusters is not known in advance\citep{tonkin-hill_fast_2019}, and when there are a high number of significant PCs\citep{diaz-papkovich_umap_2019}. One straightforward approach is to run UMAP again on a cluster itself to examine subcontinental population structure, as in the National Geographic Genographic Project\citep{dai_population_2020}. One may run UMAP on several types of genetic data; this was the case with Almarri et al's study of structural variants, where they found population stratification in all classes of genetic variants, with Oceanian populations consistently forming their own clusters\citep{almarri2020population}. In Spear et al., we identified several clusters of Hispanic/Latinx populations using UMAP on the top PCs, despite these groups having overlapping proportions of continental ancestry proportions, and further studied the Mexican-American population to identify temporal and demographic patterns in their admixture histories\citep{spear2020recent}. In each case, these projections were combined with traditional statistical approaches such as $F_{ST}$, ADMIXTURE\citep{alexander2009fast}, or fineSTRUCTURE\citep{lawson2012inference}.
 
-Despite the complexity of the UKB, topological clustering identifies population structure that is interpretable from historical or demographic perspectives and includes all or almost all individuals. Such structure is difficult to infer from a single label such as geography or ethnicity; once it is characterized, it can clarify the genetic structure of the cohort. 
+One promising application is the use of clusters as covariates in GWAS and polygenic scores (PGS). Fine-scale population structure continues to confound studies of polygenic traits whether in studies of ancestrally diverse or relatively homogeneous populations (e.g. \citep{kerminen_geographic_2019,berg_reduced_2019,sohail2019polygenic}), making it an important area of research. Sakaue et al. used UMAP to identify substructure within the Japanese population, separating it into a mainland population and Hokkaido-Ainu with surrounding islands, reflecting known demographic history in Japan\citep{sakaue_dimensionality_2020}. They identified systematic shifts in PGS for multiple traits across UMAP clusters.
 
-\subsection{Phenotype smoothing and modelling}
-
-Epidemiological research often focuses on observed differences between groups---for example, finding the mean of a phenotype or sociodemographic measure and comparing between populations. Clustering is one method to define groups based on shared demographic history. However, clustering data featuring continuous variation patterns can be sensitive to input parameters, may not reflect true boundaries, and risks encouraging the perception that clusters are more distinct than they really are\citep{lewis_getting_2022}. As an illustration of how topological approaches can help interpret data beyond specific clustering choices, we use HDBSCAN($\hat{\epsilon}$) to define a simple regularization method, defined in Algorithm~\ref{alg:regularization}, that allows us to incorporate alternative parameterizations. We use this smoothing method to examine phenotypic and sociodemographic data with respect to population structure and identify outstanding patterns.
-
-\clearpage
-
-\begin{algorithm}
-\caption{We create a regularized value for each measure by taking the mean of cluster means for each individual. Given a set of parameters $P$ for the clustering algorithm, each parametrization $p$ will result in a set of clusters $C_p$. We use varying cluster assignments across parametrizations to smooth a measured quantity (e.g. phenotype) $m$ for individual $i$.}
-\label{alg:regularization}
-\begin{algorithmic}
-\State Given a set of parametrizations $P$, each with a set of clusters $C_p$, for some measure of interest $m$, we calculate the regularized value $\mu_i$ for each individual $i$.
-\For{$p$ in $P$}
-\For{$c$ in $C_p$}
-\State For each individual $i$ in $C_p$, set the mean value $\mu_{p,i}:=\sum_{i}m_i/\mid C_p \mid $
-\EndFor
-\EndFor
-\State Set $\mu_{i}:=\frac{\sum_{p \in P}\mu_{p,i}}{\mid P \mid}$
-\end{algorithmic}
-\end{algorithm}
-
-\clearpage
-
-\begin{figure}[!ht]
-  \centering
-  \begin{subfigure}[b]{0.45\linewidth}
-    %\includegraphics[width=\linewidth]{images/smoothed_phenotypes/SR4_FEV1.jpeg}
-       \includegraphics[width=\linewidth]{placeholder.png}
-    \caption{}
-    \label{fig:smoothed_fev1}
-  \end{subfigure}
-    \begin{subfigure}[b]{0.45\linewidth}
-   % \includegraphics[width=\linewidth]{images/smoothed_phenotypes/SR4_X30140_Neutrophill_count.jpeg}
-   \includegraphics[width=\linewidth]{placeholder.png}
-    \caption{}
-      \label{fig:smoothed_neutrophil}
-  \end{subfigure}
-  \caption[Smoothed phenotypic measures across multiple parametrizations of clustering]{\textbf{Smoothed phenotypic measures across multiple parametrizations of clustering.} A 2D UMAP coloured by phenotype value after having removed the top $40$ PCs and averaged by cluster, run over $604$ parametrizations of the clustering pipeline. The colour scale runs from $-0.5\sigma$ to $0.5\sigma$, for the standard deviation $\sigma$ of each phenotype after regressing the linear effects of the top $40$ PCs. We observe that the distributions of phenotypes among some groups are not centred about $0$ even after PC adjustment. (a) Left: FEV1. (b) Right:  Neutrophil count.}
-\label{fig:smoothed_phenos}
-\end{figure}
-
-\clearpage
-
-In Figure~\ref{fig:smoothed_phenos}, we visualize the smoothing across $604$ parametrizations of UMAP-HDBSCAN($\hat{\epsilon}$) FEV1 and neutrophil count. Despite regressing out the effects of the top $40$ principal components, there remains structure in the distribution of the residuals. For example, the average residual value is noticeably higher in individuals who fall in Cluster~22 in Figure~\ref{fig:ukb_hdbscan_labels}. This cluster is composed mostly of individuals with admixed African/European backgrounds, and although they are intermediate to African and European ancestry populations in PCA space (Figure~\ref{fig:supp_cluster_22_pca}), their phenotype distributions are not intermediate to clusters of primarily European- and African-ancestry individuals (Figure~\ref{fig:supp_pheno_ridge_fev}, Figure~\ref{fig:supp_pheno_ridge_neut}).
-
-\clearpage
-
-\begin{figure}[!ht]
-  \centering
-  \begin{subfigure}[b]{0.7\linewidth}
-    %\includegraphics[width=\linewidth]{{"images/phenotype_models/MSE_rotated_White and Black Caribbean"}.png}
-    \includegraphics[width=0.5\linewidth]{placeholder.png}
-    \caption{}
-    \label{fig:wabc_pheno_model}
-  \end{subfigure}
-    \begin{subfigure}[b]{0.7\linewidth}
-    %\includegraphics[width=\linewidth]{{"images/phenotype_models/MSE_rotated_White and Black African"}.png}
-    \includegraphics[width=0.5\linewidth]{placeholder.png}
-    \caption{}
-    \label{fig:waba_pheno_model}
-  \end{subfigure}
-  \caption[MSE of cluster-based phenotype estimation]{\textbf{Cluster-based estimation can improve phenotype models.} To test the explanatory value of smoothed cluster estimates generated from Algorithm~\ref{alg:regularization}, we carried out an $80-20$ split on the UKB data and compared phenotype prediction using the top $40$ principal components versus estimates generated from the residual structure, presented in Figure~\ref{fig:smoothed_phenos}.}
-  \label{fig:pheno_models}
-\end{figure}
-
-\clearpage
-
-To test if smoothed cluster estimates have explanatory power for these admixed individuals, we carried out an $80-20$ split and compared simple linear models for phenotype prediction using the top $40$ PCs versus using the smoothed estimates made from residuals after removing the effects of the top $40$ PCs. We compared the models for populations that selected ``Mixed'' as their EB in the UKB questionnaire and found that for individuals who selected ``White and Black Caribbean'' ($n=573$) or ``White and Black African'' ($n=389$), the smoothed cluster estimates indeed outperformed the PCA model, with an improved mean squared error across several phenotypes (see Figure~\ref{fig:pheno_models}; full table of MSE values in Tables~\ref{table:supp_mse1} and \ref{table:supp_mse2}).
-
-Analysis based on topological components can help to visualize the impact of covariate adjustment in the context of population structure and to identify residual heterogeneity in phenotype distributions and environmental data (e.g. smoking rates in Figure~\ref{fig:supp_ukb_smoking}).
-
-\clearpage
-
-\subsection{Evaluating transferability of polygenic scores}
-
-\begin{figure}[ht]
-  \centering
-  \begin{subfigure}[b]{0.6\linewidth}
-%    \includegraphics[width=\linewidth]{images/fst_vs_r2_weighted_plink_20200214_065646/HEIGHT_mean_r2_vs_fst.png}
-\includegraphics[width=0.6\linewidth]{placeholder.png}
-    \caption{}
-    \label{fig:fst_vs_r2_height}
-  \end{subfigure}
-    \begin{subfigure}[b]{0.6\linewidth}
-%    \includegraphics[width=\linewidth]{images/fst_vs_r2_weighted_plink_20200214_065646/LDL_mean_r2_vs_fst.png}
-\includegraphics[width=0.6\linewidth]{placeholder.png}
-    \caption{}
-    \label{fig:fst_vs_r2_ldl}
-  \end{subfigure}
-  \caption[PGS accuracy by $F_{ST}$]{\textbf{PGS accuracy by $F_{ST}$ for standing height and LDL.}  A plot of the mean $R^2$ of a PGS against the difference in $F_{ST}$ from the White British in the UKB. We use clusters extracted using HDBSCAN($\hat{\epsilon}$). There is a negative linear relationship between $F_{ST}$ from the largest cluster and PGS accuracy. (a) Top: A PGS of height shows a strong decay between $R^2$ and $F_{ST}$, as expected. (b) Bottom: A PGS of LDL-cholesterol has an unclear relationship between $R^2$ and $F_{ST}$. Cluster $18$ has the largest $F_{ST}$ but one of the highest $R^2$ values; the cluster also has the highest frequency of the $rs7412$ and $rs4420638$ alleles.} 
-  \label{fig:fst_vs_r2}
-\end{figure}
-
-Most investigations of PGS transferability are done at a population-level using large-scale geographical groups (e.g. ``African'', ``European'', ``Asian''). However, these broad populations themselves exhibit population structure\citep{kamiza_transferability_2022}. Instead, we use our $26$ cluster labels from Figure~\ref{fig:ukb_hdbscan_labels}, and compared the transferability of PGS across them. 
-
-Using UKB data, we estimated effect sizes of SNPs using VIPRS\citep{zabad_fast_2023}. As a training population, we used individuals who selected ``White British'' as their EB to mimic the well-documented overrepresentation of European-ancestry individuals in GWAS. We estimated phenotypes for individuals and calculated the values of the fixation index ($F_{ST}$) between the clusters. In Figure~\ref{fig:fst_vs_r2}, we plot the PGS accuracy for two phenotypes---standing height and low-density lipoprotein cholesterol (LDL)---against the $F_{ST}$ for each cluster relative to Cluster~17, a cluster with over $400,000$ individuals and with significant overlap with the training population ($>95\%$ selected ``White British'' as their EB). We observe for height (Figure~\ref{fig:fst_vs_r2_height}) that as the $F_{ST}$ between populations grows, the predictive value of the PGS decreases; such a decrease is expected, due to factors like population-specific causal variants, gene-by-environment interaction, differences in allele frequencies, and linkage disequilibrium between assayed SNPs and causal variants\citep{wang_theoretical_2020}.
-
-However, we see no such relationship for LDL (Figure~\ref{fig:fst_vs_r2_ldl}). Cluster~18, composed mostly of individuals born in sub-Saharan Africa and of whom $77\%$ selected the EB ``Black African'', has one of the best PGS predictions despite its large $F_{ST}$ from the training population. This may be because there are a few variants with large effect sizes; in contrast to height, LDL has been noted for its relatively low polygenicity\citep{ding_polygenic_2023}. Since $F_{ST}$ compares genome-wide variation, the accuracy of a PGS constructed from relatively few variants with strong effects is not expected to correlate as strongly with $F_{ST}$.
-
-To test if the frequencies of certain alleles impacted the PGS estimates, we modelled the $R^2$ from the VIPRS estimates for each cluster against minor allele frequencies (MAF) of the top $100$ SNPs and found the two strongest results were for $rs4420638$ and $rs7412$ (Tables~\ref{table:supp_rs4420638_lm} and \ref{table:supp_rs7412_lm}; Figures~\ref{fig:supp_rs4420638_lm} and \ref{fig:supp_rs7412_lm}, respectively).  Both have their highest frequencies in Cluster~18 and both markers are in the apolipoprotein E (APOE) gene cluster; $rs7412$ had the largest overall effect size ($\hat{\beta}=-0.1812$), while $rs4420638$ had the second largest effect size in the opposite direction ($\hat{\beta}=0.02813$). The $rs7412$ allele has been linked to LDL\citep{bennet_pleiotropy_2010} and was found to explain significant variation in LDL in African Americans\citep{rasmussen-torvik_high_2012}. The $rs4420638$ allele was associated with LDL even in the presence of the $rs7412$ allele in a study of Sardinian, Norwegian, and Finnish individuals\citep{sanna_fine_2011}; it was also found to affect LDL in studies with of children in Germany\citep{breitling_genetic_2015} and China\citep{wang_associations_2022}.
-
-The relationship between PGS accuracy and fine-scale population structure is complex and will vary by phenotype. It is not immediately obvious whether a PGS will transfer when there is a large degree of differentiation between the estimand and training populations. However, an approach like UMAP-HDBSCAN($\hat{\epsilon}$) can provide a detailed picture of the likely performance of a PGS in various genetic subgroups.
-
-\clearpage
-
-\subsection{Quality control for complex multi-ethnic cohorts}
-
-\begin{figure}[ht]
-  \centering
-  \begin{subfigure}[b]{0.95\linewidth}
-%  \includegraphics[width=\linewidth]{images/cartagene_naf_cluster_wc.png}
-  \includegraphics[width=0.5\linewidth]{placeholder.png}
-  \end{subfigure}
-  \caption[Clustering identifies data collection errors in CaG]{\textbf{Clustering can identify data collection errors.} A 2D UMAP of CARTaGENE data coloured by clusters extracted using HDBSCAN($\hat{\epsilon}$). The highlighted cluster was found to have most of its individuals born in North Africa. A word cloud shows that a significant minority of individuals were born in American Samoa, which was found to be a coding error.}
-    \label{fig:ctg}
-\end{figure}
-
-Generally the fine-scale structure of biobank data is not known in advance. The structure of under-represented groups in particular, such as minority populations or those with complex histories of recent migration and admixture, can also be intricate and poorly understood, at least by geneticists. Individuals with uncommon combinations of ancestral, geographic, and ethnic descriptors are present in all biobanks. These combinations can be real and represent the completely different nature of genetic ancestry and ethnicity; they may also represent clerical errors\citep{macleod_principles_2009}. Distinguishing the two is especially relevant when biobanks are used as sample frames for deeper sequencing or for follow-up studies, and when variables like country of birth and ethnicity are used as selection criteria. Using HDBSCAN$(\hat{\epsilon})$ to explore the relationship between clusters membership and auxiliary variables can detect data collection errors before sample selection is carried out, preventing serious methodology problems or unnecessary exclusion of individuals.
-
-CARTaGENE is a biobank of residents from Quebec, Canada, that has recently genotyped $29,337$ individuals\citep{awadalla_cohort_2013}. We were interested in identifying populations of North African descent for further study. In Figure~\ref{fig:ctg}, we identified a cluster of $446$ people born largely in North Africa with $51$ individuals ($11.4\%$) recorded as being born in American Samoa, an American island territory in the South Pacific Ocean with fewer than $50,000$ inhabitants. After researching possible historical explanations (e.g. migration between American Samoa and North Africa), we traced the result to a coding error from different country codes used over the course of data collection; the actual birth country was corrected to Algeria. The same coding error was found in other clusters, affecting $266$ individuals born in $43$ countries. While this error was easy to discover using $HDBSCAN(\hat{\epsilon})$, it is not obvious whether or how it would have been identified otherwise given that it affected less than $1\%$ of the cohort. Efficient data exploration, aided by visualization and clustering, remains one of our best tools to combat the dual evils of bookkeeping errors and batch effects.
+The capacity of UMAP to identify haplotype structure was used by Yamamoto et al to visualize mitochondrial DNA (mtDNA). Though UMAP correctly identified sub-haplogroup clusters of mitchondrial DNA, it did not identify parent clusters as readily as PCA or phylogenetic analysis, and is not particularly advantageous for single-locus analysis\citep{yamamoto_genetic_2020}. 
 
 \section{Discussion}
+UMAP is now used regularly to visualize the ancestral composition of cohorts as well as to examine fine-scale population structure and subtle patterns in biobanks of all compositions. In this sense, UMAP --- and dimensionality reduction at large --- is to data what a microscope is to biological samples: an effective tool to scientifically examine a subject and provoke deeper investigation. In both cases, calibration is an important factor, as is understanding the tool's limitations. The main parameters to calibrate in UMAP are the number of nearest neighbours (NN) and the minimum distance (MD). Studies varied in their parameter selection, but generally chose NN close to $15$; setting $NN < 10$ can result in disjoint clusters made up of closely-related individuals, such as families. The minimum distance was usually $0.1 < MD < 0.5$; values of $MD$ close to $0$ create very tight clusters, which can be appropriate for  downstream process such as cluster analysis but less pleasing visually. We recommend running multiple parametrizations and to combine UMAP plots with PCA plots and methods like fineSTRUCTURE\citep{lawson2012inference}, ADMIXTURE\citep{alexander2009fast}, or traditional statistics such as $F_{ST}$ to make inferences. As with PCA and other dimensionality reduction methods, genetically defined clusters represent some degree of shared ancestry. While genetic clusters correlate with variables like self-identified ethnicity or race, they are distinct concepts and not interchangeable\citep{mathieson_what_2020}.
 
-We present UMAP-HDBSCAN($\hat{\epsilon}$), a new approach to capturing population structure that approximates the topology of high-dimensional genetic data and detects dense clusters in a low-dimensional space. This approach does not assume a specific number of populations, nor does it assume that there is a type genome for a given population. Our method requires neither reference panels nor \emph{a priori} definitions of populations, but can use auxiliary data such as population labels, country of birth, ethnicity, geographic coordinates, etc., to characterize the clusters \emph{a posteriori} and learn about their history or origins. With tools like PCA and UMAP already common in population genetics\citep{diaz-papkovich_review_2021}, it integrates easily with existing analysis pipelines. Given UMAP data from the UKB---a matrix of dimension ($488,377 \times 5$)---HDBSCAN($\hat{\epsilon}$) takes under $60$ seconds to execute on a single core, making it tractable for large-scale data. Being robust to the presence of many populations of widely varying sizes, it is a powerful and flexible method and is well-suited to modern biobanks.
-
-Stratification is important in data exploration and analysis, and many stratification strategies have been proposed. Using self-identification is common, and can be appropriate if the outcome of interest is tied to identity. It is however an inconsistent measure of genetic ancestry, and is limited to identities that are available in questionnaire data. Its use in genetic screening has led to missed carriers in at-risk populations\citep{kaseniit_genetic_2020}, and a report from the US National Academies of Sciences, Engineering, and Medicine has recommended against using such variables as proxies for genetic variation\citep{committee_2023}. 
-
-The most commonly used metrics for fine-scale genetic community identification are based on recent relatedness. One such approach is identity-by-descent (IBD; see e.g. \citep{freyman_fast_2021,shemirani_rapid_2021,qian_efficient_2014,lawson_inference_2012}), which has been used for downstream clustering (e.g. characterizing demographic history in \citep{han_clustering_2017} and identifying selection within populations in \citep{nait_saada_identity-by-descent_2020}). An IBD-based approach in ATLAS, for example, recently identified associations between genetic clusters and genetic, clinical, and environmental data\citep{caggiano_disease_2023}. The ability of IBD clustering to identify fine-scale structure can be due to two effects. First, it focuses on recent relatedness between individuals, which may be helpful in identifying recent demographic effects. Second, because it is by nature pairwise, it encourages the use of clustering methods that focus less on archetypes and more on genetic neighbourhoods, i.e., on more topological approaches.  
-
-The topological approach presented here only uses overall genetic similarity--- which reflects both recent and background relatedness---to capture population structure. Since it bypasses the need to perform phasing and IBD calling, it requires fewer analytical tools and computational resources. Because IBD clustering is demanding, and because researchers are often interested in identifying clusters they see in PCA or UMAP space (which may not relate to IBD clusters) researchers commonly rely on hand-selected delineations of dimensionally-reduced data (e.g. \citep{halldorsson_sequences_2022,sakaue_dimensionality_2020}). The approach we propose is faster, less arbitrary, identifies structure at a finer scale, and takes advantage of the higher-dimensional nature of the data to identify structure more consistently.
-
-A recent publication on polygenic scoring by Ding et al\citep{ding_polygenic_2023} suggested moving entirely away from stratification based on genetic clusters. Instead, they argued in favour of individual-level measures. They cite three issues with clusters: (i) clustering algorithms fail to capture populations without reference panels, such as those that are relatively small or recently admixed; (ii) clusters ignore inter-individual variation; and (iii) clustering results change based on algorithms and reference panels. We believe that these criticisms are valid for the type of stratification they considered: Ding et al clustered UKB data based on proximity to an archetype in PCA-space---if an individual fell within a certain distance of one of nine pre-defined population centroids, they were considered a member of a cluster; otherwise, their ancestry was considered unknown.
-
-We believe that the first two objections can be resolved by topological approaches. In the UKB, $91\%$ of participants were placed into clusters in \citep{ding_polygenic_2023}. In contrast, across $604$ parametrizations, the median percentage of individuals placed in a cluster was $99.99\%$ (Figure~\ref{fig:supp_num_unclustered}), with the three worst-performing runs of UMAP-HDBSCAN($\hat{\epsilon}$) respectively assigning $99.11\%$, $99.69\%$, and $99.86\%$  of individuals in the UKB to a cluster. The clusters reflect groups that have shared genetic and geographic histories, including for relatively small and recently admixed groups which were often excluded based on prior approaches\citep{ding_polygenic_2023,martschenko_including_2023}. 
-We achieved similar results with CaG and 1KGP data, suggesting that our approach is robust to the idiosyncratic composition of a biobank.  
-
-\subsection{Applications}
-
-Understanding the population structure of a biobank is a necessary precursor to many analyses. In the 1KGP, the source of its structure is largely the sampling scheme, which is reflected in Figure~\ref{fig:1000GP}---to ensure diversity in the data, the populations were deliberately sampled from multiple locations around the world with similar sample sizes. The sources of population structure of the UKB, on the other hand, reflect a complex history of migrations at different geographic and time scales, including isolation by distance within the UK and recent immigration and admixture between populations from regions of the former British Empire.
-
-We chose the clustering in Figure~\ref{fig:ukb_hdbscan_labels} based on its suitability for examining PGS transferability and examining allele frequency versus PGS accuracy. Alternative parameterizations highlight structure at different scales. In Figure~\ref{fig:supp_ukb_alt}, for example, we see the large cluster of mostly European-born individuals is split into three smaller clusters. The structure of a typical biobank is more similar to the UKB than the 1KGP, as the recruitment methodology is often based on residence within a jurisdiction. Examples include municipal (ATLAS in Los Angeles\citep{caggiano_disease_2023}, Bio\emph{Me} in New York City\citep{belbin_toward_2021}), regional (CARTaGENE in Quebec\citep{awadalla_cohort_2013}) and national (Million Veterans Project (MVP),\citep{hunter-zinck_genotyping_2020}, CANPATH\citep{dummer_canadian_2018}) biobanks. Leveraging these diverse cohorts can improve variant discovery\citep{wojcik_genetic_2019,lin_admixed_2021}.
-
-Though population labels like ethnicity can be useful, individuals may identify as ``Other'' or ``Unknown'', leading to incomplete data. In the MVP, missing data were imputed using a support vector machine trained on race/ethnicity data to harmonize genetic data with labels for an ethnicity-specific GWAS\citep{fang_harmonizing_2019}. A similar supervised approach with random forests was used by gnomAD\citep{karczewski_mutational_2020}. Rather than assigning ethnicities to individuals, we constructed clusters from genetic data and investigated the distributions of auxiliary variables within clusters, including missing values. We found word clouds to be well-suited for describing data without imposing a reductive label.   
-
-The goal of genetic stratification is in no way to replace self-declared variables in contexts where they are relevant. In fact, genetic stratification revealed interesting trends in self-declared variables. For example, in Cluster~17 of Figure~\ref{fig:ukb_hdbscan_labels}, $97.6\%$ of individuals were born in Britain and Ireland and $99.5\%$ chose an ethnic group label; in contrast, $18.9\%$ of those in Cluster~18 (mostly born in sub-Saharan Africa) and $36.5\%$ in Cluster~23 (mostly born in the Horn of Africa) chose ``Other'', highlighting differential completeness of questionnaire data. As mentioned above, UKB strata with ``mixed'' ethnic backgrounds as their mode featured multiple ethnic background labels, likely reflecting both the fact that (genetically) admixed individuals may have a diversity of ethnic backgrounds, and the fact that individuals with both mixed genetic and cultural heritage may have to choose among potentially inadequate labels (see, e.g., discussion in \citep{martschenko_including_2023}). The presence or absence of a label in data collection can critically influence how people identify: Canadian demographers noted that between the 2011 National Household Survey and the 2016 Census, there was a $53.6\%$ drop in people who identified as ``Jewish''---this result was traced to the list of ethnicities not presenting the label as an example in 2016\citep{government_of_canada_technical_2019}. 
-
-\subsection{Considerations}
-
-Unlike archetype-based methods, HDBSCAN($\hat{\epsilon}$) identifies groups that can be created by linking nearby individuals---it is possible to have a very long chain containing many individuals who are each closely related to those near them within a cluster but not to those at the distant end. In this way, admixed populations can form a single cluster even though individuals within the cluster can differ as much as individuals from the different ancestral ``source'' populations. In a sense, HDBSCAN($\hat{\epsilon}$) identifies groups of individuals whose distribution in genetic space suggests a common sampling or demographic history, rather than genetic similarity. For this reason, topological stratification may be less conducive to reification of clusters and the notion that population labels reflect a true underlying ``type''.  However, given the weaponization of population genetics research in the past\citep{carlson_counter_2022}, it is worth emphasizing limitations common to all clustering approaches.
-
-No single label is an individual's ``true'' ancestry, race, or ethnicity, as these are complex, multifactorial population descriptors\citep{martschenko_including_2023,roth_multiple_2016}. Thus clustering does not have a well-defined ground truth \citep{ben-david_clustering_2018}, and clusters are most useful as ``helpful constructs that support clarification''\citep{hennig_what_2015}. With real genetic data, there is no ``correct'' number of populations\citep{lawson_tutorial_2018} and discrete groupings provide a flattened view of a high-dimensional landscape\citep{martschenko_including_2023,lewis_getting_2022}. The clusters generated are sensitive to the input samples, since the demographic composition of a biobank will impact the clustering, and they are also affected by the parameters at the filtering, dimensionality reduction, and clustering steps. This is a reflection of the data, as genetic data are not composed of ``natural types''. These clusters can be useful in understanding how genetics relates to health and the environment, but it is worth repeating that variation in phenotypes across genetic clusters does not imply a genetic cause, as differences in environment or systemic discrimination are also expected to produce such variation\citep{vyas_hidden_2020}. Each identified cluster also likely features considerable genetic heterogeneity. The UK biobank clusters of majority sub-Saharan-born individuals, for example, encompass considerable genetic substructure\citep{choudhury_high-depth_2020}. Different choices of metrics for clustering (i.e., genetic relatedness vs. IBD) can emphasize different types of structure. There are no true clusters. 
-
-Ultimately, however, many useful analyses require some definition of ``populations''. For example, an allele frequency can only be calculated and reported within a population. Data exploration and quality control often require investigating relevant subsets of the data to decide whether they likely reflect technical artefacts or meaningful subgroups.  To date there has not been a method of stratification that is tractable, easy to implement, robust to the presence of many populations of many sizes, and that captures all or almost all individuals with complex population histories. We believe our topological approach satisfies these important needs. Looking forward, we expect that topological approaches underlying UMAP and HDBSCAN($\hat{\epsilon}$) also present a promising avenue to move towards a more continuous description of genetic variation in complex cohorts. 
-
-\section{Acknowledgements}
-We are grateful to the participants in each biobank who provided their genetic data. We thank the CARTaGENE team for troubleshooting data with us, and C. Bh\'{e}rer, M. L. Spear, and P. Verdu for scientific discussion.
-
-\textbf{Funding:} This research was also supported by the Canadian Institute for Health Research (CIHR) project grant 437576, Natural Sciences and Engineering Research Council of Canada (NSERC) grant RGPIN-2017-04816, the Canada Research Chair program, and the Canada Foundation for Innovation.
-
-\section{Materials and Methods}
-Our code is available at \url{https://github.com/diazale/topstrat}. We have provided command line tools to run Python implementations of UMAP and HDBSCAN($\hat{\epsilon}$).
-
-We used three datasets for this analysis: the 1000 Genomes project (1KGP), the UK biobank (UKB), and CARTaGENE (CaG). For the 1KGP we used $3,450$ genotypes using Affy 6.0 genotyping\citep{global_2015}. We generated the principal components using a Python script and have made the top PCs available in the repository to demonstrate the code. We used the genotype file \verb|ALL.wgs.nhgri_coriell_affy_6.20140825.genotypes_has_ped.vcf.gz| and population labels \verb|affy_samples.20141118.panel 20131219.populations.tsv|,  available at \url{http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/supporting/hd_genotype_chip/}.
-
-For the UKB, we limited our analyses to the $488,377$ individuals with genotype data. We used the UKB's top 40 pre-computed PCs (Data-Field 22009), blood cell counts (Data-Fields 30000, 30010, 30120, 30130, 30140, 30150, 30160), lung function measures (Data-Fields 3062, 3063), age (Data-Field 21003), sex (Data-Field 31), standing height (Data-Field 50), weight (Data-Field 21002), BMI (Data-Field 21001), smoking status (Data-Field 20116), country of birth (Data-Fields 1647, 20115), and ethnic group/background (Data-Field 21000). Ethnic group/background is a hierarchical item in which participants are prompted to select from a pre-populated list of options for Ethnic Group (e.g. ``White'') and, if available, a secondary option for Ethnic Background (e.g. ``British''). Phenotypes used in analyses were normalized with respect to variables $sex$, $age$, and $age^2$. Access to the UKB can be granted at 
-\url{https://www.ukbiobank.ac.uk/scientists-3/genetic-data/}.
-
-% HLA range: 6 25000000 33500000
-For CARTaGENE, we used $29,337$ individuals with genotype data. We generated the PCs using PLINK\citep{purcell_plink_2007} after filtering for linkage disequilibrium and HLA (chromosome 6, $25000000\textbf{--}33500000$ ). The options used were:
-\begin{itemize}
-\item \verb|indep-pairwise 1000 50 0.1| (PLINK2)
-\item \verb|maf 0.05|
-\item \verb|mind 0.1|
-\item \verb|geno 0.1|
-\item \verb|hwe 1e-6|.
-\end{itemize}
-
-We used the Python implementations of UMAP\citep{mcinnes_umap_2020} (0.3.6) and HDBSCAN (0.8.24), integrating the updates from Malzer and Baum\citep{malzer_hybrid_2020}. To calculate PGS, we used VIPRS\citep{zabad_fast_2023}.
-
-\section{Supporting information}
-
-For visualization, we reduce our data to 2D via UMAP and set a relatively high minimum distance ($MD$; usually between $0.3$ and $0.5$); this enables us to view fine-scale patterns of structure. We find satisfactory results with the number of neighbours ($NN$) varying from $15$ to $50$; higher values will require more computational resources, but they increase the connectivity between points in the data, as discussed in \citep{diaz-papkovich_review_2021}. For clustering, we set a low value of minimum distance (equal to or close to $0$) and reduce the number of dimensions to at least $3$---in our analyses, we used $3$, $4$, and $5$ dimensions. The low minimum distance encourages dimensionally-reduced data to form dense clusters, while keeping the dimensionality at $\geq3$ preserves the complexities of data that can be lost because of artificial tearing in the drop from $3$ to $2$ dimensions. The number of neighbours will vary depending on what is a reasonable expectation for the data. For the 1KGP data, which consists of geographically diverse samples of roughly similar size, $50$ neighbours capture the structure well. For biobank data, it is common for structure to arise from a handful of individuals; we found $10$ to $25$ neighbours to work best. Lower neighbourhood values (e.g. $NN=5$) will create smaller clusters, but can also highlight highly-localized structure within larger populations. $2D$ visualizations can give intuition as to the presence and sizes of clusters. If pre-processing the data with PCA, more PCs tend to reveal finer-scale structure (see e.g. the relationship with geographical coordinates in Figures~S17 and S18 in \citep{diaz-papkovich_umap_2019}). For the 1KGP clusters in Figure~\ref{fig:1000GP} we used the top $16$ PCs; for the UKB in Figure~\ref{fig:ukb_hdbscan_labels} and CaG in Figure~\ref{fig:ctg} we used the top $25$.
-
-In parametrizing HDBSCAN($\hat{\epsilon}$), the parameter $\hat{\epsilon}$ defines a threshold at which clusters are merged or split. We find values of $\hat{\epsilon}$ ranging from $0.3$ to $0.5$ to be effective at ensuring all or almost all individuals are clustered while still identifying fine-scale structure. The minimum number of points ($MP$) should not be significantly higher than the number of neighbours used in the associated UMAP. If $MP$ is high and $NN$ is low, it can result in a large number of points being classified as noise since the UMAP data will tend to form small clusters; e.g. a UMAP parametrized with $NN=10$ and HDBSCAN($\hat{\epsilon}$) with $MP=100$ may return poor results.
-
-Changing parameters will result in different clusters being generated. Given the low computational costs of UMAP and HDBSCAN($\hat{\epsilon}$), we recommend running a grid search for visualization and exploratory analysis. Clusters can then be characterized using auxiliary data, such as country of birth, geographical location, population label, self-identification, etc. We selected the clustering for the UKB for its suitability for comparing PGS results by $F_{ST}$ from the training population. For CaG, we selected one of the clustering runs that generated a cluster of individuals with North African ancestry.
-
-We calculated pairwise $F_{ST}$ for UKB clusters using PLINK\citep{purcell_plink_2007}. We calculated admixture proportions using ADMIXTURE 1.3.0\citep{alexander_fast_2009}. For computational reasons, for the UKB we calculated admixture proportions on individuals not falling into Cluster~17 (the largest cluster, containing around $400,000$ individuals) in Figure~\ref{fig:ukb_hdbscan_labels}.
-
-Visualizations and statistical analyses were done in R (3.5.3)\citep{r_2018}. We used ggplot2\citep{wickham_2016} for graphics and ggwordcloud for word clouds, and stargazer\citep{Hlavac2018-fy} to generate tables.
-
-For phenotype smoothing, we removed the effects of the top $40$ PCs using linear regression, working with the residuals. For phenotype $p$ and individuals $i=1 \dots I$, we use the model:
-
-$$ y_{p,i} = \beta_{p,0} + \sum_{j=1}^{40}\beta_{p,j}PC_{j,i} + \epsilon_{p,i},  \epsilon_{p,i} \sim N(0,\sigma^2_{p}) $$
-
-We visualize the data in Figure~\ref{fig:smoothed_phenos} with the values $ e_{p,i} = y_{p,i} - (\hat{\beta_{p,0}} + \sum_{j=1}^{40}\hat{\beta_{p,j}}PC_{j,i}) $
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%                       Supplementary figures and tables
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+The reference implementation of UMAP is regularly updated with new features\citep{mcinnes2018software}. A recent update enabled visualization of the simplicial complex underlying the algorithm, which can highlight how input data and parameterization impact the formation and placement of clusters relative to one another. We demonstrate this using genotype data from the 1000GP in Figure~\ref{fig:UMAP_connectivity}. Increasing the value of $NN$ increases the size of the complex (at a higher computational cost), but clusters that are completely disjoint from the rest of the data when $NN=15$ become connected as $NN$ is increased to $200$. In Figures~\ref{fig:UMAP_low_NN_1KGP} and \ref{fig:UMAP_low_NN_connectivity} the simplicial complexes of South Asian and East Asian populations do not connect to other populations; that is, for these continental clusters, every individual's $15$ closest genetic neighbours fall within the cluster. In Figures~\ref{fig:UMAP_high_NN_1KGP} and \ref{fig:UMAP_high_NN_connectivity}, where $NN=200$, all continental populations become connected. Some populations, such as the Luhya (LWK) and Japanese (JPT), become more closely connected to their continental groups, and the embedding with $NN=200$ places their subclusters closer to their respective continental populations. These visualizations also clarify that since UMAP preserves these topological connections, the positions of connected clusters may be flipped or rotated relative to each other when carrying out multiple runs with identical parameters.
 
 \clearpage
 
-\input{base/chapter3/chapter3_supp.tex}
+\begin{figure}[h!]
+  \centering
+  \begin{subfigure}[b]{0.4\linewidth}
+%    \includegraphics[width=\linewidth]{code/images/1KGP_genotype_UMAP_low_NN.jpeg}
+    \includegraphics[width=\linewidth]{placeholder.png}
+    \caption{UMAP with 15 neighbours.}
+    \label{fig:UMAP_low_NN_1KGP}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.4\linewidth}
+%    \includegraphics[width=\linewidth]{code/images/UMAP_connectivity_low_NN.jpeg}
+    \includegraphics[width=\linewidth]{placeholder.png}
+    \caption{Connectivity map of 15 neighbours.}
+    \label{fig:UMAP_low_NN_connectivity}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.4\linewidth}
+%    \includegraphics[width=\linewidth]{code/images/1KGP_genotype_UMAP_high_NN.jpeg}
+    \includegraphics[width=\linewidth]{placeholder.png}
+    \caption{UMAP with 200 neighbours.}
+    \label{fig:UMAP_high_NN_1KGP}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.4\linewidth}
+%    \includegraphics[width=\linewidth]{code/images/UMAP_connectivity_high_NN.jpeg}
+    \includegraphics[width=\linewidth]{placeholder.png}
+    \caption{Connectivity map of 200 neighbours.}
+    \label{fig:UMAP_high_NN_connectivity}
+  \end{subfigure}
+  \caption[UMAP parametrization changes the connectivity of points]{\textbf{UMAP projection of the same genotype data from the 1000GP comparing parametrization with a small (top) and large (bottom) number of nearest neighbours.} Left images are coloured by population; right images are the same points but with the simplicial complex drawn. When adding more neighbours, subclusters become less separated, as with the LWK population, for example. Looking at the connectivity maps, we see new connections between continental groups, such as the Central/South American clusters and East Asian clusters. Darker lines indicate that individuals are closer to each other in genotype space.}
+  \label{fig:UMAP_connectivity}
+\end{figure}
 
 \clearpage
+
+\section{Conclusion}
+With its effective performance and widespread use in under two years, UMAP shows considerable promise as part of the toolbox of a population geneticist, especially in the case of large cohorts. Beyond its capacity to visualize data, it holds promise for downstream methods such as clustering, correction for fine-scale population structure in GWAS and PGS, and identifying unique demographic histories. We anticipate that UMAP and/or related methods of dimensionality reduction will continue to find applications in the field, bolstering our exploration and understanding of human genomic data and the study of complex polygenic traits.
+
+\section{Materials and methods}
+All code used to process 1000GP data and generate images is available at \url{https://github.com/diazale/umap_review}. We used genotype data from $3,450$ individuals from the 1000GP using Affy 6.0 genotyping\citep{global_2015}. Genotype data from the 1000GP is available at \url{http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/supporting/hd_genotype_chip/} and \url{http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/}. The Genizon cohort is comprised of $7,843$ genotyped individuals from Quebec. The genotype data from this cohort was compiled from 4 different chips (HumanHap375, HumanHap550, Illumina1M and Human610-Quad). The missing data from the merging of these datasets was imputed using the Michigan Imputation Server.  The UKB provides genotype data and principal components on $488,377$ individuals. Visualizations were done with matplotlib\citep{Hunter2007} and PCA was done using sklearn\citep{scikit-learn}. 

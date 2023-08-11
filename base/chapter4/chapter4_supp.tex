@@ -1,0 +1,826 @@
+\section{Supplementary figures and tables}
+
+\begin{figure}[ht]
+  \centering
+%    \includegraphics[width=0.7\linewidth]{images/original_clusterings/UKBB_UMAP_PC10_NN15_MD05_2018328174511_hdbscan_labels_min15_UKBB_UMAP_PC10_NC5_NN10_MD0001_euclidean_201981322313_clusters.jpeg}
+\includegraphics[width=0.7\linewidth]{placeholder.png}
+  \caption[Clustering the UKB with basic HDBSCAN]{An example of a clustering of the UKB data using HDBSCAN rather than HDBSCAN($\hat{\epsilon}$). The algorithm fails to adequately cluster many of the sub-populations, categorizing $4,197$ individuals as noise and generated $197$ micro-clusters.}
+    \label{fig:supp_ukb_hdbscan_original}  
+\end{figure}
+
+\clearpage
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}[b]{0.45\linewidth}
+%    \includegraphics[width=\linewidth]{images/colour_matched/hdbscan_labels_min25_EPS05_ukbb_pca_with_ids_UMAP_PC25_NC5_NN10_MD001_euclidean_20200214_065646/selected_clusters_labelled_COB.png}
+        \includegraphics[width=\linewidth]{placeholder.png}
+    \caption{}
+    \label{fig:supp_ukb_hdbscan_top1}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.45\linewidth}
+    %\includegraphics[width=\linewidth]{images/colour_matched/hdbscan_labels_min25_EPS05_ukbb_pca_with_ids_UMAP_PC25_NC5_NN10_MD001_euclidean_20200214_065646/selected_clusters_labelled_eth.png}
+        \includegraphics[width=\linewidth]{placeholder.png}
+    \caption{}
+    \label{fig:supp_ukb_hdbscan_top2}
+  \end{subfigure}
+  \caption[Word clouds generated from four clusters in the UKB]{Word clouds generated from four clusters in the UKB from Figure~\ref{fig:ukb_hdbscan_compare}. (a) Left: Word clouds of the most common countries of birth within each cluster. Most individuals in the orange cluster (Cluster~0) were born in Japan, and most in the pink cluster (Cluster~15) were born in Nepal. (b) Right: Word clouds for the most common EB. The most common in the blue cluster (Cluster~13) was ``Chinese'', while those in the green cluster (Cluster~14) select a variety, including ``White British'', ``Chinese'', ``Mixed'', or ``Other''. Detailed breakdowns are available in Tables~\ref{table:supp_ukb_cluster_cob} and \ref{table:supp_ukb_cluster_sieb}.}
+  \label{fig:supp_ukb_hdbscan_top}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+    %\includegraphics[width=0.8\linewidth]{images/admixture/barplots/admixture_tall_5.png}
+    \includegraphics[width=0.8\linewidth]{placeholder.png}
+    \caption[Admixture proportions for 5 populations]{Admixture proportions for $K=5$ populations on each of the clusters in Figure~\ref{fig:ukb_hdbscan_compare}. Cluster 17 ($n>400,000$) was excluded for computational reasons. Individuals not assigned to a cluster are labelled as $-1$.}
+  \label{fig:supp_ukb_admix}
+\end{figure}
+
+\clearpage
+
+\begin{figure}[ht]
+  \centering
+%    \includegraphics[width=0.9\linewidth]{images/smoothed_phenotypes/daily_smoking_proportion.jpeg}
+    \includegraphics[width=0.9\linewidth]{placeholder.png}
+    \caption[Proportion of daily smokers]{Proportion of daily smokers, smoothed using Algorithm~\ref{alg:regularization}.}
+    \label{fig:supp_ukb_smoking}
+\end{figure}
+
+\clearpage
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}[b]{0.7\linewidth}
+    %\includegraphics[width=\linewidth]{images/pheno_distributions/SR4_FEV1_ridge_prepc.jpeg}
+    \includegraphics[width=\linewidth]{placeholder.png}
+    \caption{}
+    \label{fig:supp_pheno_ridge_fev_pre}
+  \end{subfigure}
+    \begin{subfigure}[b]{0.7\linewidth}
+%    \includegraphics[width=\linewidth]{images/pheno_distributions/SR4_FEV1_ridge_postpc.jpeg}
+\includegraphics[width=\linewidth]{placeholder.png}
+    \caption{}
+    \label{fig:supp_pheno_ridge_fev_post}
+  \end{subfigure}
+  \caption[Distributions of FEV1 by cluster]{Distributions of FEV1 adjusted for age and sex stratified by cluster. Vertical dotted lines represent the mean of the distribution. Cluster labels and colours match those in Figure~\ref{fig:ukb_hdbscan_labels}. Cluster 17 is mostly European-born individuals, Cluster 18 is mostly sub-Saharan African born individuals, Cluster 19 is mostly individuals born in England, the Caribbean, Ghana, and Nigeria, and Cluster 22 is mostly individuals born in England who chose the EB ``White and Black Caribbean'' or ``White and Black African''. (a) Top: Distribution of FEV1 by cluster without adjusting for population structure. (b) Bottom: Distribution of FEV1 by cluster after having adjusted for the top $40$ principal components.}
+  \label{fig:supp_pheno_ridge_fev}
+\end{figure}
+
+\clearpage
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}[b]{0.7\linewidth}
+    %\includegraphics[width=\linewidth]{images/pheno_distributions/SR4_X30140_Neutrophill_count_ridge_prepc.jpeg}
+    \includegraphics[width=\linewidth]{placeholder.png}
+    \caption{}
+    \label{fig:supp_pheno_ridge_neut_pre}
+  \end{subfigure}
+    \begin{subfigure}[b]{0.7\linewidth}
+    %\includegraphics[width=\linewidth]{images/pheno_distributions/SR4_X30140_Neutrophill_count_ridge_postpc.jpeg}
+    \includegraphics[width=\linewidth]{placeholder.png}
+    \caption{}
+    \label{fig:supp_pheno_ridge_neut_post}
+  \end{subfigure}
+  \caption[Distributions of neutrophil count by cluster]{Distributions of neutrophil count adjusted for age and sex stratified by cluster. Vertical dotted lines represent the mean of the distribution. Cluster labels and colours match those in Figure~\ref{fig:ukb_hdbscan_labels}. Cluster 17 is mostly European-born individuals, Cluster 18 is mostly sub-Saharan African born individuals, Cluster 19 is mostly individuals born in England, the Caribbean, Ghana, and Nigeria, and Cluster 22 is mostly individuals born in England who chose the EB ``White and Black Caribbean'' or ``White and Black African''. (a) Top: Distribution of neutrophil count by cluster without adjusting for population structure. (b) Bottom: Distribution of neutrophil count by cluster after having adjusted for the top $40$ principal components.}
+  \label{fig:supp_pheno_ridge_neut}
+\end{figure}
+
+\clearpage
+
+\begin{figure}[ht]
+  \centering
+    %\includegraphics[width=0.9\linewidth]{images/hdbscan_labels_min25_EPS05_ukbb_pca_with_ids_UMAP_PC25_NC5_NN10_MD001_euclidean_20200214_065646/pca_cluster_22_20200214_065646_2.png}
+    \includegraphics[width=0.9\linewidth]{placeholder.png}
+  \caption{Cluster 22 from Figure~\ref{fig:ukb_hdbscan_labels} highlighted coloured in on a plot of PC1 and PC2.}
+  \label{fig:supp_cluster_22_pca}
+\end{figure}
+
+\clearpage
+
+\begin{figure}[!ht]
+  \centering
+    %\includegraphics[width=0.9\linewidth]{images/fst_vs_r2_weighted_plink_20200214_065646/LDL_median_r2_vs_maf_rs4420638.png}
+    \includegraphics[width=0.4\linewidth]{placeholder.png}
+  \caption[Regression line of PGS vs MAF of rs4420638]{Regression line of the $R^2$ of a PGS generated by VIPRS versus the minor allele frequency $rs4420638$, labelled by clusters from Figure~\ref{fig:ukb_hdbscan_labels}. The regression summary is presented in Table~\ref{table:supp_rs4420638_lm}.}
+  \label{fig:supp_rs4420638_lm}
+\end{figure}
+
+\begin{table}[!htbp] \centering 
+\scriptsize
+\begin{tabular}{@{\extracolsep{5pt}}lc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{1}{c}{\textit{Dependent variable:}} \\ 
+\cline{2-2} 
+\\[-1.8ex] & R2 \\ 
+\hline \\[-1.8ex] 
+ MAF & 0.401$^{***}$ \\ 
+  & (0.100) \\ 
+  & \\ 
+ Constant & 0.018 \\ 
+  & (0.016) \\ 
+  & \\ 
+\hline \\[-1.8ex] 
+Observations & 26 \\ 
+R$^{2}$ & 0.402 \\ 
+Adjusted R$^{2}$ & 0.378 \\ 
+Residual Std. Error & 0.025 (df = 24) \\ 
+F Statistic & 16.163$^{***}$ (df = 1; 24) \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{1}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\end{tabular}
+  \caption[Regression summary of PGS against MAF of rs4420638]{Linear regression model between minor allele frequency (MAF) of $rs4420638$ within each cluster from Figure~\ref{fig:ukb_hdbscan_labels} and the $R^2$ of a PGS for LDL generated by VIPRS using the clusters from Figure~\ref{fig:ukb_hdbscan_labels}. The plot of the regression is present in Figure~\ref{fig:supp_rs4420638_lm}.} 
+  \label{table:supp_rs4420638_lm} 
+\end{table} 
+
+\clearpage
+
+\begin{figure}[!ht]
+  \centering
+    %\includegraphics[width=0.9\linewidth]{images/fst_vs_r2_weighted_plink_20200214_065646/LDL_median_r2_vs_maf_rs7412.png}
+    \includegraphics[width=0.4\linewidth]{placeholder.png}
+  \caption[Regression line of PGS vs MAF of rs7412]{Regression line of the $R^2$ of a PGS generated by VIPRS versus the minor allele frequency $rs7412$, labelled by clusters from Figure~\ref{fig:ukb_hdbscan_labels}. The regression summary is presented in Table~\ref{table:supp_rs7412_lm}.}
+  \label{fig:supp_rs7412_lm}
+\end{figure}
+
+\begin{table}[!htbp] \centering 
+\scriptsize
+\begin{tabular}{@{\extracolsep{5pt}}lc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{1}{c}{\textit{Dependent variable:}} \\ 
+\cline{2-2} 
+\\[-1.8ex] & R2 \\ 
+\hline \\[-1.8ex] 
+ MAF & 0.609$^{***}$ \\ 
+  & (0.202) \\ 
+  & \\ 
+ Constant & 0.041$^{***}$ \\ 
+  & (0.014) \\ 
+  & \\ 
+\hline \\[-1.8ex] 
+Observations & 26 \\ 
+R$^{2}$ & 0.275 \\ 
+Adjusted R$^{2}$ & 0.245 \\ 
+Residual Std. Error & 0.027 (df = 24) \\ 
+F Statistic & 9.126$^{***}$ (df = 1; 24) \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{1}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\end{tabular} 
+\caption[Regression summary of PGS vs MAF of rs7412]{Linear regression model between minor allele frequency (MAF) of $rs7412$ within each cluster from Figure~\ref{fig:ukb_hdbscan_labels} and the $R^2$ of a PGS for LDL generated by VIPRS using the clusters from Figure~\ref{fig:ukb_hdbscan_labels}. The plot of the regression is present in Figure~\ref{fig:supp_rs7412_lm}.} 
+\label{table:supp_rs7412_lm} 
+\end{table} 
+
+\clearpage
+
+\begin{figure}[ht]
+  \centering
+\begin{subfigure}[b]{0.4\linewidth}
+    %\includegraphics[width=\linewidth]{images/diagnostic_plots/num_unclustered.png}
+    \includegraphics[width=\linewidth]{placeholder.png}
+    \caption{}
+    \label{fig:supp_num_unclustered_1}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.4\linewidth}
+    %\includegraphics[width=\linewidth]{images/diagnostic_plots/num_unclustered_filtered.png}
+    \includegraphics[width=\linewidth]{placeholder.png}
+    \caption{}
+    \label{fig:supp_num_unclustered_2}
+  \end{subfigure}
+  \caption[Measuring the number of individuals not clustered]{For each of the $604$ runs of UMAP-HDBSCAN($\hat{\epsilon}$) on the UKB, we count the number of individuals not assigned to a cluster. (a) Top: Across all  $604$ runs. (b) Bottom: To improve the scale of the figure, we remove $3$ outlier runs in which $684$, $1,535$, and $4,346$ individuals were not assigned to a cluster.}
+  \label{fig:supp_num_unclustered}
+\end{figure}
+
+\clearpage
+
+\begin{figure}[!ht]
+  \centering
+    %\includegraphics[width=0.7\linewidth]{images/colour_matched/hdbscan_labels_min25_EPS05_ukbb_pca_with_ids_UMAP_PC25_NC5_NN5_MD00_euclidean_20200215_162944.png}
+\includegraphics[width=0.7\linewidth]{placeholder.png}
+  \caption[Alternative clustering of the UKB]{An alternative clustering of UKB data. Compared to Figure~\ref{fig:ukb_hdbscan_labels}, the largest cluster (Cluster~17 in that figure) has been split into three smaller clusters (Clusters $14$, $24$, $25$ in this figure). Other clusters have been split or merged, while some remain the same between runs.}
+  \label{fig:supp_ukb_alt}
+\end{figure}
+
+\clearpage
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{l|r}
+Abbreviation & Population name\\
+\hline
+ ACB & African Caribbean in Barbados\\
+ \hline
+    ASW & African Ancestry in SW USA \\
+ \hline
+    BEB & Bengali in Bangladesh\\
+ \hline
+    CDX & Chinese Dai in Xishuangbanna, China\\
+ \hline
+    CEU & Utah residents with Northern/Western European ancestry\\
+ \hline
+    CHB & Han Chinese in Beijing, China\\
+ \hline
+    CHS & Han Chinese South\\
+ \hline
+    CLM & Colombian in Medell\'{i}n, Colombia\\
+ \hline
+    ESN & Esan in Nigeria\\
+ \hline
+    FIN & Finnish in Finland\\
+ \hline
+    GBR & British From England and Scotland\\
+ \hline
+    GWD & Gambian in Western Division -- Mandinka\\
+ \hline
+    GIH & Gujarati Indians in Houston, Texas, USA\\
+ \hline
+    IBS & Iberian Populations in Spain\\
+ \hline
+    ITU & Indian Telugu in the UK\\
+ \hline
+    JPT & Japanese in Tokyo, Japan\\
+ \hline
+    KHV & Kinh in Ho Chi Minh City, Vietnam\\
+ \hline
+    LWK & Luhya in Webuye, Kenya\\
+ \hline
+    MSL & Mende in Sierra Leone\\
+ \hline
+    MXL & Mexican Ancestry in Los Angeles, CA, USA\\
+ \hline
+    PEL & Peruvian in Lima, Peru\\
+ \hline
+    PJL & Punjabi in Lahore, Pakistan\\
+ \hline
+    PUR & Puerto Rican in Puerto Rico\\
+ \hline
+    STU & Sri Lankan Tamil in the UK\\
+ \hline
+    TSI & Toscani in Italy\\
+ \hline
+    YRI & Yoruba in Ibadan, Nigeria\\
+\end{tabular}
+\caption{Names and abbreviations of 1KGP populations.}
+\label{table:1kgp_labels} 
+\end{table} 
+
+\clearpage
+
+\begin{table}[ht]
+\centering
+\resizebox{0.6\textwidth}{!}{
+\begin{tabular}{l|r|r|r|r}
+\hline
+1KGP population & Cluster label & 1KGP in cluster & Total in 1KGP & Proportion in cluster\\
+\hline
+ACB & 0 & 122 & 122 & 1.0000000\\
+\hline
+ASW & 0 & 103 & 107 & 0.9626168\\
+\hline
+ASW & 5 & 3 & 107 & 0.0280374\\
+\hline
+ASW & 15 & 1 & 107 & 0.0093458\\
+\hline
+BEB & 1 & 133 & 143 & 0.9300699\\
+\hline
+BEB & 11 & 10 & 143 & 0.0699301\\
+\hline
+CDX & 2 & 104 & 105 & 0.9904762\\
+\hline
+CDX & 4 & 1 & 105 & 0.0095238\\
+\hline
+CEU & 3 & 183 & 183 & 1.0000000\\
+\hline
+CHB & 4 & 105 & 105 & 1.0000000\\
+\hline
+CHS & 4 & 171 & 171 & 1.0000000\\
+\hline
+CLM & 5 & 142 & 146 & 0.9726027\\
+\hline
+CLM & 15 & 4 & 146 & 0.0273973\\
+\hline
+ESN & 6 & 172 & 172 & 1.0000000\\
+\hline
+FIN & 7 & 104 & 104 & 1.0000000\\
+\hline
+GBR & 3 & 105 & 105 & 1.0000000\\
+\hline
+GIH & 8 & 69 & 111 & 0.6216216\\
+\hline
+GIH & 17 & 41 & 111 & 0.3693694\\
+\hline
+GIH & 11 & 1 & 111 & 0.0090090\\
+\hline
+GWD & 9 & 179 & 180 & 0.9944444\\
+\hline
+GWD & 14 & 1 & 180 & 0.0055556\\
+\hline
+IBS & 10 & 162 & 162 & 1.0000000\\
+\hline
+ITU & 11 & 109 & 118 & 0.9237288\\
+\hline
+ITU & 17 & 9 & 118 & 0.0762712\\
+\hline
+JPT & 12 & 104 & 105 & 0.9904762\\
+\hline
+JPT & 4 & 1 & 105 & 0.0095238\\
+\hline
+KHV & 2 & 118 & 121 & 0.9752066\\
+\hline
+KHV & 4 & 3 & 121 & 0.0247934\\
+\hline
+LWK & 13 & 110 & 110 & 1.0000000\\
+\hline
+MSL & 14 & 122 & 122 & 1.0000000\\
+\hline
+MXL & 15 & 97 & 104 & 0.9326923\\
+\hline
+MXL & 10 & 7 & 104 & 0.0673077\\
+\hline
+PEL & 16 & 128 & 129 & 0.9922481\\
+\hline
+PEL & 5 & 1 & 129 & 0.0077519\\
+\hline
+PJL & 17 & 95 & 155 & 0.6129032\\
+\hline
+PJL & 19 & 48 & 155 & 0.3096774\\
+\hline
+PJL & 11 & 12 & 155 & 0.0774194\\
+\hline
+PUR & 18 & 145 & 149 & 0.9731544\\
+\hline
+PUR & 0 & 4 & 149 & 0.0268456\\
+\hline
+STU & 11 & 124 & 128 & 0.9687500\\
+\hline
+STU & 17 & 4 & 128 & 0.0312500\\
+\hline
+TSI & 10 & 111 & 111 & 1.0000000\\
+\hline
+YRI & 20 & 181 & 182 & 0.9945055\\
+\hline
+YRI & 6 & 1 & 182 & 0.0054945\\
+\hline
+\end{tabular}}
+\caption[Cluster assignments for each 1KGP population]{Cluster assignments for each 1KGP population, showing how many individuals from each population ended up in each cluster.}
+\label{table:1kgp_clusters} 
+\end{table} 
+
+\clearpage
+
+\begin{table}[ht]
+\centering
+\resizebox{0.60\textwidth}{!}{
+\begin{tabular}{l|l|r|r}
+\hline
+Cluster & 1KGP population & 1KGP population in cluster & Proportion\\
+\hline
+0 & ACB & 122 & 0.5327511\\
+\hline
+0 & ASW & 103 & 0.4497817\\
+\hline
+0 & PUR & 4 & 0.0174672\\
+\hline
+1 & BEB & 133 & 1.0000000\\
+\hline
+2 & CDX & 104 & 0.4684685\\
+\hline
+2 & KHV & 118 & 0.5315315\\
+\hline
+3 & CEU & 183 & 0.6354167\\
+\hline
+3 & GBR & 105 & 0.3645833\\
+\hline
+4 & CDX & 1 & 0.0035587\\
+\hline
+4 & CHB & 105 & 0.3736655\\
+\hline
+4 & CHS & 171 & 0.6085409\\
+\hline
+4 & JPT & 1 & 0.0035587\\
+\hline
+4 & KHV & 3 & 0.0106762\\
+\hline
+5 & ASW & 3 & 0.0205479\\
+\hline
+5 & CLM & 142 & 0.9726027\\
+\hline
+5 & PEL & 1 & 0.0068493\\
+\hline
+6 & ESN & 172 & 0.9942197\\
+\hline
+6 & YRI & 1 & 0.0057803\\
+\hline
+7 & FIN & 104 & 1.0000000\\
+\hline
+8 & GIH & 69 & 1.0000000\\
+\hline
+9 & GWD & 179 & 1.0000000\\
+\hline
+10 & IBS & 162 & 0.5785714\\
+\hline
+10 & MXL & 7 & 0.0250000\\
+\hline
+10 & TSI & 111 & 0.3964286\\
+\hline
+11 & BEB & 10 & 0.0390625\\
+\hline
+11 & GIH & 1 & 0.0039062\\
+\hline
+11 & ITU & 109 & 0.4257812\\
+\hline
+11 & PJL & 12 & 0.0468750\\
+\hline
+11 & STU & 124 & 0.4843750\\
+\hline
+12 & JPT & 104 & 1.0000000\\
+\hline
+13 & LWK & 110 & 1.0000000\\
+\hline
+14 & GWD & 1 & 0.0081301\\
+\hline
+14 & MSL & 122 & 0.9918699\\
+\hline
+15 & ASW & 1 & 0.0098039\\
+\hline
+15 & CLM & 4 & 0.0392157\\
+\hline
+15 & MXL & 97 & 0.9509804\\
+\hline
+16 & PEL & 128 & 1.0000000\\
+\hline
+17 & GIH & 41 & 0.2751678\\
+\hline
+17 & ITU & 9 & 0.0604027\\
+\hline
+17 & PJL & 95 & 0.6375839\\
+\hline
+17 & STU & 4 & 0.0268456\\
+\hline
+18 & PUR & 145 & 1.0000000\\
+\hline
+19 & PJL & 48 & 1.0000000\\
+\hline
+20 & YRI & 181 & 1.0000000\\
+\hline
+\end{tabular}}
+\caption[Composition of each cluster broken down by 1KGP population]{Composition of each cluster broken down by 1KGP population.}
+\label{table:1kgp_populations} 
+\end{table} 
+
+\newpage
+\begin{table}[ht]
+\centering
+\resizebox{0.60\textwidth}{!}{
+\begin{tabular}{l|l|r|r}
+\hline
+Ethnic group & Ethnic background \\
+\hline
+White & British \\
+\hline
+White & Irish \\
+\hline
+White & Any other white background \\
+\hline 
+Mixed & White and Black Caribbean \\
+\hline
+Mixed & White and Black African \\
+\hline
+Mixed & White and Asian \\
+\hline
+Mixed & Any other mixed background \\
+\hline
+Asian or Asian British & Indian \\
+\hline
+Asian or Asian British & Pakistani \\
+\hline
+Asian or Asian British & Bangladeshi \\
+\hline
+Asian or Asian British & Any other Asian background \\
+\hline
+Black or Black British & Caribbean \\
+\hline
+Black or Black British & African \\
+\hline
+Black or Black British & Any other Black background \\
+\hline
+Chinese & \\
+\hline
+Other ethnic group & \\
+\hline
+Do not know & \\
+\hline
+Prefer not to answer \\
+\hline
+\end{tabular}}
+\caption[Possible values for ethnic background in the UKB]{Possible values for ethnic background in the UKB (Data-Field 21000). Participants are first asked ``What is your ethnic group?'' and then asked ``What is your ethnic background?'' For ``Chinese'', there is no second question. Participants may also select ``Prefer not to answer'' for the second question; it is possible to have ethnic background recorded as ethnic group (e.g. just ``White'' or ``Mixed''. Excluding ``Do not know'', ``Prefer not to answer'', and ``Not available'', there were $20$ unique values of ethnic background.}
+\label{table:ukb_eb_options} 
+\end{table} 
+
+\clearpage
+
+\begin{table}[ht]
+\tiny
+\centering
+\resizebox{\textwidth}{!}{
+\begin{tabular}[t]{rlrr}
+  \hline
+Cluster & COB & Count & Proportion \\ 
+  \hline
+ n/a & England &  18 & 0.51 \\ 
+   n/a & Morocco &   3 & 0.09 \\ 
+   n/a & Sudan &   3 & 0.09 \\ 
+   n/a & Libya &   2 & 0.06 \\ 
+   n/a & Wales &   2 & 0.06 \\ 
+    0 & Japan & 242 & 0.84 \\ 
+    0 & South Korea &  26 & 0.09 \\ 
+    1 & Italy &  35 & 0.83 \\ 
+    1 & England &   6 & 0.14 \\ 
+    2 & Finland & 136 & 0.92 \\ 
+    3 & England & 1707 & 0.82 \\ 
+    4 & England & 2418 & 0.76 \\ 
+    4 & Scotland & 181 & 0.06 \\ 
+    4 & USA & 170 & 0.05 \\ 
+    5 & Iran & 502 & 0.31 \\ 
+    5 & Iraq & 303 & 0.19 \\ 
+    5 & England & 169 & 0.10 \\ 
+    5 & Cyprus & 163 & 0.10 \\ 
+    5 & Turkey & 135 & 0.08 \\ 
+    6 & Egypt &  72 & 0.22 \\ 
+    6 & Algeria &  70 & 0.21 \\ 
+    6 & Morocco &  66 & 0.20 \\ 
+    6 & Libya &  37 & 0.11 \\ 
+    7 & India & 3019 & 0.33 \\ 
+    7 & Pakistan & 1344 & 0.15 \\ 
+    7 & Kenya & 1067 & 0.12 \\ 
+    7 & England & 743 & 0.08 \\ 
+    7 & Sri Lanka & 644 & 0.07 \\ 
+    8 & India & 140 & 0.33 \\ 
+    8 & Kenya & 124 & 0.29 \\ 
+    8 & Uganda &  81 & 0.19 \\ 
+    8 & England &  31 & 0.07 \\ 
+    8 & Tanzania &  24 & 0.06 \\ 
+    9 & England & 553 & 0.60 \\ 
+    9 & India & 190 & 0.21 \\ 
+   10 & Somalia &  76 & 0.84 \\ 
+   10 & Prefer not to answer &   7 & 0.08 \\ 
+   11 & England &  50 & 0.58 \\ 
+   11 & Wales &  10 & 0.12 \\ 
+   11 & France &   7 & 0.08 \\ 
+   11 & Egypt &   5 & 0.06 \\ 
+    & & & \\
+    & & & \\
+      \hline
+     \end{tabular}
+   \begin{tabular}[t]{rlrr}
+  \hline
+Cluster & COB & Count & Proportion \\ 
+  \hline
+   12 & Peru &  35 & 0.29 \\ 
+   12 & Ecuador &  24 & 0.20 \\ 
+   12 & Mexico &  21 & 0.17 \\ 
+   12 & Bolivia &  13 & 0.11 \\ 
+   12 & Colombia &  13 & 0.11 \\ 
+   13 & Hong Kong & 459 & 0.22 \\ 
+   13 & China & 373 & 0.18 \\ 
+   13 & Philippines & 321 & 0.16 \\ 
+   13 & Malaysia & 314 & 0.15 \\ 
+   14 & England & 194 & 0.49 \\ 
+   14 & Myanmar (Burma) &  24 & 0.06 \\ 
+   14 & Hong Kong &  23 & 0.06 \\ 
+   15 & Nepal & 123 & 0.80 \\ 
+   15 & Prefer not to answer &  11 & 0.07 \\ 
+   16 & Spain & 330 & 0.39 \\ 
+   16 & Portugal & 282 & 0.33 \\ 
+   16 & England &  56 & 0.07 \\ 
+   17 & England & 355844 & 0.82 \\ 
+   17 & Scotland & 37490 & 0.09 \\ 
+   18 & Zimbabwe & 258 & 0.26 \\ 
+   18 & Congo & 144 & 0.14 \\ 
+   18 & Uganda & 126 & 0.13 \\ 
+   18 & Kenya & 111 & 0.11 \\ 
+   18 & Zambia &  56 & 0.06 \\ 
+   18 & South Africa &  53 & 0.05 \\ 
+   19 & Caribbean & 2268 & 0.31 \\ 
+   19 & England & 2077 & 0.28 \\ 
+   19 & Nigeria & 1017 & 0.14 \\ 
+   19 & Ghana & 867 & 0.12 \\ 
+   20 & England & 3528 & 0.87 \\ 
+   21 & England & 8338 & 0.54 \\ 
+   21 & Germany & 970 & 0.06 \\ 
+   21 & Scotland & 938 & 0.06 \\ 
+   22 & England & 697 & 0.66 \\ 
+   22 & Caribbean &  79 & 0.08 \\ 
+   23 & Ethiopia &  57 & 0.33 \\ 
+   23 & Sudan &  50 & 0.29 \\ 
+   23 & Eritrea &  44 & 0.25 \\ 
+   24 & England & 3178 & 0.62 \\ 
+   25 & England &  74 & 0.21 \\ 
+   25 & South Africa &  69 & 0.20 \\ 
+   25 & Mauritius &  63 & 0.18 \\ 
+   25 & Caribbean &  36 & 0.10 \\ 
+   \hline
+\end{tabular}
+}
+\caption[Frequency of country of birth by cluster]{Frequency of country of birth by cluster for Figure~\ref{fig:ukb_hdbscan_labels}. Proportion refers to the proportion within the cluster. Categories with proportion below $0.05$ are not listed.}
+\label{table:supp_ukb_cluster_cob} 
+\end{table} 
+
+\clearpage
+
+\begin{table}[ht]
+
+\centering
+\resizebox{\textwidth}{!}{
+\begin{tabular}[t]{rlrr}
+  \hline
+Cluster & EB & Count & Proportion \\ 
+  \hline
+n/a & Mixed, White and Black African &  10 & 0.29 \\ 
+   n/a & Mixed, Any other mixed background &   7 & 0.20 \\ 
+   n/a & Other ethnic group, Other ethnic group &   6 & 0.17 \\ 
+   n/a & White, British &   6 & 0.17 \\ 
+   n/a & White, Any other white background &   3 & 0.09 \\ 
+   n/a & Black or Black British, African &   2 & 0.06 \\ 
+    0 & Other ethnic group, Other ethnic group & 220 & 0.76 \\ 
+    0 & Asian or Asian British, Any other Asian background &  54 & 0.19 \\ 
+    1 & White, Any other white background &  39 & 0.93 \\ 
+    2 & White, Any other white background & 145 & 0.98 \\ 
+    3 & White, British & 1585 & 0.76 \\ 
+    3 & White, Any other white background & 407 & 0.20 \\ 
+    4 & White, British & 1880 & 0.59 \\ 
+    4 & White, Any other white background & 993 & 0.31 \\ 
+    4 & Other ethnic group, Other ethnic group & 239 & 0.08 \\ 
+    5 & Other ethnic group, Other ethnic group & 751 & 0.46 \\ 
+    5 & White, Any other white background & 435 & 0.27 \\ 
+    5 & Asian or Asian British, Any other Asian background & 229 & 0.14 \\ 
+    5 & White, British & 103 & 0.06 \\ 
+    6 & Other ethnic group, Other ethnic group & 223 & 0.68 \\ 
+    6 & White, Any other white background &  47 & 0.14 \\ 
+    6 & Mixed, White and Black African &  18 & 0.05 \\ 
+    7 & Asian or Asian British, Indian & 5177 & 0.57 \\ 
+    7 & Asian or Asian British, Pakistani & 1726 & 0.19 \\ 
+    7 & Asian or Asian British, Any other Asian background & 1049 & 0.12 \\ 
+    7 & Other ethnic group, Other ethnic group & 498 & 0.06 \\ 
+    8 & Asian or Asian British, Indian & 419 & 0.99 \\ 
+    9 & Mixed, White and Asian & 432 & 0.47 \\ 
+    9 & White, British & 141 & 0.15 \\ 
+    9 & Asian or Asian British, Indian &  84 & 0.09 \\ 
+    9 & Mixed, Any other mixed background &  76 & 0.08 \\ 
+    9 & Other ethnic group, Other ethnic group &  53 & 0.06 \\ 
+   10 & Black or Black British, African &  67 & 0.74 \\ 
+   10 & Other ethnic group, Other ethnic group &  22 & 0.24 \\ 
+   11 & Mixed, Any other mixed background &  30 & 0.35 \\ 
+   11 & White, British &  20 & 0.23 \\ 
+   11 & White, Any other white background &  13 & 0.15 \\ 
+   11 & Mixed, White and Asian &   9 & 0.10 \\ 
+   11 & Other ethnic group, Other ethnic group &   7 & 0.08 \\ 
+    & & & \\
+    & & & \\
+   \hline
+   \end{tabular}
+   \begin{tabular}[t]{rlrr}
+  \hline
+Cluster & EB & Count & Proportion \\ 
+  \hline
+12 & Other ethnic group, Other ethnic group &  90 & 0.74 \\ 
+   12 & Mixed, Any other mixed background &  15 & 0.12 \\ 
+   12 & White, Any other white background &  11 & 0.09 \\ 
+   13 & Chinese, Chinese & 1454 & 0.70 \\ 
+   13 & Other ethnic group, Other ethnic group & 323 & 0.16 \\ 
+   13 & Asian or Asian British, Any other Asian background & 232 & 0.11 \\ 
+   14 & Mixed, Any other mixed background & 114 & 0.29 \\ 
+   14 & Mixed, White and Asian &  93 & 0.23 \\ 
+   14 & Other ethnic group, Other ethnic group &  61 & 0.15 \\ 
+   14 & Asian or Asian British, Any other Asian background &  44 & 0.11 \\ 
+   14 & Chinese, Chinese &  31 & 0.08 \\ 
+   14 & White, British &  31 & 0.08 \\ 
+   15 & Asian or Asian British, Any other Asian background &  63 & 0.41 \\ 
+   15 & Other ethnic group, Other ethnic group &  63 & 0.41 \\ 
+   15 & Not Available &  22 & 0.14 \\ 
+   16 & White, Any other white background & 753 & 0.89 \\ 
+   16 & White, British &  53 & 0.06 \\ 
+   17 & White, British & 412206 & 0.95 \\ 
+   18 & Black or Black British, African & 773 & 0.77 \\ 
+   18 & Other ethnic group, Other ethnic group & 190 & 0.19 \\ 
+   19 & Black or Black British, Caribbean & 4143 & 0.56 \\ 
+   19 & Black or Black British, African & 2225 & 0.30 \\ 
+   19 & Other ethnic group, Other ethnic group & 602 & 0.08 \\ 
+   20 & White, British & 3778 & 0.93 \\ 
+   20 & White, Any other white background & 221 & 0.05 \\ 
+   21 & White, British & 7848 & 0.51 \\ 
+   21 & White, Any other white background & 7020 & 0.45 \\ 
+   22 & Mixed, White and Black Caribbean & 408 & 0.39 \\ 
+   22 & Mixed, White and Black African & 254 & 0.24 \\ 
+   22 & Mixed, Any other mixed background & 111 & 0.11 \\ 
+   22 & Black or Black British, Caribbean & 106 & 0.10 \\ 
+   22 & Other ethnic group, Other ethnic group &  69 & 0.07 \\ 
+   23 & Black or Black British, African &  95 & 0.54 \\ 
+   23 & Other ethnic group, Other ethnic group &  64 & 0.37 \\ 
+   24 & White, British & 3416 & 0.67 \\ 
+   24 & White, Any other white background & 646 & 0.13 \\ 
+   24 & Other ethnic group, Other ethnic group & 285 & 0.06 \\ 
+   25 & Other ethnic group, Other ethnic group & 100 & 0.29 \\ 
+   25 & Mixed, Any other mixed background &  83 & 0.24 \\ 
+   25 & Mixed, White and Black African &  24 & 0.07 \\ 
+   25 & Black or Black British, Caribbean &  23 & 0.07 \\ 
+   \hline
+\end{tabular}
+}
+\caption[Frequency of selected EB by cluster]{Frequency of selected EB by cluster for Figure~\ref{fig:ukb_hdbscan_labels}. Proportions refer to the proportion within the cluster. Categories with proportions below $0.05$ are not listed.}
+\label{table:supp_ukb_cluster_sieb} 
+\end{table} 
+
+\clearpage
+
+\begin{landscape}
+
+\begin{table}[!htbp] \centering 
+\tiny 
+%\rowcolors{1}{gray}{white}
+\rowcolors{5}{}{lightgray}
+%\begin{tabular}{@{\extracolsep{5pt}} ccccccccccc} 
+\begin{tabular}{ ccccccccccc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+Phenotype & Model & Caribbean & Indian & African & Any other Asian background & Not available & White & White and Black African & White and Black Caribbean & Bangladeshi \\ 
+\hline \\[-1.8ex] 
+FVC & PCA & 0.886 (n=78623) & 1.021 (n=134) & 1.601 (n=320) & 1.215 (n=293) & 0.83 (n=2876) & 1.329 (n=330) & 0.969 (n=2365) & 0.844 (n=197) & 1.081 (n=737) \\ 
+FVC & CLS & 0.891 (n=78623) & 1.029 (n=134) & 1.972 (n=320) & 1.209 (n=293) & 0.874 (n=2876) & 1.32 (n=330) & 0.969 (n=2365) & 0.844 (n=197) & 1.316 (n=737) \\ 
+FEV1 & PCA & 0.913 (n=78623) & 1.092 (n=134) & 1.612 (n=320) & 1.035 (n=293) & 0.854 (n=2876) & 1.21 (n=330) & 1.056 (n=2365) & 0.809 (n=197) & 0.981 (n=737) \\ 
+FEV1 & CLS & 0.917 (n=78623) & 1.085 (n=134) & 1.896 (n=320) & 0.997 (n=293) & 0.884 (n=2876) & 1.173 (n=330) & 1.058 (n=2365) & 0.791 (n=197) & 1.213 (n=737) \\ 
+Standing height & PCA & 0.951 (n=85995) & 1.03 (n=144) & 0.98 (n=350) & 0.831 (n=310) & 0.945 (n=3139) & 0.957 (n=348) & 0.916 (n=2606) & 0.913 (n=214) & 0.93 (n=809) \\ 
+Standing height & CLS & 0.965 (n=85995) & 0.969 (n=144) & 1.059 (n=350) & 0.806 (n=310) & 1.054 (n=3139) & 0.873 (n=348) & 0.922 (n=2606) & 0.972 (n=214) & 1.099 (n=809) \\ 
+BMI & PCA & 0.986 (n=85902) & 0.903 (n=144) & 1.181 (n=347) & 0.683 (n=310) & 0.956 (n=3136) & 1 (n=348) & 0.964 (n=2604) & 1.156 (n=214) & 1.067 (n=805) \\ 
+BMI & CLS & 0.989 (n=85902) & 0.823 (n=144) & 1.18 (n=347) & 0.666 (n=310) & 0.966 (n=3136) & 0.976 (n=348) & 0.964 (n=2604) & 1.197 (n=214) & 1.2 (n=805) \\ 
+Weight & PCA & 0.983 (n=85934) & 1.046 (n=144) & 1.129 (n=347) & 0.752 (n=310) & 0.967 (n=3136) & 0.929 (n=348) & 0.97 (n=2605) & 1.125 (n=214) & 1.122 (n=807) \\ 
+Weight & CLS & 0.984 (n=85934) & 0.943 (n=144) & 1.132 (n=347) & 0.728 (n=310) & 0.977 (n=3136) & 0.9 (n=348) & 0.972 (n=2605) & 1.138 (n=214) & 1.347 (n=807) \\ 
+Leukocyte count & PCA & 0.991 (n=83649) & 0.874 (n=142) & 1.176 (n=333) & 1.13 (n=302) & 0.909 (n=3050) & 0.843 (n=346) & 1.064 (n=2544) & 0.959 (n=210) & 1.021 (n=798) \\ 
+Leukocyte count & CLS & 0.992 (n=83649) & 0.827 (n=142) & 1.124 (n=333) & 1.041 (n=302) & 0.917 (n=3050) & 0.836 (n=346) & 1.063 (n=2544) & 0.871 (n=210) & 1.087 (n=798) \\ 
+Erythrocyte count & PCA & 0.971 (n=83652) & 0.844 (n=142) & 0.969 (n=333) & 1.525 (n=302) & 1.011 (n=3050) & 1.483 (n=346) & 1.004 (n=2544) & 1.113 (n=210) & 1.344 (n=798) \\ 
+Erythrocyte count & CLS & 0.975 (n=83652) & 0.803 (n=142) & 0.98 (n=333) & 1.505 (n=302) & 1.025 (n=3050) & 1.433 (n=346) & 1.004 (n=2544) & 0.957 (n=210) & 1.381 (n=798) \\ 
+Lymphocyte count & PCA & 0.982 (n=83505) & 0.874 (n=142) & 1.073 (n=333) & 1.061 (n=302) & 0.908 (n=3046) & 0.895 (n=345) & 1.042 (n=2539) & 0.763 (n=209) & 0.958 (n=794) \\ 
+Lymphocyte count & CLS & 0.983 (n=83505) & 0.831 (n=142) & 1.081 (n=333) & 0.959 (n=302) & 0.914 (n=3046) & 0.866 (n=345) & 1.039 (n=2539) & 0.778 (n=209) & 0.963 (n=794) \\ 
+Monocyte count & PCA & 0.995 (n=83505) & 1.808 (n=142) & 0.908 (n=333) & 0.908 (n=302) & 0.902 (n=3046) & 1.144 (n=345) & 1.049 (n=2539) & 1.752 (n=209) & 0.895 (n=794) \\ 
+Monocyte count & CLS & 0.995 (n=83505) & 1.848 (n=142) & 0.883 (n=333) & 0.851 (n=302) & 0.905 (n=3046) & 1.137 (n=345) & 1.048 (n=2539) & 1.747 (n=209) & 0.932 (n=794) \\ 
+Neutrophil count & PCA & 0.984 (n=83505) & 0.974 (n=142) & 1.19 (n=333) & 1.188 (n=302) & 0.909 (n=3046) & 0.939 (n=345) & 1.058 (n=2539) & 1.224 (n=209) & 1.102 (n=794) \\ 
+Neutrophil count & CLS & 0.985 (n=83505) & 0.922 (n=142) & 1.178 (n=333) & 1.11 (n=302) & 0.916 (n=3046) & 0.919 (n=345) & 1.053 (n=2539) & 1.127 (n=209) & 1.192 (n=794) \\ 
+Eosinophil count & PCA & 0.982 (n=83505) & 1.249 (n=142) & 0.997 (n=333) & 1.155 (n=302) & 0.892 (n=3046) & 1.992 (n=345) & 0.999 (n=2539) & 1.206 (n=209) & 1.136 (n=794) \\ 
+Eosinophil count & CLS & 0.982 (n=83505) & 1.101 (n=142) & 1.03 (n=333) & 1.111 (n=302) & 0.888 (n=3046) & 1.988 (n=345) & 0.996 (n=2539) & 1.091 (n=209) & 1.126 (n=794) \\ 
+Basophil count & PCA & 0.997 (n=83505) & 0.657 (n=142) & 0.736 (n=333) & 0.957 (n=302) & 0.757 (n=3046) & 1.209 (n=345) & 1.103 (n=2539) & 1.185 (n=209) & 1.122 (n=794) \\ 
+Basophil count & CLS & 0.998 (n=83505) & 0.618 (n=142) & 0.722 (n=333) & 0.956 (n=302) & 0.754 (n=3046) & 1.206 (n=345) & 1.097 (n=2539) & 1.114 (n=209) & 1.101 (n=794) \\ 
+\hline \\[-1.8ex] 
+\end{tabular} 
+\caption[Comparing phenotype models by EB (1)]{Comparing two phenotype models split by EB. One model (PCA) uses the top $40$ PCs to estimate phenotypes, while the other (CLS) uses a cluster-smoothed phenotype estimate from Algorithm~\ref{alg:regularization} in addition to the top $40$ PCs.}
+  \label{table:supp_mse1} 
+\end{table} 
+
+\end{landscape}
+
+\clearpage
+
+\begin{landscape}
+
+\begin{table}[!htbp] \centering 
+\tiny 
+\rowcolors{5}{}{lightgray}
+%\begin{tabular}{@{\extracolsep{5pt}} ccccccccccc} 
+\begin{tabular}{ ccccccccccc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+Phenotype & Model & Caribbean & Indian & African & Any other Asian background & Not available & White & White and Black African & White and Black Caribbean & Bangladeshi \\ 
+\hline \\[-1.8ex] 
+FVC & PCA & 1.364 (n=788) & 1.127 (n=1010) & 1.548 (n=589) & 1.106 (n=329) & 1.792 (n=76) & 1.576 (n=91) & 0.962 (n=84) & 1.17 (n=97) &  \\ 
+FVC & CLS & 1.365 (n=788) & 1.149 (n=1010) & 1.573 (n=589) & 1.214 (n=329) & 1.943 (n=76) & 1.411 (n=91) & 0.841 (n=84) & 1.16 (n=97) &  \\ 
+FEV1 & PCA & 1.071 (n=788) & 1.007 (n=1010) & 1.232 (n=589) & 1.127 (n=329) & 1.419 (n=76) & 1.92 (n=91) & 1.022 (n=84) & 1.044 (n=97) &  \\ 
+FEV1 & CLS & 1.085 (n=788) & 1.034 (n=1010) & 1.262 (n=589) & 1.243 (n=329) & 1.917 (n=76) & 1.687 (n=91) & 0.84 (n=84) & 1.051 (n=97) &  \\ 
+Standing height & PCA & 1.012 (n=868) & 0.992 (n=1073) & 0.987 (n=642) & 0.942 (n=358) & 1.171 (n=88) & 1.404 (n=103) & 0.83 (n=88) & 1.288 (n=111) & 0.884 (n=52) \\ 
+Standing height & CLS & 1.023 (n=868) & 1.011 (n=1073) & 0.993 (n=642) & 0.943 (n=358) & 1.17 (n=88) & 1.308 (n=103) & 0.872 (n=88) & 1.113 (n=111) & 0.864 (n=52) \\ 
+BMI & PCA & 1.23 (n=867) & 0.898 (n=1071) & 1.057 (n=641) & 0.842 (n=358) & 1.164 (n=86) & 1.212 (n=103) & 1.9 (n=87) & 1.357 (n=110) & 1.258 (n=52) \\ 
+BMI & CLS & 1.204 (n=867) & 0.889 (n=1071) & 1.055 (n=641) & 0.819 (n=358) & 1.061 (n=86) & 1.208 (n=103) & 1.691 (n=87) & 1.213 (n=110) & 0.775 (n=52) \\ 
+Weight & PCA & 1.241 (n=871) & 0.916 (n=1094) & 1.081 (n=642) & 0.828 (n=360) & 1.053 (n=86) & 1.264 (n=103) & 1.799 (n=87) & 1.211 (n=110) & 1.262 (n=52) \\ 
+Weight & CLS & 1.234 (n=871) & 0.922 (n=1094) & 1.108 (n=642) & 0.852 (n=360) & 0.988 (n=86) & 1.233 (n=103) & 1.579 (n=87) & 1.109 (n=110) & 0.823 (n=52) \\ 
+Leukocyte count & PCA & 1.14 (n=828) & 0.892 (n=1061) & 0.926 (n=636) & 0.993 (n=354) & 1.136 (n=84) & 1.262 (n=103) & 1.526 (n=89) & 1.155 (n=107) & 0.893 (n=50) \\ 
+Leukocyte count & CLS & 1.148 (n=828) & 0.884 (n=1061) & 0.914 (n=636) & 0.962 (n=354) & 1.205 (n=84) & 0.919 (n=103) & 1.25 (n=89) & 1.02 (n=107) & 0.596 (n=50) \\ 
+Erythrocyte count & PCA & 1.826 (n=828) & 1.301 (n=1061) & 1.504 (n=636) & 0.952 (n=354) & 1.026 (n=84) & 0.868 (n=103) & 1.355 (n=89) & 1.446 (n=107) & 2.186 (n=50) \\ 
+Erythrocyte count & CLS & 1.81 (n=828) & 1.306 (n=1061) & 1.507 (n=636) & 0.937 (n=354) & 0.955 (n=84) & 0.881 (n=103) & 1.185 (n=89) & 1.217 (n=107) & 1.156 (n=50) \\ 
+Lymphocyte count & PCA & 1.014 (n=826) & 1.138 (n=1060) & 0.93 (n=636) & 1.176 (n=354) & 0.893 (n=84) & 1.048 (n=103) & 1.053 (n=89) & 1.086 (n=107) & 1.356 (n=50) \\ 
+Lymphocyte count & CLS & 1.004 (n=826) & 1.135 (n=1060) & 0.914 (n=636) & 1.168 (n=354) & 0.801 (n=84) & 1.016 (n=103) & 1.041 (n=89) & 1.055 (n=107) & 0.549 (n=50) \\ 
+Monocyte count & PCA & 1.008 (n=826) & 1.069 (n=1060) & 0.944 (n=636) & 1.391 (n=354) & 0.986 (n=84) & 0.984 (n=103) & 1.004 (n=89) & 1.347 (n=107) & 1.817 (n=50) \\ 
+Monocyte count & CLS & 0.993 (n=826) & 1.063 (n=1060) & 0.929 (n=636) & 1.352 (n=354) & 0.922 (n=84) & 0.834 (n=103) & 0.93 (n=89) & 1.24 (n=107) & 1.242 (n=50) \\ 
+Neutrophil count & PCA & 1.223 (n=826) & 0.879 (n=1060) & 1.058 (n=636) & 0.992 (n=354) & 1.179 (n=84) & 1.177 (n=103) & 1.58 (n=89) & 1.147 (n=107) & 0.83 (n=50) \\ 
+Neutrophil count & CLS & 1.232 (n=826) & 0.878 (n=1060) & 1.027 (n=636) & 0.95 (n=354) & 1.27 (n=84) & 0.836 (n=103) & 1.287 (n=89) & 0.988 (n=107) & 0.678 (n=50) \\ 
+Eosinophil count & PCA & 1.277 (n=826) & 1.529 (n=1060) & 1.561 (n=636) & 1.616 (n=354) & 1.355 (n=84) & 0.838 (n=103) & 1.099 (n=89) & 1.131 (n=107) & 2.652 (n=50) \\ 
+Eosinophil count & CLS & 1.291 (n=826) & 1.514 (n=1060) & 1.543 (n=636) & 1.646 (n=354) & 1.412 (n=84) & 0.729 (n=103) & 0.904 (n=89) & 1.078 (n=107) & 2.28 (n=50) \\ 
+Basophil count & PCA & 0.954 (n=826) & 0.766 (n=1060) & 1.607 (n=636) & 0.532 (n=354) & 0.945 (n=84) & 2.296 (n=103) & 0.764 (n=89) & 0.942 (n=107) & 0.436 (n=50) \\ 
+Basophil count & CLS & 0.943 (n=826) & 0.767 (n=1060) & 1.622 (n=636) & 0.505 (n=354) & 0.955 (n=84) & 0.67 (n=103) & 0.675 (n=89) & 0.724 (n=107) & 0.399 (n=50) \\ 
+\hline \\[-1.8ex] 
+\end{tabular} 
+\caption[Comparing phenotype models by EB (2)]{Comparing two phenotype models split by EB. One model (PCA) uses the top $40$ PCs to estimate phenotypes, while the other (CLS) uses a cluster-smoothed phenotype estimate from Algorithm~\ref{alg:regularization} in addition to the top $40$ PCs.}
+  \label{table:supp_mse2} 
+\end{table} 
+
+\end{landscape}
