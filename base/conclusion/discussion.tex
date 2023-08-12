@@ -39,16 +39,20 @@ How PC adjustment affects GWAS?
 
 \section{Clustering in population genetics}
 
+Unlike problems like classification, clustering does not have a well-defined ground truth, and even the most basic definition, such as ``similar points are grouped together and dissimilar points are grouped separately'', can be self-contradictory\citep{ben-david_clustering_2018}. In a genetic cluster from \hyperref[chap:chapter4]{Chapter~4}, individuals in may be closely related to their immediate neighbours, but not to those in a far end of a cluster; they are grouped by similarity in one sense, but not separated by dissimilarity. Different inputs, algorithms, and parametrizations will yield different results. Though various quality metrics exist, even untrained humans excel at assessing arbitrary $2$D clustering\citep{lewis_human_2012}---there is an element of ``I know it when I see it''. Paired with auxiliary data, e.g. country of birth, we can explore population structure effectively.
+
 \begin{figure}[h]
 \centering
     \includegraphics[width=0.75\linewidth]{main_figures/discussion/magritte.png}
-\caption[The treachery of clustering]{\textbf{A cluster is only an abstraction, albeit a useful one.} Clusters and even the idea of a population are concepts that help us understand reality, but are not reality itself.}
+\caption[The treachery of clustering]{\textbf{A cluster is only an abstraction, albeit a useful one.}}
 \label{fig:magritte}
 \end{figure}
 
-Unlike problems like classification, clustering does not have a well-defined ground truth, and even the most basic definition, such as ``similar points are grouped together and dissimilar points are grouped separately'', can be self-contradictory\citep{ben-david_clustering_2018}. In a genetic cluster from \hyperref[chap:chapter4]{Chapter~4}, individuals in may be closely related to their immediate neighbours, but not to those in a far end of a cluster; they are grouped by similarity in one sense, but not separated by dissimilarity. Different inputs, algorithms, and parametrizations will yield different results. Though various quality metrics exist, even untrained humans excel at assessing arbitrary $2$D clustering\citep{lewis_human_2012}---there is an element of ``I know it when I see it''. Paired with auxiliary data, e.g. country of birth, we can explore population structure effectively.
+Clusters are a discrete categorical description of genetic ancestry---a continuous and multidimensional measure. A cluster is not a population, but an abstraction of one. Clusters that are clearly separated in one sample ultimately fall into a continuum among broader samples. Using categories arbitrarily risks reifying them and erroneously implying groups are homogeneous, and while \citep{lewis_getting_2022}. 
 
-Clustering population genetic data with several ethical considerations. The field 
+When using clusters, a key consideration is the motivation behind using them
+
+Clustering population genetic data comes with several ethical considerations.
 
 Still, a cluster is only an abstraction, and it falls to the researcher to navigate its application. The question of the appropriateness of a given clustering can be framed as whether it is useful in its context: whether it identifies interesting patterns; whether it simplifies the data; whether it can be used to investigate correlations with other variables, etc\citep{hennig_what_2015}. The choice of clustering method is often arbitrary, e.g. ``we use the standard method in the field''\citep{ben-david_clustering_2018}. In population genetics, standard strategies involve assigning an ancestry group, usually via $K$-means clustering on the top PCs or based on pre-defined proportions of inferred global ancestry proportions. 
 
@@ -63,14 +67,11 @@ This unsupervised learning approach is invaluable for generating and testing hyp
 
 This is a question of epistemology---
 
-There is no universal definition of a ``cluster'', and the idea of a ``good'' clustering will be domain-specific\citep{hennig_what_2015}.
 
 - discrete groupings are useful, like models --- and like models, they are prone to reification: the territory is not the map
 - the philosophy of unsupervised learning and clustering in general
 - we're finding something, it's probably not nothing
 - clusters confer on us an ability to generate and reject hypotheses about our data ``This raises a third and final reply to the vacuity objection—unsupervised learning models do not generally work in isolation. Instead, they are used in conjunction with a range of other methods to build evidence for or against particular conclusions.''
-
-\clearpage
 
 
 The UKB's nested structure, and how definitions shape our perceptions.
