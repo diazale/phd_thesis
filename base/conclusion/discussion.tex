@@ -10,10 +10,9 @@ With UMAP, we are able to map complex genetic structure down to $2$ or $3$ dimen
 
 There is also value in going beyond static $2$D figures. Software libraries such as plotly\citep{plotly} can generate interactive figures, are available for Python and R, and are straightforward to implement. Interactive exploration can assess how individual points fit within larger projections, rapidly identifying patterns or using them for diagnostics. Working in $3$D is much easier when the figures are interactive, and we have, e.g., explored the relationships between individuals and populations in the UKB. Finally, as noted in \hyperref[chap:chapter4]{Chapter~4}, clustering works well in dimensions abvoe $2$---while it can be tempting to delineate clusters from $2$D figures alone, the jump from $3$ to $2$ dimensions can lose information about how points are related to one another topologically. There is value in using information from higher dimensions to aid visualization in lower dimensions and, despite UMAP's now-widespread use, its ability to work in $3$ or more dimensions is, in the view of the author, underappreciated.
 
-%\section{The entangled biobank}
 \section{Implications for biomedical and epidemiological research}
 
-Biobanks are as complex as they are rich. Across visualizations in \hyperref[chap:chapter2]{Chapters~2} and \hyperref[chap:chapter4]{4}, we see complex patterns. Some appear quickly at the population level, as in Figure~\ref{fig:umap_height_female} where we see population-level differences in height; others require iterative smoothing, such as  Figure~\ref{fig:smoothed_phenos} where we see residual structure in phenotypes after removing the effects of the top $40$ PCs. These patterns also appear in behavioural measures, such as smoking in Figure~\ref{fig:supp_ukb_smoking}. Figures~\ref{fig:supp_montage_ukbb_ns} and \ref{fig:supp_montage_ukbb_ew} show how geographic structure is closely tied to genetic structure. Using variables like admixture proportions, country of birth, immigration history, environmental data, etc, underscore the difficulty of disentangling genetic and environmental effects becomes evident. Patterns between population structure and phenotypes do not necessarily imply an underlying genetic architecture. Imagine, for example, a population fully exposed to a pollutant that leads to a disease, which would lead us to erroneously conclude that the disease has a genetic basis.
+Biobanks are as complex as they are rich. Across visualizations in \hyperref[chap:chapter2]{Chapters~2} and \hyperref[chap:chapter4]{4}, we see patterns. Some appear quickly at the population level, as in Figure~\ref{fig:umap_height_female} where we see population-level differences in height; others require iterative smoothing, such as  Figure~\ref{fig:smoothed_phenos} where we see residual structure in phenotypes after removing the effects of the top $40$ PCs. These patterns also appear in behavioural measures, such as smoking in Figure~\ref{fig:supp_ukb_smoking}. Figures~\ref{fig:supp_montage_ukbb_ns} and \ref{fig:supp_montage_ukbb_ew} show how geographic structure is closely tied to genetic structure. Using variables like admixture proportions, country of birth, immigration history, environmental data, etc, underscore the difficulty of disentangling genetic and environmental effects becomes evident. %Patterns between population structure and phenotypes do not necessarily imply an underlying genetic architecture. Imagine, for example, a population fully exposed to a pollutant that leads to a disease, which would lead us to erroneously conclude that the disease has a genetic basis.
 
 Approximately $86\%$ of genomic studies by 2021 were based on individuals of European ancestry, an increase from $81\%$ in 2016\citep{fatumo_roadmap_2022,kaplan_polygenic_2022}. Many studies have data from non-European individuals (there are thousands within the UKB, for example) but discard data citing concerns around low sample sizes or issues with population structure\citep{ben-eghan_dont_2020}. In principle, an approach using UMAP and HDBSCAN($\hat{\epsilon}$) could alleviate some of these problems: first, by defining study populations, and second, by revealing fine-scale population structure and its many correlates. This has several advantages over methods based on, e.g. $K$-means clustering: it clusters all or almost all individuals, even those with, e.g., recent admixture; it is does not require assumptions about $K$; it does not require reference panels; its assumptions of the structure of genetic data are more realistic. It also has advantages over variables like self-identification or country of birth that, though sometimes used as proxies for population structure, are not actually genetic information--- even then, we see in \hyperref[chap:chapter4]{Chapter 4} that there is differential response in identification with, e.g., many individuals from non-majority populations simply identifying as ``other''.
 
@@ -36,27 +35,31 @@ Approximately $86\%$ of genomic studies by 2021 were based on individuals of Eur
 
 In inferential statistics, we require some definitions of ``population'', shown in Figure~\ref{fig:statistical_populations} . To establish the scope of study we define a target population (the group to whom the research applies) and the study population (the group which is covered by the study and is, ideally, drawn from the target population)\citep{statcan2003}. Biobanks are generally not random samples of a population and suffer from selection bias\citep{huang_representativeness_2021}; there are genetic biases in enrolment itself\citep{pirastu_genetic_2021,benonisdottir_studying_2023}. The target population for a study may be, e.g., all European-ancestry individuals---but if there is significant bias in the composition of a biobank, the study population is not aligned with the target population and the inference may not be reliable. As such, though we have a methodology to define populations, any analyses are necessarily conditioned on the data sources themselves.
 
-\section{Clusters and populations}
+How PC adjustment affects GWAS?
+
+\section{Clustering in population genetics}
 
 \begin{figure}[h]
 \centering
     \includegraphics[width=0.75\linewidth]{main_figures/discussion/magritte.png}
-\caption[The treachery of clustering]{\textbf{A cluster is an abstraction, albeit a useful one.} Clusters and even the idea of a population are concepts that help us understand reality, but are not reality itself.}
+\caption[The treachery of clustering]{\textbf{A cluster is only an abstraction, albeit a useful one.} Clusters and even the idea of a population are concepts that help us understand reality, but are not reality itself.}
 \label{fig:magritte}
 \end{figure}
 
-Unlike problems like classification, clustering does not have a well-defined ground truth, and even the most basic definition, such as ``similar points are grouped together and dissimilar points are grouped separately'', can be self-contradictory\citep{ben-david_clustering_2018}. In a genetic cluster from \hyperref[chap:chapter4]{Chapter~4}, individuals in may be closely related to their immediate neighbours, but not to those in a far end of a cluster; they are grouped by similarity in one sense, but not separated by dissimilarity. Different inputs, algorithms, and parametrizations will yield different results. Though various quality metrics exist, even untrained humans excel at assessing arbitrary $2$D clustering\citep{lewis_human_2012}---there is an element of ``I know it when I see it''. 
+Unlike problems like classification, clustering does not have a well-defined ground truth, and even the most basic definition, such as ``similar points are grouped together and dissimilar points are grouped separately'', can be self-contradictory\citep{ben-david_clustering_2018}. In a genetic cluster from \hyperref[chap:chapter4]{Chapter~4}, individuals in may be closely related to their immediate neighbours, but not to those in a far end of a cluster; they are grouped by similarity in one sense, but not separated by dissimilarity. Different inputs, algorithms, and parametrizations will yield different results. Though various quality metrics exist, even untrained humans excel at assessing arbitrary $2$D clustering\citep{lewis_human_2012}---there is an element of ``I know it when I see it''. Paired with auxiliary data, e.g. country of birth, we can explore population structure effectively.
 
-The question of the appropriateness of a given clustering can be framed as whether it is useful in its context: whether it identifies interesting patterns (without necessarily assigning interpretation); whether it simplifies data; investigation correlations with other variables, etc\citep{hennig_what_2015}. The choice of clustering method is often arbitrary, e.g. ``we use the standard method in the field''\citep{ben-david_clustering_2018}, and this has resulted in standards that exclude individuals from analyses\citep{ding_polygenic_2023}. We have demonstrated that density clustering successfully includes all or almost all individuals in several biobanks and that the clusters generated reflect logical groupings.
-\citep{hennig_what_2015}
+Clustering population genetic data with several ethical considerations. The field 
 
-Though UMAP appears to preserve structure, at least visually, it is only one representation of very complex high-dimensional data points and the relationships between them. HDBSCAN($\hat{\epsilon}$) extracts clusters that correspond to our knowledge of population structure, but again they are only an abstraction and should not be reified. They are abstractions that, ideally, represent some underlying truth---they are maps of an unknown (unknowable?) territory; this map cannot be confused with the territory itself. 
+Still, a cluster is only an abstraction, and it falls to the researcher to navigate its application. The question of the appropriateness of a given clustering can be framed as whether it is useful in its context: whether it identifies interesting patterns; whether it simplifies the data; whether it can be used to investigate correlations with other variables, etc\citep{hennig_what_2015}. The choice of clustering method is often arbitrary, e.g. ``we use the standard method in the field''\citep{ben-david_clustering_2018}. In population genetics, standard strategies involve assigning an ancestry group, usually via $K$-means clustering on the top PCs or based on pre-defined proportions of inferred global ancestry proportions. 
 
-Structure may be subtle and arise from, e.g., recent population structure or admixture\citep{gopalan_human_2022}
+Though UMAP appears to preserve structure, at least visually, it is only one representation of very complex high-dimensional data points and the relationships between them. HDBSCAN($\hat{\epsilon}$) extracts clusters that correspond to our knowledge of population structure, but again they are only an abstraction and should not be reified. They are abstractions that, ideally, represent some underlying truth---they are maps of an unknown territory, not the territory itself.
+
+This unsupervised learning approach is invaluable for generating and testing hypotheses\citep{watson_philosophy_2023}.
+
+
+, and this has resulted in standards that exclude individuals from analyses\citep{ding_polygenic_2023}.
 
 ``Empirical'' is not the same as ``objective''
-
-\citep{lewis_human_2012}
 
 This is a question of epistemology---
 
@@ -70,26 +73,10 @@ There is no universal definition of a ``cluster'', and the idea of a ``good'' cl
 \clearpage
 
 
-
-
-
-
-\section{Implications for GWAS and PGS}
-
-used k-means\citep{sun_analyses_2022}
-
-genetics of participants may not match non-participants
-\citep{benonisdottir_studying_2023}
-
 The UKB's nested structure, and how definitions shape our perceptions.
 
-How PC adjustment affects GWAS.
-
-Don't just filter out ``other'' groups
 
 
-
-Biases in biobanks?
 
 The meanings of structure, biological essentialism, and the shadow of eugenics.
 
