@@ -10,10 +10,30 @@ With UMAP, we are able to map complex genetic structure down to $2$ or $3$ dimen
 
 There is also value in going beyond static $2$D figures. Software libraries such as plotly\citep{plotly} can generate interactive figures, are available for Python and R, and are straightforward to implement. Interactive exploration can assess how individual points fit within larger projections, rapidly identifying patterns or using them for diagnostics. Working in $3$D is much easier when the figures are interactive, and we have, e.g., explored the relationships between individuals and populations in the UKB. Finally, as noted in \hyperref[chap:chapter4]{Chapter~4}, clustering works well in dimensions abvoe $2$---while it can be tempting to delineate clusters from $2$D figures alone, the jump from $3$ to $2$ dimensions can lose information about how points are related to one another topologically. There is value in using information from higher dimensions to aid visualization in lower dimensions and, despite UMAP's now-widespread use, its ability to work in $3$ or more dimensions is, in the view of the author, underappreciated.
 
-\section{The entangled biobank}
+%\section{The entangled biobank}
+\section{Implications for biomedical and epidemiological research}
 
-Biobanks are as complex as they are rich. Across visualizations in \hyperref[chap:chapter2]{Chapters~2} and \hyperref[chap:chapter4]{4}, we see complex patterns. Some appear quickly at the population level, as in Figure~\ref{fig:umap_height_female} where we see population-level differences in height; others require iterative smoothing, such as  Figure~\ref{fig:smoothed_phenos} where we see residual structure in phenotypes after removing the effects of the top $40$ PCs. These patterns also appear in behavioural measures, such as smoking in Figure~\ref{fig:supp_ukb_smoking}. Adding geographic data,migration histories,  and other variables to the mix, the difficulty of disentangling the genetic and environmental effects becomes more evident.
+Biobanks are as complex as they are rich. Across visualizations in \hyperref[chap:chapter2]{Chapters~2} and \hyperref[chap:chapter4]{4}, we see complex patterns. Some appear quickly at the population level, as in Figure~\ref{fig:umap_height_female} where we see population-level differences in height; others require iterative smoothing, such as  Figure~\ref{fig:smoothed_phenos} where we see residual structure in phenotypes after removing the effects of the top $40$ PCs. These patterns also appear in behavioural measures, such as smoking in Figure~\ref{fig:supp_ukb_smoking}. Figures~\ref{fig:supp_montage_ukbb_ns} and \ref{fig:supp_montage_ukbb_ew} show how geographic structure is closely tied to genetic structure. Using variables like admixture proportions, country of birth, immigration history, environmental data, etc, the difficulty of disentangling genetic and environmental effects becomes evident.
 
+As the typical sources of GWAS and PGS data, the biases of biobanks are continually studied. Approximately $86\%$ of genomic studies by 2021 were based on individuals of European ancestry, an increase from $81\%$ in 2016\citep{fatumo_roadmap_2022}. Many studies have data from non-European individuals (there are thousands within the UKB, for example) but discard data citing concerns around low sample sizes or issues with population structure\citep{ben-eghan_dont_2020}. In principle, an approach using UMAP and HDBSCAN($\hat{\epsilon}$) could alleviate some of these problems: first, by defining study populations, and second, by revealing fine-scale population structure and its many correlates. This has several advantages over methods based on, e.g. $K$-means clustering: it clusters all or almost all individuals, even those with, e.g., recent admixture; it is does not require assumptions about $K$; it does not require reference panels; its assumptions of the structure of genetic data are more realistic.
+
+Patterns 
+
+
+
+
+. Much has been written about the biases 
+
+- we probably can't big-data our way out of this
+
+- going in a few directions here: EUR bias in studies, selection bias in biobanks, collider bias and confounding related to population structure --- eye on the prize!
+
+General a biobank is not a random sample of its population.
+
+
+Structure may be subtle and arise from, e.g., recent population structure or admixture\citep{gopalan_human_2022}
+
+Bigger data is not better data. We cannot just collect our way out of this --- we need to understand what it is that we are doing and what we are working with.
 
 
 
@@ -27,12 +47,13 @@ Biobanks are as complex as they are rich. Across visualizations in \hyperref[cha
 
 \clearpage
 
+
 \section{Clusters and populations}
 
 \begin{figure}[h]
 \centering
     \includegraphics[width=0.75\linewidth]{main_figures/discussion/magritte.png}
-\caption[The treachery of clustering]{\textbf{The treachery of clustering.} Clusters and even the idea of a population are concepts that help us understand reality, but are not reality itself.}
+\caption[The treachery of clustering]{\textbf{A cluster is an abstraction, albeit a useful one.} Clusters and even the idea of a population are concepts that help us understand reality, but are not reality itself.}
 \label{fig:magritte}
 \end{figure}
 
@@ -98,9 +119,6 @@ In practice, biobank inference is often based on a form of non-probability sampl
 [talk about popgen, biobanks, assumptions, etc]
 
 
-Structure may be subtle and arise from, e.g., recent population structure or admixture\citep{gopalan_human_2022}
-
-Bigger data is not better data. We cannot just collect our way out of this --- we need to understand what it is that we are doing and what we are working with.
 
 
 
