@@ -13,40 +13,28 @@ There is also value in going beyond static $2$D figures. Software libraries such
 %\section{The entangled biobank}
 \section{Implications for biomedical and epidemiological research}
 
-Biobanks are as complex as they are rich. Across visualizations in \hyperref[chap:chapter2]{Chapters~2} and \hyperref[chap:chapter4]{4}, we see complex patterns. Some appear quickly at the population level, as in Figure~\ref{fig:umap_height_female} where we see population-level differences in height; others require iterative smoothing, such as  Figure~\ref{fig:smoothed_phenos} where we see residual structure in phenotypes after removing the effects of the top $40$ PCs. These patterns also appear in behavioural measures, such as smoking in Figure~\ref{fig:supp_ukb_smoking}. Figures~\ref{fig:supp_montage_ukbb_ns} and \ref{fig:supp_montage_ukbb_ew} show how geographic structure is closely tied to genetic structure. Using variables like admixture proportions, country of birth, immigration history, environmental data, etc, the difficulty of disentangling genetic and environmental effects becomes evident.
+Biobanks are as complex as they are rich. Across visualizations in \hyperref[chap:chapter2]{Chapters~2} and \hyperref[chap:chapter4]{4}, we see complex patterns. Some appear quickly at the population level, as in Figure~\ref{fig:umap_height_female} where we see population-level differences in height; others require iterative smoothing, such as  Figure~\ref{fig:smoothed_phenos} where we see residual structure in phenotypes after removing the effects of the top $40$ PCs. These patterns also appear in behavioural measures, such as smoking in Figure~\ref{fig:supp_ukb_smoking}. Figures~\ref{fig:supp_montage_ukbb_ns} and \ref{fig:supp_montage_ukbb_ew} show how geographic structure is closely tied to genetic structure. Using variables like admixture proportions, country of birth, immigration history, environmental data, etc, underscore the difficulty of disentangling genetic and environmental effects becomes evident. Patterns between population structure and phenotypes do not necessarily imply an underlying genetic architecture. Imagine, for example, a population fully exposed to a pollutant that leads to a disease, which would lead us to erroneously conclude that the disease has a genetic basis.
 
-As the typical sources of GWAS and PGS data, the biases of biobanks are continually studied. Approximately $86\%$ of genomic studies by 2021 were based on individuals of European ancestry, an increase from $81\%$ in 2016\citep{fatumo_roadmap_2022}. Many studies have data from non-European individuals (there are thousands within the UKB, for example) but discard data citing concerns around low sample sizes or issues with population structure\citep{ben-eghan_dont_2020}. In principle, an approach using UMAP and HDBSCAN($\hat{\epsilon}$) could alleviate some of these problems: first, by defining study populations, and second, by revealing fine-scale population structure and its many correlates. This has several advantages over methods based on, e.g. $K$-means clustering: it clusters all or almost all individuals, even those with, e.g., recent admixture; it is does not require assumptions about $K$; it does not require reference panels; its assumptions of the structure of genetic data are more realistic.
+Approximately $86\%$ of genomic studies by 2021 were based on individuals of European ancestry, an increase from $81\%$ in 2016\citep{fatumo_roadmap_2022,kaplan_polygenic_2022}. Many studies have data from non-European individuals (there are thousands within the UKB, for example) but discard data citing concerns around low sample sizes or issues with population structure\citep{ben-eghan_dont_2020}. In principle, an approach using UMAP and HDBSCAN($\hat{\epsilon}$) could alleviate some of these problems: first, by defining study populations, and second, by revealing fine-scale population structure and its many correlates. This has several advantages over methods based on, e.g. $K$-means clustering: it clusters all or almost all individuals, even those with, e.g., recent admixture; it is does not require assumptions about $K$; it does not require reference panels; its assumptions of the structure of genetic data are more realistic. It also has advantages over variables like self-identification or country of birth that, though sometimes used as proxies for population structure, are not actually genetic information--- even then, we see in \hyperref[chap:chapter4]{Chapter 4} that there is differential response in identification with, e.g., many individuals from non-majority populations simply identifying as ``other''.
 
-Patterns 
+\begin{figure}[ht]
+\centering
+\begin{subfigure}{0.45\linewidth}
+    \includegraphics[width=\linewidth]{main_figures/discussion/populations_1.png}
+    \caption{}
+    \label{fig:statistical_populations1}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.45\linewidth}
+    \includegraphics[width=\linewidth]{main_figures/discussion/populations_2.png}
+    \caption{}
+    \label{fig:statistical_populations2}
+\end{subfigure}
+\caption[The relationship between target and study populations]{\textbf{The study population should match the target population.} In \textbf{(a)}, the study population is a subset of the target population, so inferences drawn from it will apply to the target population. In \textbf{(b)}, the study population is not fully a subset of the target population, so its inferences will be less reliable.}
+\label{fig:statistical_populations}
+\end{figure}
 
-
-
-
-. Much has been written about the biases 
-
-- we probably can't big-data our way out of this
-
-- going in a few directions here: EUR bias in studies, selection bias in biobanks, collider bias and confounding related to population structure --- eye on the prize!
-
-General a biobank is not a random sample of its population.
-
-
-Structure may be subtle and arise from, e.g., recent population structure or admixture\citep{gopalan_human_2022}
-
-Bigger data is not better data. We cannot just collect our way out of this --- we need to understand what it is that we are doing and what we are working with.
-
-
-
-
- while allowing the viewer to maintain some idea of the scale of the populations in mind. 
-
--bias in biobanks
--collider bias
--complexity
--some signal definitely exists across populations (selection for sickle cell, e.g., high altitude, deep diving, etc) but there is just so much variation in other variables that it's hard to keep track of
-
-\clearpage
-
+In inferential statistics, we require some definitions of ``population'', shown in Figure~\ref{fig:statistical_populations} . To establish the scope of study we define a target population (the group to whom the research applies) and the study population (the group which is covered by the study and is, ideally, drawn from the target population)\citep{statcan2003}. Biobanks are generally not random samples of a population and suffer from selection bias\citep{huang_representativeness_2021}; there are genetic biases in enrolment itself\citep{pirastu_genetic_2021,benonisdottir_studying_2023}. The target population for a study may be, e.g., all European-ancestry individuals---but if there is significant bias in the composition of a biobank, the study population is not aligned with the target population and the inference may not be reliable. As such, though we have a methodology to define populations, any analyses are necessarily conditioned on the data sources themselves.
 
 \section{Clusters and populations}
 
@@ -64,7 +52,7 @@ The question of the appropriateness of a given clustering can be framed as wheth
 
 Though UMAP appears to preserve structure, at least visually, it is only one representation of very complex high-dimensional data points and the relationships between them. HDBSCAN($\hat{\epsilon}$) extracts clusters that correspond to our knowledge of population structure, but again they are only an abstraction and should not be reified. They are abstractions that, ideally, represent some underlying truth---they are maps of an unknown (unknowable?) territory; this map cannot be confused with the territory itself. 
 
-
+Structure may be subtle and arise from, e.g., recent population structure or admixture\citep{gopalan_human_2022}
 
 ``Empirical'' is not the same as ``objective''
 
@@ -81,54 +69,12 @@ There is no universal definition of a ``cluster'', and the idea of a ``good'' cl
 
 \clearpage
 
-\section{Defining populations}
-
-\begin{figure}[h]
-\centering
-\begin{subfigure}{0.45\linewidth}
-    \includegraphics[width=\linewidth]{main_figures/discussion/populations_1.png}
-    \caption{}
-    \label{fig:statistical_populations1}
-\end{subfigure}
-\hfill
-\begin{subfigure}{0.45\linewidth}
-    \includegraphics[width=\linewidth]{main_figures/discussion/populations_2.png}
-    \caption{}
-    \label{fig:statistical_populations2}
-\end{subfigure}
-\caption[The relationship between target and study populations]{\textbf{The study population should match the target population.} In \textbf{(a)}, the study population is a subset of the target population, so inferences drawn from it will apply to the target population. In \textbf{(b)}, the study population is not fully a subset of the target population, so its inferences will be less reliable.}
-\label{fig:statistical_populations}
-\end{figure}
-
-Though genetic variation exists on a multidimensional continuum, defining discrete populations can be useful, e.g. for modelling ancestry\citep{pritchard_inference_2000}. In inferential statistics, we also require a definition of ``population''\citep{statcan2003}. To establish the scope of a study, we define the ``target population'' (the group to which research applies) and the ``survey population'' (the group which is covered by the study and, ideally, is very similar to the target population). The survey population is ultimately chosen from the survey frame, which provides the means to sample the individuals from the population. Figure~\ref{fig:statistical_populations} provides a schematic of this concept, as well as a schematic of when the study population is not drawn from the target population.
 
 
-
-Pgh1: Biobanks are the sources of biomedical studies, but how do they define their study populations and how do they define their target populations? Also point out that the studies done are not random samples from the target population but volunteer-based non-random samples. Then mention some of the associates found between markers and participationi n the UKB.
-
-Pgh2: The way we define populations is pretty archaic and not great. Segue into hte next section (subsection?) where we discuss the histories of these ideas
-
-Biobanks are the source of many biomedical studies, particularly GWAS and PGS. 
-
-This principle applies to inferences and studies based on biobanks. 
-
-In practice, biobank inference is often based on a form of non-probability sampling. 
-
--COB, ethnicity, biobank selection and ascertainment bias, etc
-
-[talk about popgen, biobanks, assumptions, etc]
-
-
-
-
-
-Though clustering is often viewed as a statistical or computational method, it has topological underpinnings as well.
 
 
 
 \section{Implications for GWAS and PGS}
-
-One of the promises of genomics is deciphering the genetic architecture of complex traits and illness. Unfortunately, the overwhelming majority of studies have been limited to European populations\citep{fatumo_roadmap_2022}\citep{kaplan_polygenic_2022}. Some oft-cited concerns include confounding from population structure and a lack of power from sample size of non-European individuals\citep{ben-eghan_dont_2020}. 
 
 used k-means\citep{sun_analyses_2022}
 
@@ -141,7 +87,7 @@ How PC adjustment affects GWAS.
 
 Don't just filter out ``other'' groups
 
-Sick people and sick populations\citep{rose_sick_2001}
+
 
 Biases in biobanks?
 
