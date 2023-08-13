@@ -266,7 +266,7 @@
 %
 %%%%%%%%%%%%%%%%%%%
 
-\begin{refsection}
+
 \part{Introduction and literature review}
 \label{part:intro}
 
@@ -289,11 +289,12 @@
 \hspace{0pt}
 \pagebreak
 
+%\begin{refsection}
 \unchapter{Introduction}
 \chapter*{Chapter 1: Introduction}
 \input{base/intro/intro.tex}
-\printbibliography[heading=subbibintoc]
-\end{refsection}
+%\printbibliography[heading=subbibintoc]
+%\end{refsection}
 
 %%%%%%%%%%%%%%%%%%%
 %
@@ -330,6 +331,8 @@
 \label{chap:chapter2}
 \input{base/chapter2/chapter2_preface.tex}
 \input{base/chapter2/chapter2.tex}
+\cleardoublepage
+\phantomsection
 \begin{singlespace}
 \printbibliography[heading=subbibintoc]
 \end{singlespace}
@@ -341,6 +344,8 @@
 \label{chap:chapter3}
 \input{base/chapter3/chapter3_preface.tex}
 \input{base/chapter3/chapter3.tex}
+\cleardoublepage
+\phantomsection
 \begin{singlespace}
 \printbibliography[heading=subbibintoc]
 \end{singlespace}
@@ -352,6 +357,8 @@
 \label{chap:chapter4}
 \input{base/chapter4/chapter4_preface.tex}
 \input{base/chapter4/chapter4.tex}
+\cleardoublepage
+\phantomsection
 \begin{singlespace}
 \printbibliography[heading=subbibintoc]
 \end{singlespace}
@@ -383,7 +390,7 @@
 \hspace{0pt}
 \pagebreak
 
-\begin{refsection}
+%\begin{refsection}
 \unchapter{Discussion}
 \chapter*{Chapter 5: Discussion}
 \label{chap:discussion}
@@ -393,8 +400,11 @@
 \chapter*{Chapter 6: Conclusion}
 \label{chap:conclusion}
 \input{base/conclusion/conclusion.tex}
-\printbibliography[heading=subbibintoc]
-\end{refsection}
+\cleardoublepage
+\phantomsection
+\addcontentsline{toc}{chapter}{General references}
+\printbibliography[keyword = mainbib]%, heading=subbibintoc]
+%\end{refsection}
 
 
 %\begin{onehalfspacing}
@@ -410,9 +420,9 @@
 %%%%%%%%%%%%%%%%%%%
 
 
-\chaptermark{{\rm\bfseries Bibliography}}
-\addcontentsline{toc}{chapter}{Bibliography}
-\addcontentsline{toc}{chapter}{\numberline{}\rm\bfseries{Bibliography}}
+%\chaptermark{{\rm\bfseries Bibliography}}
+%\addcontentsline{toc}{chapter}{Bibliography}
+%\addcontentsline{toc}{chapter}{\numberline{}\rm\bfseries{Bibliography}}
 
 
 
