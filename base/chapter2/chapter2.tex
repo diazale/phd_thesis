@@ -248,6 +248,14 @@ We thank all participants in the HRS, UKBB, and 1KGP for providing their genetic
 
 \section{Supporting information}
 
+\makeatletter
+\renewcommand\thetable{\@arabic\c@chapter s\@arabic\c@table}
+\renewcommand \thefigure{\@arabic\c@chapter s\@arabic\c@figure}
+\makeatother
+
+\setcounter{figure}{0}  
+\setcounter{table}{0}
+
 \input{base/chapter2/chapter2_supp.tex}
 
 \clearpage

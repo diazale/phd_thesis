@@ -358,6 +358,14 @@ We visualize the data in Figure~\ref{fig:smoothed_phenos} with the values $ e_{p
 
 \clearpage
 
+\makeatletter
+\renewcommand\thetable{\@arabic\c@chapter s\@arabic\c@table}
+\renewcommand \thefigure{\@arabic\c@chapter s\@arabic\c@figure}
+\makeatother
+
+\setcounter{figure}{0}  
+\setcounter{table}{0}
+
 \input{base/chapter4/chapter4_supp.tex}
 
 \clearpage
