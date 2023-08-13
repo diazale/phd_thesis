@@ -35,8 +35,6 @@ Approximately $86\%$ of genomic studies by 2021 were based on individuals of Eur
 
 In inferential statistics, we require some definitions of ``population'', shown in Figure~\ref{fig:statistical_populations} . To establish the scope of study we define a target population (the group to whom the research applies) and the study population (the group which is covered by the study and is, ideally, drawn from the target population)\citep{statcan2003}. Biobanks are generally not random samples of a population and suffer from selection bias\citep{huang_representativeness_2021}; there are genetic biases in enrolment itself\citep{pirastu_genetic_2021,benonisdottir_studying_2023}. The target population for a study may be, e.g., all European-ancestry individuals---but if there is significant bias in the composition of a biobank, the study population is not aligned with the target population and the inference may not be reliable. As such, though we have a methodology to define populations, any analyses are necessarily conditioned on the data sources themselves.
 
-How PC adjustment affects GWAS?
-
 \section{Clustering in population genetics}
 
 Unlike problems like classification, clustering does not have a well-defined ground truth, and even the most basic definition, such as ``similar points are grouped together and dissimilar points are grouped separately'', can be self-contradictory\citep{ben-david_clustering_2018}. In a genetic cluster from \hyperref[chap:chapter4]{Chapter~4}, individuals in may be closely related to their immediate neighbours, but not to those in a far end of a cluster; they are grouped by similarity in one sense, but not separated by dissimilarity. Different inputs, algorithms, and parametrizations will yield different results. Though various quality metrics exist, even untrained humans excel at assessing arbitrary $2$D clustering\citep{lewis_human_2012}---there is an element of ``I know it when I see it''. Paired with auxiliary data, e.g. country of birth, we can explore population structure effectively.
@@ -48,51 +46,19 @@ Unlike problems like classification, clustering does not have a well-defined gro
 \label{fig:magritte}
 \end{figure}
 
-Clusters are a discrete categorical description of genetic ancestry---a continuous and multidimensional measure. A cluster is not a population, but an abstraction of one. Clusters that are clearly separated in one sample ultimately fall into a continuum among broader samples. Using categories arbitrarily risks reifying them and erroneously implying groups are homogeneous, and while \citep{lewis_getting_2022}. 
+Clusters are a discrete description of genetic ancestry, which is a continuous and multidimensional variable. Clusters that are clearly separated in one sample will ultimately fall into a continuum among larger and more diverse samples\citep{lewis_getting_2022}. We have seen through this thesis that clusters can split, merge, reappear, or disappear, in the same vein that objects may appear or disappear in microscopy depending on the depth and focus and type of microscope used. It would be folly to look at, e.g., a $2$D slice of a single cell and its sub-cellular components at one single time point and to conclude that this image defines the ``real'' cell. It is, however, a useful representation of the structure of the cell---provided we keep in mind that everything we see is conditioned on the sample (e.g. the cell type and state, the health of the organism, the environment in which the cell is viewed, etc).
 
-When using clusters, a key consideration is the motivation behind using them
+These same conditions apply to data. Data sets do not spring forth naturally; they are sampled, collected, processed, and are products of societies and institutions situated within their own contexts and biases\citep{dignazio_data_2020}. Population labels are an excellent example, since we often use them as shorthand for clusters and populations. In the UKB, there are $20$ unique values for ``ethnic background'' (see Table~\ref{table:ukb_eb_options}) and they are selected in a nested manner (first you select from a list of ``ethnic groups'', then from a second list of ``ethnic backgrounds''). It is not possible to identify as, for example, ``Chinese British'' or ``Mixed Black and Asian''. In British English, ``Asian'' typically refers to individuals with South Asian ancestry, while in American English, it refers to East Asian. These details shape our perceptions of our own work. When we work with clusters and we use labels, we are drawing a map of an unknown territory.
 
-Clustering population genetic data comes with several ethical considerations.
+It is erroneous to describe clusters as ``objective'' measures of human population structure, both for the aforementioned reasons, and also because clustering changes based on many subjective inputs: algorithms, hyperparameters, subsets of data, etc\citep{watson_philosophy_2023}. The cost of epistemological ignorance here varies, but at its most extreme, it can lead to misuse and misinterpretation by extremist and racist movements\citep{panofsky_genetic_2019,panofsky_how_2021}. Like any powerful tools, we must understand the strengths and limitations of dimensionality reduction and clustering in population genetics and use it responsibly, particularly for visualizations\citep{carlson_counter_2022}.
 
-Still, a cluster is only an abstraction, and it falls to the researcher to navigate its application. The question of the appropriateness of a given clustering can be framed as whether it is useful in its context: whether it identifies interesting patterns; whether it simplifies the data; whether it can be used to investigate correlations with other variables, etc\citep{hennig_what_2015}. The choice of clustering method is often arbitrary, e.g. ``we use the standard method in the field''\citep{ben-david_clustering_2018}. In population genetics, standard strategies involve assigning an ancestry group, usually via $K$-means clustering on the top PCs or based on pre-defined proportions of inferred global ancestry proportions. 
-
-Though UMAP appears to preserve structure, at least visually, it is only one representation of very complex high-dimensional data points and the relationships between them. HDBSCAN($\hat{\epsilon}$) extracts clusters that correspond to our knowledge of population structure, but again they are only an abstraction and should not be reified. They are abstractions that, ideally, represent some underlying truth---they are maps of an unknown territory, not the territory itself.
-
-This unsupervised learning approach is invaluable for generating and testing hypotheses\citep{watson_philosophy_2023}.
-
-
-, and this has resulted in standards that exclude individuals from analyses\citep{ding_polygenic_2023}.
-
-``Empirical'' is not the same as ``objective''
-
-This is a question of epistemology---
-
-
-- discrete groupings are useful, like models --- and like models, they are prone to reification: the territory is not the map
-- the philosophy of unsupervised learning and clustering in general
-- we're finding something, it's probably not nothing
-- clusters confer on us an ability to generate and reject hypotheses about our data ``This raises a third and final reply to the vacuity objection—unsupervised learning models do not generally work in isolation. Instead, they are used in conjunction with a range of other methods to build evidence for or against particular conclusions.''
-
-
-The UKB's nested structure, and how definitions shape our perceptions.
-
-
-
-
-The meanings of structure, biological essentialism, and the shadow of eugenics.
-
-What we show undermines these narratives---there are no true clusers, no true populations, no perfect models or representations, but there are \textit{useful} ones.
-
-Algorithmic colonialism, helicopter/imperialistic research, 
-
-\citep{gebru_race_2020}
-
+Still, as we have seen throughout this work (particularly \hyperref[chap:chapter4]{Chapter~4}), clusters are useful abstractions. The structure they find is ``real'' in the sense that it is a discrete measure of relatedness between individuals, with the caveat that it the structure identified is conditioned on the data and methods. When we require a genetic definition of a population, such as to calculate a MAF or train/test a PGS or to explore biobank data efficiently, the approach of using UMAP and HDBSCAN($\hat{\epsilon}$) shows great promise.
 
 \section{Limitations}
 
 Dimensionality reduction necessarily sacrifices information. To help us navigate the physical world, we use two-dimensional Euclidean maps of a three-dimensional spherical planet. This transformation introduces artificial tearing and distortion into world maps---PCA, $t$-SNE, UMAP, and density clustering are no different. We may see patterns or clusters that are artefactual, arising from unidentified batch effects or the distribution of genetic variants particular to a biobank. Patterns may also form from noise. 
 
-UMAP represents topology by approximating the local structure of the data. By patching together many local topological representations, it achieves a semblance of the global structure of data; however, the distances themselves do not have meaningful interpretations. PCA, which explicitly models global variation in data, has been interpreted in connection to TMRCA and F-statistics\citep{mcvean2009genealogical,peter_geometric_2022}. Several other non-linear dimensionality reduction methods aim to balance global and local structure (e.g. diffusion PHATE\citep{moon2019visualizing}, POPVAE\citep{battey_visualizing_2021}). UMAP captures topology, not geometry; it approximates the shapes of data, but now how the shapes are positioned relative to one another. Consider three nested hollow spheres in $3$D: each sphere forms one connected shape, but a $2$D UMAP would represent them as three disconnected clusters\citep{herrmann_enhancing_2022}. This correctly identifies the three connected components but not their relationships to each other.
+UMAP represents topology by approximating the local structure of the data. By patching together many local topological representations, it achieves a semblance of the global structure of data; however, the distances themselves do not have meaningful interpretations. PCA, which explicitly models global variation in data, has been interpreted in connection to TMRCA and F-statistics\citep{mcvean2009genealogical,peter_geometric_2022}. Several other non-linear dimensionality reduction methods aim to balance global and local structure (e.g. PHATE\citep{moon2019visualizing}, POPVAE\citep{battey_visualizing_2021}). UMAP captures topology, not geometry; it approximates the shapes of data, but now how the shapes are positioned relative to one another. Consider three nested hollow spheres in $3$D: each sphere forms one connected shape, but a $2$D UMAP would represent them as three disconnected clusters\citep{herrmann_enhancing_2022}. This correctly identifies the three connected components but not their relationships to each other.
 
 \section{Future directions}
 
