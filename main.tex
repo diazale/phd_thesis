@@ -155,14 +155,13 @@
 
 \input{content/FirstPage.tex}
 
-\begin{spacing}{1}
+\begin{singlespace}
  % Start of table of contents
 \tableofcontents\thispagestyle{plain}
-\end{spacing}{1}
+\end{singlespace}
 
-% Set page numbering to roman
 \cleardoublepage
-\setcounter{page}{1}\renewcommand{\thepage}{\roman{page}}	
+
 
 %%%%%%%%%%%%%%%%%%%
 %
@@ -170,10 +169,15 @@
 %
 %%%%%%%%%%%%%%%%%%%
 
+% Set page numbering to roman (i, ii, ...)
+\setcounter{page}{1}\renewcommand{\thepage}{\roman{page}}	
+
 \chapter*{Abstract}\markboth{Abstract}{}
 	\label{chap:engAbstract}
 	\addcontentsline{toc}{chapter}{Abstract}  
 	\input{content/en_Abstract.tex}
+
+\cleardoublepage
 
 %%%%%%%%%%%%%%%%%%%
 %
@@ -186,6 +190,8 @@
 		\addcontentsline{toc}{chapter}{Résumé}  
 		\input{content/fr_Abstract.tex}
 
+\cleardoublepage
+
 %%%%%%%%%%%%%%%%%%%
 %
 % ACKNOWLEDGEMENTS
@@ -196,6 +202,8 @@
 	\label{chap:acknowledgments}
 			\addcontentsline{toc}{chapter}{Acknowledgements}  
 	\input{content/Acknowledgements.tex}
+
+\cleardoublepage
 
 %%%%%%%%%%%%%%%%%%%
 %
@@ -208,6 +216,8 @@
 			\addcontentsline{toc}{chapter}{Contribution to original knowledge}  
 	\input{content/contribution_knowledge.tex}
 
+\cleardoublepage
+
 %%%%%%%%%%%%%%%%%%%
 %
 % CONTRIBUTIONS OF AUTHORS
@@ -218,6 +228,8 @@
 	\label{chap:authors}
 			\addcontentsline{toc}{chapter}{Contributions of authors}  
 	\input{content/contribution_authors.tex}
+
+\cleardoublepage
 
 %%%%%%%%%%%%%%%%%%%
 %
@@ -230,6 +242,8 @@
 			\addcontentsline{toc}{chapter}{List of abbreviations}  
 	\input{content/acronyms.tex}
 
+\cleardoublepage
+
 %%%%%%%%%%%%%%%%%%%
 %
 % LIST OF FIGURES
@@ -241,6 +255,8 @@
 \listoffigures
 \end{singlespace}
 \addcontentsline{toc}{chapter}{\listfigurename}
+
+\cleardoublepage
 
 %%%%%%%%%%%%%%%%%%%
 %
@@ -406,20 +422,14 @@
 \begin{singlespace}
 \printbibliography[keyword = mainbib, title={Master reference list}, heading=bibintoc]%, heading=subbibintoc]
 \end{singlespace}
-%\end{refsection}
 
+\appendix
 
-%\begin{onehalfspacing}
-%\input{content/publications.tex}
-%\end{onehalfspacing}
-
-%\newpage
-
-%%%%%%%%%%%%%%%%%%%
-%
-% BIBLIOGRAPHY
-%
-%%%%%%%%%%%%%%%%%%%
+\unchapter{Re-use permissions}
+\chapter*{Re-use permissions}
+\label{appendix:copyright}
+\input{content/copyrights.tex}
+\addcontentsline{toc}{chapter}{Re-use permissions}
 
 
 %\chaptermark{{\rm\bfseries Bibliography}}

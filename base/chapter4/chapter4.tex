@@ -8,6 +8,8 @@ $^2$Department of Human Genetics, McGill University, Montreal, Qu\'{e}bec, Canad
 $^3$School of Computer Science, McGill University, Montreal, Qu\'{e}bec, Canada\\
 $^4$Department of Bioengineering, McGill University, Montreal, Qu\'{e}bec, Canada}
 
+Posted as a preprint on bioRxiv.
+
 \section{Abstract}
 
 Biobanks now contain genetic data from millions of individuals. Dimensionality reduction, visualization and stratification are standard when exploring data at these scales; while efficient and tractable methods exist for the first two, stratification remains challenging because of uncertainty about sources of population structure. In practice, stratification is commonly performed by drawing shapes around dimensionally reduced data or assuming populations have a "type" genome. We propose a method of stratifying data with topological analysis that is fast, easy to implement, and integrates with existing pipelines. The approach is robust to the presence of sub-populations of varying sizes and wide ranges of population structure patterns. We demonstrate its effectiveness on genotypes from three biobanks and illustrate how topological genetic strata can help us understand structure within biobanks, evaluate distributions of genotypic and phenotypic data, examine polygenic score transferability, identify potential influential alleles, and perform quality control.
@@ -32,10 +34,8 @@ In summary, we argue that topological modelling, which describes data in terms o
 
 \begin{figure}[!ht]
   \centering
-  \begin{subfigure}[b]{0.9\linewidth}
-%  \includegraphics[width=\linewidth]{images/method_schematic.png}
-\includegraphics[width=\linewidth]{placeholder.png}
-  \end{subfigure}
+  \includegraphics[width=0.9\linewidth]{base/chapter4/figures/method_schematic.png}
+%\includegraphics[width=\linewidth]{placeholder.png}
   \caption[Overview of visualization and clustering pipeline]{\textbf{Overview of visualization and clustering pipeline.} We use the same genotype data to generate visualizations as well as cluster labels and combine them within one figure. For visualization, we reduce data to 2D and optimize for visual clarity. For clustering, we use higher UMAP dimensions to maximize information and minimize distortions before HDBSCAN($\hat{\epsilon}$) processing. These clusters are then used to colour the 2D plot, where each point is an individual and the cluster is represented by colour. Genotype data is pre-processed with PCA.}
     \label{fig:method}
 \end{figure}
@@ -55,42 +55,38 @@ After reducing genetic data to $3$ or more dimensions with UMAP in step 2, we us
 
 We use UMAP-assisted density-based clustering on data from three biobanks: the Thousand Genomes Project (1KGP), the UK biobank (UKB), and CARTaGENE (CaG). The 1KGP data consists of the genotypes of $3,450$ individuals sampled from $26$ populations from around the world; the populations were decided in advance and their sample sizes are similar, ranging from $104$ to $183$ samples\citep{global_2015}. The UKB is a cohort of $488,377$ individuals from the United Kingdom (UK) with genotypic, phenotypic, and sociodemographic data. UKB participants were recruited by inviting 9 million individuals registered with the National Health Service (NHS) who lived near a testing centre\citep{sudlow_uk_2015}. CaG is a cohort of residents of the Canadian province of Qu\'{e}bec, with genotype data for $29,337$ participants who were recruited using registration data from the R\'{e}gie de l'assurance maladie du Qu\'{e}bec (RAMQ), the provincial health authority, from four metropolitian areas in the province\citep{awadalla_cohort_2013}. Unlike the 1KGP, CaG and the UKB do not have \emph{a priori} populations defined, though they collected information about ethnicity, country of birth, and residential geographic distribution.
 
-\clearpage
-
 \section{Results}
-
 \subsection{Clustering captures population structure from sample design}
-\begin{figure}[!ht]
+
+\begin{figure}[ht]
   \centering
-  \begin{subfigure}[b]{0.45\linewidth}
-%    \includegraphics[width=\linewidth]{images/1KGP_no_colours.png}
-\includegraphics[width=\linewidth]{placeholder.png}
+  \begin{subfigure}[b]{0.4\linewidth}
+    \includegraphics[width=\linewidth]{base/chapter4/figures/1KGP_no_colours.png}
+%\includegraphics[width=\linewidth]{placeholder.png}
     \caption{}
     \label{fig:1KGP_no_colours}
   \end{subfigure}
-  \begin{subfigure}[b]{0.45\linewidth}
-%    \includegraphics[width=\linewidth]{images/1KGP_population_colours.png}
-\includegraphics[width=\linewidth]{placeholder.png}
+  \begin{subfigure}[b]{0.4\linewidth}
+    \includegraphics[width=\linewidth]{base/chapter4/figures/1KGP_population_colours.png}
+%\includegraphics[width=\linewidth]{placeholder.png}
     \caption{}
     \label{fig:1KGP_pop_colours}
   \end{subfigure}
-    \begin{subfigure}[b]{0.49\linewidth}
-%    \includegraphics[width=\linewidth]{images/1KGP_cluster_colours.png}
-\includegraphics[width=\linewidth]{placeholder.png}
+    \begin{subfigure}[b]{0.4\linewidth}
+    \includegraphics[width=\linewidth]{base/chapter4/figures/1KGP_cluster_colours.png}
+%\includegraphics[width=\linewidth]{placeholder.png}
     \caption{}
     \label{fig:1KGP_cluster_colours}
   \end{subfigure}
-    \begin{subfigure}[b]{0.49\linewidth}
-%    \includegraphics[height=15em,keepaspectratio]{images/1KGP_heatmap.png}
-\includegraphics[width=\linewidth]{placeholder.png}
+    \begin{subfigure}[b]{0.4\linewidth}
+    \includegraphics[height=15em,keepaspectratio]{base/chapter4/figures/1KGP_heatmap.png}
+%\includegraphics[width=\linewidth]{placeholder.png}
     \caption{}
     \label{fig:1KGP_heatmap}
   \end{subfigure}
   \caption[Clusters generated from 1KGP genotype data reflect its population sampling]{\textbf{Clusters generated from 1KGP genotype data reflect its population sampling.} (A) UMAP embedding of data without labels. (B) UMAP embedding of data, coloured by population label. (C) UMAP embedding of data, coloured by clusters derived from HDBSCAN($\hat{\epsilon}$) applied to a 5D UMAP embedding. (D) Proportions of each 1KGP population contained within a given cluster. Most populations fall almost entirely within a single cluster, with a few splitting into multiple clusters. Population labels are provided in Table~\ref{table:1kgp_labels}.}
   \label{fig:1000GP}
 \end{figure}
-
-\clearpage
 
 The 1KGP's relatively balanced global sample design makes it useful for testing algorithms to identify population structure. We have previously shown that UMAP results in clear visual clusters from 1KGP data in two dimensions\citep{diaz-papkovich_umap_2019}. Figure~\ref{fig:1000GP} shows a UMAP representation of the 1KGP. Figure~\ref{fig:1KGP_no_colours} shows the data without population labels (to mimic data with unknown populations), Figure~\ref{fig:1KGP_pop_colours} shows the data with corresponding population labels from the 1KGP, and Figure~\ref{fig:1KGP_cluster_colours} shows the data with cluster labels generated by HDBSCAN($\hat{\epsilon}$) run on a $5D$ UMAP.
 
@@ -100,8 +96,8 @@ The major source of genetic structure in 1KGP data is its sampling scheme, which
 
 \begin{figure}[ht]
   \centering
-%    \includegraphics[width=0.75\linewidth]{images/1kgp_ternary.png}
-\includegraphics[width=0.75\linewidth]{placeholder.png}
+    \includegraphics[width=0.75\linewidth]{base/chapter4/figures/1kgp_ternary.png}
+%\includegraphics[width=0.75\linewidth]{placeholder.png}
   \caption[Clusters capture structure in populations with overlapping admixture proportions in the 1KGP]{\textbf{Clusters capture structure in populations with overlapping admixture proportions in the 1KGP.} A ternary plot of the PUR, PEL, MXL, and CLM populations from the 1KGP with axes corresponding to global ancestry proportions estimated using ADMIXTURE ($K=3$). Shapes indicate 1KGP label, colours indicate cluster label and match Figure~\ref{fig:1KGP_cluster_colours}; bolded points with a + symbol overlaid indicate individuals who are not members of the modal cluster of their 1KGP population (full results given in Tables~\ref{table:1kgp_clusters} and \ref{table:1kgp_populations}). Many individuals from the populations have similar admixture proportions; UMAP-HDBSCAN($\hat{\epsilon}$) clusters reflect structure from the sample populations, while clusters based on inferred admixture proportions would not.}
   \label{fig:1000GP_ternary}
 \end{figure}
@@ -119,33 +115,29 @@ The UK biobank (UKB) contains $488,377$ genotypes from volunteers with an array 
 
 The biobank is one of the most-used resources for genetic analyses. Despite its multi-ethnic composition, many studies discard non-European samples, sometimes citing concerns related to confounding from population structure\citep{ben-eghan_dont_2020}. The population structure has been deeply explored, though typically focused on British or European individuals\citep{abdellaoui_genetic_2019,gilbert_revealing_2022,chiu_inferring_2022}. Because its sub-populations are numerous, geographically/ancestrally diverse, and of widely varying sizes, clustering the UKB data is challenging, requiring overly broad categorization (e.g. a small number of continental populations \citep{halldorsson_sequences_2022,nagar_socioeconomic_2021}) and/or significant computational resources. The original implementation of HDBSCAN, without the $\hat{\epsilon}$ parameter, discards much of the UKB data as noise and splits populations into hundreds of microclusters that are not interpretable (see Fig~\ref{fig:supp_ukb_hdbscan_original}).
 
-\clearpage
-
 \begin{figure}[ht]
   \centering
   \begin{subfigure}[b]{0.3\linewidth}
-    %\includegraphics[width=\linewidth]{images/colour_matched/hdbscan_labels_min25_EPS05_ukbb_pca_with_ids_UMAP_PC25_NC5_NN10_MD001_euclidean_20200214_065646.png}
-\includegraphics[width=\linewidth]{placeholder.png}
+    \includegraphics[width=\linewidth]{base/chapter4/figures/hdbscan_labels_min25_EPS05_ukbb_pca_with_ids_UMAP_PC25_NC5_NN10_MD001_euclidean_20200214_065646.png}
+%\includegraphics[width=\linewidth]{placeholder.png}
     \caption{}
     \label{fig:ukb_hdbscan_labels}
   \end{subfigure}
    \begin{subfigure}[b]{0.3\linewidth}
-%    \includegraphics[width=\linewidth]{images/colour_matched/hdbscan_labels_min25_EPS05_ukbb_pca_with_ids_UMAP_PC25_NC5_NN10_MD001_euclidean_20200214_065646/selected_clusters_afr_labelled_COB.png}
-\includegraphics[width=\linewidth]{placeholder.png}
+    \includegraphics[width=\linewidth]{base/chapter4/figures/selected_clusters_afr_labelled_COB.png}
+%\includegraphics[width=\linewidth]{placeholder.png}
     \caption{}
     \label{fig:ukb_hdbscan_labels_cob}
   \end{subfigure}
      \begin{subfigure}[b]{0.3\linewidth}
-%    \includegraphics[width=\linewidth]{images/colour_matched/hdbscan_labels_min25_EPS05_ukbb_pca_with_ids_UMAP_PC25_NC5_NN10_MD001_euclidean_20200214_065646/selected_clusters_afr_labelled_eth.png}
-\includegraphics[width=\linewidth]{placeholder.png}
+    \includegraphics[width=\linewidth]{base/chapter4/figures/selected_clusters_afr_labelled_eth.png}
+%\includegraphics[width=\linewidth]{placeholder.png}
     \caption{}
     \label{fig:ukb_hdbscan_labels_eth}
   \end{subfigure}
   \caption[Clusters of population structure in the UKB]{\textbf{An example of clusters of population structure in the UKB.} The clusters reflect a mixture of demographic history within the UK, the geographic origins of recent immigrants, the colonial history of the British Empire, and ongoing admixture. (a) Left: A 2D UMAP of UKB genotypes coloured by HDBSCAN($\hat{\epsilon}$). This parametrization generated $26$ clusters. (b) Middle: Five clusters are highlighted with word clouds for the most common countries of birth within the cluster. (c) Right: The same five clusters are highlighted with word clouds for the most common EB within the cluster. Admixture proportions for clusters are presented in Figure~\ref{fig:supp_ukb_admix}. Detailed breakdowns of EB and country of birth are presented in Tables~\ref{table:supp_ukb_cluster_cob} and \ref{table:supp_ukb_cluster_sieb}.}
   \label{fig:ukb_hdbscan_compare}
 \end{figure}
-
-\clearpage
 
 Figure~\ref{fig:ukb_hdbscan_labels} shows $26$ clusters generated by HDBSCAN($\hat{\epsilon}$), placing $99.99\%$ of individuals in clusters. We generated word clouds for COB and EB, shown in Figures~\ref{fig:ukb_hdbscan_labels_cob} and \ref{fig:ukb_hdbscan_labels_eth}, which allow us to illustrate sources of structure without having to impose a label to groups which may be heterogeneous. Individuals in Cluster~10, for example, are mostly born in Somalia ($84\%$), while those in Cluster~23 are mostly born in East Africa (Ethiopia, Sudan, Eritrea; $33\%$, $29\%$, $25\%$, respectively). Those in Cluster 18 are mostly born in sub-Saharan Africa, and $77\%$ chose ``African'' as their EB, while $19\%$ chose ``Other ethnic group''. Figure~\ref{fig:supp_ukb_hdbscan_top} presents word clouds for another subset of data. Individuals in Cluster~0 are mostly born in Japan and South Korea ($84\%$ and $9\%$, respectively), and those in Cluster~15 are mostly born in Nepal ($80\%$). In contrast, individuals in Cluster 13 are born in a variety of East/Southeast Asian jurisdictions; the most common EB was ``Chinese'' ($70\%$), followed by ``Other ethnic group'' ($16\%$) and ``Any other Asian background'' ($11\%$). Tables~\ref{table:supp_ukb_cluster_cob} and \ref{table:supp_ukb_cluster_sieb} provide breakdowns for clusters.
 
@@ -158,8 +150,6 @@ Despite the complexity of the UKB, topological clustering identifies population 
 \subsection{Phenotype smoothing and modelling}
 
 Epidemiological research often focuses on observed differences between groups---for example, finding the mean of a phenotype or sociodemographic measure and comparing between populations. Clustering is one method to define groups based on shared demographic history. However, clustering data featuring continuous variation patterns can be sensitive to input parameters, may not reflect true boundaries, and risks encouraging the perception that clusters are more distinct than they really are\citep{lewis_getting_2022}. As an illustration of how topological approaches can help interpret data beyond specific clustering choices, we use HDBSCAN($\hat{\epsilon}$) to define a simple regularization method, defined in Algorithm~\ref{alg:regularization}, that allows us to incorporate alternative parameterizations. We use this smoothing method to examine phenotypic and sociodemographic data with respect to population structure and identify outstanding patterns.
-
-\clearpage
 
 \begin{algorithm}
 \caption{We create a regularized value for each measure by taking the mean of cluster means for each individual. Given a set of parameters $P$ for the clustering algorithm, each parametrization $p$ will result in a set of clusters $C_p$. We use varying cluster assignments across parametrizations to smooth a measured quantity (e.g. phenotype) $m$ for individual $i$.}
@@ -175,19 +165,17 @@ Epidemiological research often focuses on observed differences between groups---
 \end{algorithmic}
 \end{algorithm}
 
-\clearpage
-
-\begin{figure}[!ht]
+\begin{figure}[h]
   \centering
   \begin{subfigure}[b]{0.45\linewidth}
-    %\includegraphics[width=\linewidth]{images/smoothed_phenotypes/SR4_FEV1.jpeg}
-       \includegraphics[width=\linewidth]{placeholder.png}
+    \includegraphics[width=\linewidth]{base/chapter4/figures/SR4_FEV1.jpeg}
+       %\includegraphics[width=\linewidth]{placeholder.png}
     \caption{}
     \label{fig:smoothed_fev1}
   \end{subfigure}
     \begin{subfigure}[b]{0.45\linewidth}
-   % \includegraphics[width=\linewidth]{images/smoothed_phenotypes/SR4_X30140_Neutrophill_count.jpeg}
-   \includegraphics[width=\linewidth]{placeholder.png}
+    \includegraphics[width=\linewidth]{base/chapter4/figures/SR4_X30140_Neutrophill_count.jpeg}
+   %\includegraphics[width=\linewidth]{placeholder.png}
     \caption{}
       \label{fig:smoothed_neutrophil}
   \end{subfigure}
@@ -195,23 +183,19 @@ Epidemiological research often focuses on observed differences between groups---
 \label{fig:smoothed_phenos}
 \end{figure}
 
-\clearpage
-
 In Figure~\ref{fig:smoothed_phenos}, we visualize the smoothing across $604$ parametrizations of UMAP-HDBSCAN($\hat{\epsilon}$) FEV1 and neutrophil count. Despite regressing out the effects of the top $40$ principal components, there remains structure in the distribution of the residuals. For example, the average residual value is noticeably higher in individuals who fall in Cluster~22 in Figure~\ref{fig:ukb_hdbscan_labels}. This cluster is composed mostly of individuals with admixed African/European backgrounds, and although they are intermediate to African and European ancestry populations in PCA space (Figure~\ref{fig:supp_cluster_22_pca}), their phenotype distributions are not intermediate to clusters of primarily European- and African-ancestry individuals (Figure~\ref{fig:supp_pheno_ridge_fev}, Figure~\ref{fig:supp_pheno_ridge_neut}).
 
-\clearpage
-
-\begin{figure}[!ht]
+\begin{figure}[ht]
   \centering
   \begin{subfigure}[b]{0.7\linewidth}
-    %\includegraphics[width=\linewidth]{{"images/phenotype_models/MSE_rotated_White and Black Caribbean"}.png}
-    \includegraphics[width=0.5\linewidth]{placeholder.png}
+    \includegraphics[width=\linewidth]{{"base/chapter4/figures/MSE_rotated_White and Black Caribbean"}.png}
+    %\includegraphics[width=0.5\linewidth]{placeholder.png}
     \caption{}
     \label{fig:wabc_pheno_model}
   \end{subfigure}
     \begin{subfigure}[b]{0.7\linewidth}
-    %\includegraphics[width=\linewidth]{{"images/phenotype_models/MSE_rotated_White and Black African"}.png}
-    \includegraphics[width=0.5\linewidth]{placeholder.png}
+    \includegraphics[width=\linewidth]{{"base/chapter4/figures/MSE_rotated_White and Black African"}.png}
+    %\includegraphics[width=0.5\linewidth]{placeholder.png}
     \caption{}
     \label{fig:waba_pheno_model}
   \end{subfigure}
@@ -219,27 +203,23 @@ In Figure~\ref{fig:smoothed_phenos}, we visualize the smoothing across $604$ par
   \label{fig:pheno_models}
 \end{figure}
 
-\clearpage
-
 To test if smoothed cluster estimates have explanatory power for these admixed individuals, we carried out an $80-20$ split and compared simple linear models for phenotype prediction using the top $40$ PCs versus using the smoothed estimates made from residuals after removing the effects of the top $40$ PCs. We compared the models for populations that selected ``Mixed'' as their EB in the UKB questionnaire and found that for individuals who selected ``White and Black Caribbean'' ($n=573$) or ``White and Black African'' ($n=389$), the smoothed cluster estimates indeed outperformed the PCA model, with an improved mean squared error across several phenotypes (see Figure~\ref{fig:pheno_models}; full table of MSE values in Tables~\ref{table:supp_mse1} and \ref{table:supp_mse2}).
 
 Analysis based on topological components can help to visualize the impact of covariate adjustment in the context of population structure and to identify residual heterogeneity in phenotype distributions and environmental data (e.g. smoking rates in Figure~\ref{fig:supp_ukb_smoking}).
-
-\clearpage
 
 \subsection{Evaluating transferability of polygenic scores}
 
 \begin{figure}[ht]
   \centering
   \begin{subfigure}[b]{0.6\linewidth}
-%    \includegraphics[width=\linewidth]{images/fst_vs_r2_weighted_plink_20200214_065646/HEIGHT_mean_r2_vs_fst.png}
-\includegraphics[width=0.6\linewidth]{placeholder.png}
+    \includegraphics[width=\linewidth]{base/chapter4/figures/HEIGHT_mean_r2_vs_fst.png}
+%\includegraphics[width=0.6\linewidth]{placeholder.png}
     \caption{}
     \label{fig:fst_vs_r2_height}
   \end{subfigure}
     \begin{subfigure}[b]{0.6\linewidth}
-%    \includegraphics[width=\linewidth]{images/fst_vs_r2_weighted_plink_20200214_065646/LDL_mean_r2_vs_fst.png}
-\includegraphics[width=0.6\linewidth]{placeholder.png}
+    \includegraphics[width=\linewidth]{base/chapter4/figures/LDL_mean_r2_vs_fst.png}
+%\includegraphics[width=0.6\linewidth]{placeholder.png}
     \caption{}
     \label{fig:fst_vs_r2_ldl}
   \end{subfigure}
@@ -264,8 +244,8 @@ The relationship between PGS accuracy and fine-scale population structure is com
 \begin{figure}[ht]
   \centering
   \begin{subfigure}[b]{0.95\linewidth}
-%  \includegraphics[width=\linewidth]{images/cartagene_naf_cluster_wc.png}
-  \includegraphics[width=0.5\linewidth]{placeholder.png}
+  \includegraphics[width=\linewidth]{base/chapter4/figures/cartagene_naf_cluster_wc.png}
+  %\includegraphics[width=0.5\linewidth]{placeholder.png}
   \end{subfigure}
   \caption[Clustering identifies data collection errors in CaG]{\textbf{Clustering can identify data collection errors.} A 2D UMAP of CARTaGENE data coloured by clusters extracted using HDBSCAN($\hat{\epsilon}$). The highlighted cluster was found to have most of its individuals born in North Africa. A word cloud shows that a significant minority of individuals were born in American Samoa, which was found to be a coding error.}
     \label{fig:ctg}
