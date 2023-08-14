@@ -28,33 +28,27 @@ The most straightforward and common use of UMAP is for visualization. This has p
 
 Data cleaning, including LD thinning, is important when performing UMAP. Certain regions, such as the human leukocyte antigen (HLA) region in the genome, can unduly influence clustering and visualization results --- whereas the influence of HLA might be only observed in a higher-order PC, UMAP can identify the clustering of haplotypes at a single, densely typed locus and represent carriers of that haplotype as a distinct cluster (figure~\ref{fig:HLA}). LD thinning addresses this issue. Thus careful data preparation is necessary for UMAP, and researchers should resist the tendency to assign a demographic explanation to each cluster without careful analysis. 
 
-\clearpage
-
-\begin{figure}[ht]
+\begin{figure}[h]
   \centering
-    %\includegraphics[width=\linewidth]{external_images/umap_hla_comparison_highlighted.jpg}
-        \includegraphics[width=0.8\linewidth]{placeholder.png}
+    \includegraphics[width=\linewidth]{base/chapter3/figures/umap_hla_comparison_highlighted.jpg}
+        %\includegraphics[width=0.8\linewidth]{placeholder.png}
   \caption[UMAP with and without HLA regions filtered]{\textbf{UMAP with (left) and without (right) HLA regions used on the Genizon database.} The cluster in the dotted lines disappears when filtering for HLA and linkage disequilibrium.}
   \label{fig:HLA}
 \end{figure}
 
-\clearpage
-
 Comparing PCA and UMAP on the 1000GP and UKB datasets shows how the sampling scheme influences UMAP representation. PCA for both datasets presents aspects of genetic variation related to the out-of-Africa expansion, forming a triangle shape with African, East Asian, and European populations at the vertices and admixed populations falling between (Figures~\ref{fig:PCA_and_UMAP} and \ref{fig:UKB}). Since continental ancestry is expected to be the largest source of differences in population structure, PCA will put these populations far apart, and this is useful as a sanity check. In the 1000GP, which sampled individuals from geographically or culturally distinct groups, UMAP forms clusters corresponding to the different groups. By contrast, the UKB performed population-based sampling, and UMAP captures individuals with different levels of admixture from different ancestries. UMAP identifies admixture ``bridges'' between the different clusters and arguably provides a more detailed representation of the relationships among study participants. 
 
-\clearpage
-
-\begin{figure}[h!]
+\begin{figure}[h]
   \centering
   \begin{subfigure}[b]{0.45\linewidth}
-    %\includegraphics[width=\linewidth]{code/images/1KGP_PCA.jpeg}
-    \includegraphics[width=\linewidth]{placeholder.png}
+    \includegraphics[width=\linewidth]{base/chapter3/figures/1KGP_PCA.jpeg}
+    %\includegraphics[width=\linewidth]{placeholder.png}
     \caption{}
     \label{fig:PCA}
   \end{subfigure}
   \begin{subfigure}[b]{0.45\linewidth}
-    %\includegraphics[width=\linewidth]{code/images/1KGP_genotype_UMAP.jpeg}
-        \includegraphics[width=\linewidth]{placeholder.png}
+    \includegraphics[width=\linewidth]{base/chapter3/figures/1KGP_genotype_UMAP.jpeg}
+        %\includegraphics[width=\linewidth]{placeholder.png}
     \caption{}
     \label{fig:UMAP}
   \end{subfigure}
@@ -62,35 +56,29 @@ Comparing PCA and UMAP on the 1000GP and UKB datasets shows how the sampling sch
   \label{fig:PCA_and_UMAP}
 \end{figure}
 
-\clearpage
-
-\begin{figure}[h!]
+\begin{figure}[h]
   \centering
-%    \includegraphics[width=\linewidth]{code/ukb/images/ukbb_montage.jpeg}
-    \includegraphics[width=0.8\linewidth]{placeholder.png}
+    \includegraphics[width=\linewidth]{base/chapter3/figures/ukbb_montage.jpeg}
+    %\includegraphics[width=0.8\linewidth]{placeholder.png}
   \caption[PCA compared to UMAP of the UKB]{\textbf{PCA (left) and UMAP (right) projections of the UKB data, coloured by self-identified ethnic background.} Unlike PCA, UMAP focuses on preserving local relationships and emphasizes fine-scale patterns in data. Groups in the UMAP projection are less compressed showing, for example, the relative size of the British and Irish populations in the UKB, alongside populations of other ancestries, while simultaneously showing the population structure between and within groups.}
   \label{fig:UKB}
 \end{figure}
 
-\clearpage
-
 Since its strength is in revealing fine-scale population structure, UMAP is well-suited to data with a high number of significant PCs, and can also extract population structure signal from the collection of high-order PCs. \citep{diaz-papkovich_umap_2019}.  Figures~\ref{fig:gnomAD_UMAP} and \ref{fig:BBJ_UMAP} visualize, respectively, the Genome Aggregation Database (gnomAD v3) from the Broad Institute\citep{karczewski_mutational_2020} and Biobank Japan (BBJ)\citep{nagai2017overview,sakaue_dimensionality_2020}, each of which contains over $100,000$ individuals. When applied to ethnically diverse groups such as the UKB, Bio\textit{Me}\citep{belbin_towards_2019} and the Million Veterans Program (MVP) \citep{hunter-zinck_genotyping_2020}, UMAP tends to highlight groups with different international migration and admixture histories. In relatively more homogeneous populations such as BBJ, it highlights clusters related to geographic features such as island populations.
-
-\clearpage
 
 \begin{figure}[h!]
   \centering
-  \begin{subfigure}[b]{0.4\linewidth}
-%    \includegraphics[width=\linewidth]{external_images/gnomAD_umap.jpeg}
-    \includegraphics[width=\linewidth]{placeholder.png}
+  \begin{subfigure}[b]{0.5\linewidth}
+    \includegraphics[width=\linewidth]{base/chapter3/figures/gnomAD_umap.jpeg}
+    %\includegraphics[width=\linewidth]{placeholder.png}
     \caption{\textbf{gnomADv3 data visualized using UMAP.}}
     \label{fig:gnomAD_UMAP}
   \end{subfigure}
 
-  \begin{subfigure}[b]{0.4\linewidth}
-%    \includegraphics[width=\linewidth]{external_images/BBJ_UMAP.jpeg}
-    \includegraphics[width=\linewidth]{placeholder.png}
-    \caption{BBJ data visualized using UMAP.}
+  \begin{subfigure}[b]{0.5\linewidth}
+    \includegraphics[width=\linewidth]{base/chapter3/figures/BBJ_UMAP.jpeg}
+    %\includegraphics[width=\linewidth]{placeholder.png}
+    \caption{/textbf{BBJ data visualized using UMAP.}}
     \label{fig:BBJ_UMAP}
   \end{subfigure}
   \caption[UMAP of gnomAD and Biobank Japan]{\textbf{The Genome Aggregation Database (gnomAD, top) and Biobank Japan (BBJ, bottom) visualized using UMAP.} UMAP illustrates the ancestral diversity of gnomAD, showing many the relationships between populations on continental and subcontinental levels. For the relatively more homogeneous BBJ data, it splits data geographically into the large mainland cluster (consisting of Hokkaido, Tohoku, Kanto-Koshinetsu, Chubu-Hokuriku, Kinki, and Kyushu regions), and smaller non-mainland clusters. The gnomAD image is reproduced from \citep{karczewski_mutational_2020}, and the BBJ image is reproduced from \citep{sakaue_dimensionality_2020}.
@@ -121,26 +109,26 @@ The reference implementation of UMAP is regularly updated with new features\cite
 \begin{figure}[h!]
   \centering
   \begin{subfigure}[b]{0.4\linewidth}
-%    \includegraphics[width=\linewidth]{code/images/1KGP_genotype_UMAP_low_NN.jpeg}
-    \includegraphics[width=\linewidth]{placeholder.png}
+    \includegraphics[width=\linewidth]{base/chapter3/figures/1KGP_genotype_UMAP_low_NN.jpeg}
+    %\includegraphics[width=\linewidth]{placeholder.png}
     \caption{UMAP with 15 neighbours.}
     \label{fig:UMAP_low_NN_1KGP}
   \end{subfigure}
   \begin{subfigure}[b]{0.4\linewidth}
-%    \includegraphics[width=\linewidth]{code/images/UMAP_connectivity_low_NN.jpeg}
-    \includegraphics[width=\linewidth]{placeholder.png}
+    \includegraphics[width=\linewidth]{base/chapter3/figures/UMAP_connectivity_low_NN.jpeg}
+    %\includegraphics[width=\linewidth]{placeholder.png}
     \caption{Connectivity map of 15 neighbours.}
     \label{fig:UMAP_low_NN_connectivity}
   \end{subfigure}
   \begin{subfigure}[b]{0.4\linewidth}
-%    \includegraphics[width=\linewidth]{code/images/1KGP_genotype_UMAP_high_NN.jpeg}
-    \includegraphics[width=\linewidth]{placeholder.png}
+    \includegraphics[width=\linewidth]{base/chapter3/figures/1KGP_genotype_UMAP_high_NN.jpeg}
+    %\includegraphics[width=\linewidth]{placeholder.png}
     \caption{UMAP with 200 neighbours.}
     \label{fig:UMAP_high_NN_1KGP}
   \end{subfigure}
   \begin{subfigure}[b]{0.4\linewidth}
-%    \includegraphics[width=\linewidth]{code/images/UMAP_connectivity_high_NN.jpeg}
-    \includegraphics[width=\linewidth]{placeholder.png}
+    \includegraphics[width=\linewidth]{base/chapter3/figures/UMAP_connectivity_high_NN.jpeg}
+    %\includegraphics[width=\linewidth]{placeholder.png}
     \caption{Connectivity map of 200 neighbours.}
     \label{fig:UMAP_high_NN_connectivity}
   \end{subfigure}
