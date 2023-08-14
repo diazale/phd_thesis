@@ -86,22 +86,6 @@ The sampling methodologies of biobanks vary widely. The 1000 Genomes Project (1K
 Public health biobanks are commonly sampled from some combination of political jurisdiction and existing health care services. The UK biobank (UKB) and CARTaGENE (CaG), for example, recruit volunteers who are registered with their respective health care administrations within certain geographical regions and political boundaries\citep{sudlow_uk_2015}\citep{awadalla_cohort_2013}. Such administrative records are convenient sampling frames, since they tend to have contact information, associated data such as electronic health records, and established epidemiological methodologies. The wealth of health data, particularly longitudinal data, makes these biobanks invaluable for health care research. 
 
 Their population structure, however, is extraordinarily complex and not known in advance. Even limiting a biobank to one city requires in-depth knowledge of its regional history, its migrations, its cultures, its physical and social environments, etc. Without a means to understand population structure and how it relates to the aforementioned, biobanks can transform from a panacea into a witch's brew of statistical biases. In \hyperref[chap:chapter2]{Chapters~2} and \hyperref[chap:chapter4]{4}, we study the relationships between population structure and several variables in biobanks.
-%There are many layers of bias [make a figure here?]
-
-%The combination of 
-
-%\citep{alten_reweighting_2022})
-
-
-%sex-differential participation bias in 23andme data \citep{pirastu_genetic_2021}
-
-%The results of biobank studies (e.g. GWAS, PRS) are applied to populations, but how these populations are defined is arbitrary and, arguably, archaic. We can use variables like country of birth or ethnic group, but these are not formally related to genetics and, at best, are proxies. Admixed populations are not well represented---PCA coordinates are themselves a proxy for population structure as it related to a phenotype's distribution.
-
-% Maybe mention in disco?
-%Consumer genetic ancestry databases, such as AncestryDNA and 23andMe, contain tens of millions of records, but are fully volunteer-based\citep{mathieson_what_2020}. Though their sample sizes are massive, there is undoubtedly significant selection bias, and the population structure cannot be known in advance.
-
-%\subsection{HDBSCAN(\texorpdfstring{$\hat{\epsilon}$}{f})}
-% the {f} here doesn't do anything, but we need a text character for compilation
 
 \subsection{Data sources}
 
@@ -213,6 +197,38 @@ Density clustering finds sets of data with a high density of points; a formal ou
 $$ \mathcal{C} = \bigcup_{\lambda \ge 0} \mathcal{C}_{\lambda} $$
 
 By varying the threshold $\lambda$, level sets $L_{\lambda}$ become nested within each other; that is, if $A, B \in \mathcal{C}$ then $A \subset B$ or $B \subset A$ or $A \cap B = \emptyset$. Thus the set $\mathcal{C}$ can be represented as a tree, and each branch represents a cluster. This approach is useful if we know there is structure in our data but do not know how many clusters exist---if we can find an appropriate threshold for density, we can discover the structure. Unlike other clustering methods, this approach does not necessarily require specifying a number of clusters $K$ in advance---though some algorithms do incorporate $K$, we do not consider them in this thesis.
+
+\begin{figure}[h]
+\centering 
+\begin{subfigure}{.5\columnwidth}
+    \includegraphics[width=\columnwidth]{main_figures/intro/density_cluster.png}
+    \caption{}
+    \label{fig:density}
+\end{subfigure}%
+\begin{subfigure}{.5\columnwidth}
+    \includegraphics[width=\columnwidth]{main_figures/intro/density_tree.png}
+    \caption{}
+    \label{fig:tree}
+\end{subfigure}
+\caption[Density clustering]{\textbf{Density clustering.} \textbf{(a)} Clusters corresponding to $L_{t} = \{x : p(x) > t\}$. \textbf{(b)} The cluster tree. }
+\label{fig:density_clustering}
+\end{figure}
+
+%\begin{figure}%
+%\centering
+%\begin{subfigure}{.5\columnwidth}
+%\includegraphics[width=\columnwidth]{base/chapter2/figures/UKBB_PC0_PC1_eth_crop.jpeg}
+%\caption{}%
+%\label{}%
+%\end{subfigure}\hfill%
+%\begin{subfigure}{.5\columnwidth}
+%\includegraphics[width=\columnwidth]{base/chapter2/figures/UKBB_UMAP_PC10_NN15_MD05_eth_labels.jpeg}%
+%\caption{}
+%\label{}
+%\end{subfigure}%
+%\caption{}
+%\label{}
+%\end{figure}
 
 The first density clustering algorithm was Density Based Spatial Clustering of Applications with Noise (DBSCAN), developed in 1996\citep{ester1996density} and became the basis of many others\citep{khan_dbscan_2014}. DBSCAN formalized the intuition that clusters were spaces that were dense with data, while areas that were relatively sparse were noise. For each point in a cluster, the neighbourhood of a given radius $\epsilon$ must contains at least $m$ points. Any points that meet this criterion, or fall within the neighbourhood, are assigned to clusters, while the rest are deemed noise. However, this requires a global density $\epsilon$ threshold---clusters of variable densities are not considered. 
 
