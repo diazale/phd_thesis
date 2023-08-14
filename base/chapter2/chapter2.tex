@@ -32,7 +32,8 @@ Non-linear dimension reduction methods tend to be computationally intensive. A c
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.7\textwidth]{placeholder.png}
+    %\includegraphics[width=0.7\textwidth]{placeholder.png}
+    \includegraphics[width=0.7\textwidth]{base/chapter2/figures/fig1.png}
     \caption[Four methods of dimension reduction of 1KGP genotype data]{\textbf{Four methods of dimension reduction of 1KGP genotype data with population labels.} \textbf{(A)} PCA maps individuals in a triangle with vertices corresponding to African, Asian, and European continental ancestry. Discarding lower-variance PCs leads to overlap of populations with no close affinity, such as Central and South American populations with South Asians. \textbf{(B)} t-SNE forms groups corresponding to continents, with some overlap between European and Central and South American people. Smaller subgroups are visible within continental clusters. The cloud of peripheral points results from the method's poor convergence. \textbf{(C)} UMAP forms distinct clusters related to continent with clearly defined subgroups. Japanese, Finnish, Luhya, and some Punjabi and Telugu populations form separate clusters consistent with their population history\citep{10002015global}. \textbf{(D)} UMAP on the first 15 principal components forms fine-scale clusters for individual populations. Groups closely related by ancestry or geography, such as African Caribbean/African American, Spanish/Italian, and Kinh/Dai populations cluster together. Results using t-SNE on principal components are presented in Figure~\ref{fig:supp_megamontage_pc2_9}. Axes in UMAP and t-SNE are arbitrary. Since the algorithms prioritize local distances, long distances between clusters are not meaningful.}
     \label{fig:fig1}
 \end{figure}
@@ -62,26 +63,14 @@ Applying UMAP to self-identified Hispanic individuals in the HRS reveals clear g
 
 \begin{figure}[ht]
     \centering
-    \begin{subfigure}{0.49\columnwidth}
-    %\includegraphics[width=\columnwidth]{images/HRS_1000G_NP1_UMAP_PC7_NC2_NN15_MD05_pca_hrshisp_added1kgp_2018115153245_1kgp_hisp.jpeg}
-    \includegraphics[width=\columnwidth]{placeholder.png}
-    \caption{}
-    \label{fig:supp_umap_hrs_hisp_1kgp_hisp}
-    \end{subfigure}\hfill
-    \unskip\ \vrule\
-        \begin{subfigure}{0.49\columnwidth}
-%    \includegraphics[width=\columnwidth]{images/Asthma_FullAsian_PC_QC_new_UMAP_PC5_NC2_NN15_MD05_201931173256_ethcob.jpeg}
-    \includegraphics[width=\columnwidth]{placeholder.png}
-    \caption{}
-        \label{fig:umap_ukbb_indian}
-    \end{subfigure}
-    \caption[Applying UMAP to subsets of data can reveal deep population structure]{\textbf{Applying UMAP to subsets of data can reveal deep population structure.} \textbf{(a)} UMAP on the top $7$ principal components of the self-identified Hispanic population of the HRS reveals a cluster. Colouring the points by birthplace shows they were born almost entirely in the Mountain region (in green) of the United States (New Mexico, Arizona, Colorado, Utah, Nevada, Wyoming, Idaho, and Montana). When populations from the 1KGP are projected onto the UMAP embedding they do not map to the cluster. Six 1KGP populations are presented:
+    \includegraphics[width=\columnwidth]{{base/chapter2/figures/fig2.png}}
+    \caption[Applying UMAP to subsets of data can reveal deep population structure]{\textbf{Applying UMAP to subsets of data can reveal deep population structure.} \textbf{(A)} UMAP on the top $7$ principal components of the self-identified Hispanic population of the HRS reveals a cluster. Colouring the points by birthplace shows they were born almost entirely in the Mountain region (in green) of the United States (New Mexico, Arizona, Colorado, Utah, Nevada, Wyoming, Idaho, and Montana). When populations from the 1KGP are projected onto the UMAP embedding they do not map to the cluster. Six 1KGP populations are presented:
     CLM, Colombian in Medellin, Colombia;
     IBS, Iberian in Spain;
     MXL, Mexican in Los Angeles, California;
     PEL, Peruvian;
     PUR, Puerto Rican;
-    TSI, Toscani in Italy. Figures~\ref{fig:supp_umap_hrs_hisp_admix} and \ref{fig:supp_umap_hrs_hisp_birth} present the same projection of individuals from the HRS coloured by estimated admixture proportions census region of birth, respectively. \textbf{(b)} UMAP on the top $8$ principal components of the self-identified Asian populations of the UKBB creates clusters. Indian individuals born in Kenya (in purple) form one such cluster. A version coloured by self-identified ethnicity is presented in Figure~\ref{fig:supp_umap_ukbb_asian_eth}.}
+    TSI, Toscani in Italy. Figures~\ref{fig:supp_umap_hrs_hisp_admix} and \ref{fig:supp_umap_hrs_hisp_birth} present the same projection of individuals from the HRS coloured by estimated admixture proportions census region of birth, respectively. \textbf{(B)} UMAP on the top $8$ principal components of the self-identified Asian populations of the UKBB creates clusters. Indian individuals born in Kenya (in purple) form one such cluster. A version coloured by self-identified ethnicity is presented in Figure~\ref{fig:supp_umap_ukbb_asian_eth}.}
     \label{fig:fig2}
 \end{figure}
 
@@ -90,14 +79,14 @@ Applying UMAP to self-identified Hispanic individuals in the HRS reveals clear g
 \begin{figure}%
 \centering
 \begin{subfigure}{.5\columnwidth}
-%\includegraphics[width=\columnwidth]{images/UKBB_PC0_PC1_eth_crop.jpeg}
-    \includegraphics[width=\columnwidth]{placeholder.png}
+\includegraphics[width=\columnwidth]{base/chapter2/figures/UKBB_PC0_PC1_eth_crop.jpeg}
+    %\includegraphics[width=\columnwidth]{placeholder.png}
 \caption{}%
 \label{fig:pc_ukbb}%
 \end{subfigure}\hfill%
 \begin{subfigure}{.5\columnwidth}
-%\includegraphics[width=\columnwidth]{images/UKBB_UMAP_PC10_NN15_MD05_eth_labels.jpeg}%
-    \includegraphics[width=\columnwidth]{placeholder.png}
+\includegraphics[width=\columnwidth]{base/chapter2/figures/UKBB_UMAP_PC10_NN15_MD05_eth_labels.jpeg}%
+    %\includegraphics[width=\columnwidth]{placeholder.png}
 \caption{}
 \label{fig:umap_ukbb_pc10}
 \end{subfigure}%
@@ -138,12 +127,8 @@ The detailed shape of extended clusters is not stable as we vary the number of P
 
 \begin{figure}
     \centering
-    \begin{subfigure}{\columnwidth}
-%    \includegraphics[width=0.8\columnwidth]{images/UKBB_UMAP_PC10_NN15_MD05_2018328174511_geo_permuted_10nn_sd50000_base50000_201883118582.pdf}
-    \includegraphics[width=0.8\columnwidth]{placeholder.png}
-    \caption{}
-    \label{fig:umap_ukbb_geo_osgb}
-    \end{subfigure}
+    \includegraphics[width=0.8\columnwidth]{base/chapter2/figures/UKBB_UMAP_PC10_NN15_MD05_2018328174511_geo_permuted_10nn_sd50000_base50000_201883118582.pdf}
+   % \includegraphics[width=0.8\columnwidth]{placeholder.png}
       \caption[UMAP captures relationships between population structure and geography]{\textbf{UMAP captures relationships between population structure and geography.} Each individual is coloured by their geographical coordinates of residence. Coordinates follow the UKBB's OSGB1936 geographic grid system and represent distance from the Isles of Scilly, which lie southwest of Great Britain. The left image colours individuals by their north-south (``northing'') coordinates, and the right image colours them by their east-west (``easting'') coordinates. Adding more components creates finer clusters  (Figures~\ref{fig:supp_montage_ukbb_ns} and \ref{fig:supp_montage_ukbb_ew}). Northing values were truncated between $100$km and $700$km, and easting values were truncated between $200$km and $600$km.}
 \label{fig:fig4}
 \end{figure}
@@ -153,14 +138,14 @@ The detailed shape of extended clusters is not stable as we vary the number of P
 \begin{figure}[h!]
   \centering
   \begin{subfigure}[b]{0.4\linewidth}
-    %\includegraphics[width=\linewidth]{images/UKBB_mapsInMaps_2D3_permute50.jpg}
-        \includegraphics[width=\columnwidth]{placeholder.png}
+    \includegraphics[width=\linewidth]{base/chapter2/figures/UKBB_mapsInMaps_2D3_permute50.jpg}
+        %\includegraphics[width=\columnwidth]{placeholder.png}
     \caption{}
     \label{fig:umap_ukbb_geo_map}
   \end{subfigure}
   \begin{subfigure}[b]{0.4\linewidth}
-%    \includegraphics[width=\linewidth]{images/meanWorldMap.jpg}
-    \includegraphics[width=\columnwidth]{placeholder.png}
+    \includegraphics[width=\linewidth]{base/chapter2/figures/meanWorldMap.jpg}
+    %\includegraphics[width=\columnwidth]{placeholder.png}
     \caption{}
   \label{fig:umap_world_map}
   \end{subfigure}
@@ -178,12 +163,8 @@ Similarly to UMAP, t-SNE applied to the UKBB data both displays diversity within
 
 \begin{figure}
     \centering
-    \begin{subfigure}{\columnwidth}
 %    \includegraphics[width=0.8\columnwidth]{images/UKBB_UMAP_PC10_NN15_MD05_2018328174511_geo_permuted_10nn_sd50000_base50000_201883118582.pdf}
-    \includegraphics[width=0.8\columnwidth]{placeholder.png}
-    \caption{}
-    \label{fig:umap_height_female}
-    \end{subfigure}
+    \includegraphics[width=0.8\columnwidth]{base/chapter2/figures/fig6.png}
       \caption[UMAP captures relationships between population structure and phenotype heterogeneity.]{\textbf{UMAP captures relationships between population structure and phenotype heterogeneity.} Females from the UMAP projection in Figure~\ref{fig:fig3}B, coloured by age-adjusted difference from mean population height (left) and leukocyte counts (right). Individuals with missing data were excluded. To protect participant privacy, data in these images has been randomized as explained in the materials and methods section.}
 \label{fig:fig6}
 \end{figure}
