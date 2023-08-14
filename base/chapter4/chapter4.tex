@@ -28,19 +28,15 @@ We demonstrate the effectiveness of this approach on three biobanks, showing tha
 
 In summary, we argue that topological modelling, which describes data in terms of local neighbourhoods in a high-dimensional space, is a powerful alternative to ancestry-based modelling for the description of genetic variation in complex cohorts.
 
-\clearpage
-
 \section{Methods}
 
-\begin{figure}[!ht]
+\begin{figure}[h]
   \centering
   \includegraphics[width=0.9\linewidth]{base/chapter4/figures/method_schematic.png}
 %\includegraphics[width=\linewidth]{placeholder.png}
   \caption[Overview of visualization and clustering pipeline]{\textbf{Overview of visualization and clustering pipeline.} We use the same genotype data to generate visualizations as well as cluster labels and combine them within one figure. For visualization, we reduce data to 2D and optimize for visual clarity. For clustering, we use higher UMAP dimensions to maximize information and minimize distortions before HDBSCAN($\hat{\epsilon}$) processing. These clusters are then used to colour the 2D plot, where each point is an individual and the cluster is represented by colour. Genotype data is pre-processed with PCA.}
     \label{fig:method}
 \end{figure}
-
-\clearpage
 
 Our method works on structured genotype data, represented by a matrix of allele counts for each individual and genetic variant. To reduce computational burden, we perform analyses using leading principal component (PCs) on the raw genotype data. This approach has the additional benefit that many genetic cohorts have PC coordinates pre-computed as part of standard quality control pipelines. We use uniform manifold approximation and projection (UMAP)\citep{mcinnes_umap_2020}, a dimensionality reduction method, and a clustering algorithm, Hierarchical Density-Based Spatial Clustering of Applications with Noise (HDBSCAN), using an implementation by Malzer and Baum called HDBSCAN($\hat{\epsilon}$)\citep{malzer_hybrid_2020}. Both methods are unsupervised.
 
