@@ -190,14 +190,6 @@ One of the most common distance-based algorithms is $K$-means clustering. Develo
 
 \subsubsection{Density clustering}
 
-% this density lambda is set to 1/epsilon
-
-Density clustering finds sets of data with a high density of points; a formal outline can be found in Wasserman's review of TDA\citep{wasserman_topological_2018}. Briefly, assume we observe a sample $X_{1}, \dots , X_{n}$ from some distribution $P$ with density $p$ where $X_{i} \in \mathcal{X} \subseteq \mathbb{R}^d$. For any $\lambda \ge 0$, we define the upper level set $L_{\lambda} = \{x: p(x) > \lambda \}$. The density clusters at level $\lambda$ are denoted by $\mathcal{C}_{\lambda}$ and are the connected components of $L_{\lambda}$. The set of all density clusters is:
-
-$$ \mathcal{C} = \bigcup_{\lambda \ge 0} \mathcal{C}_{\lambda} $$
-
-By varying the threshold $\lambda$, level sets $L_{\lambda}$ become nested within each other; that is, if $A, B \in \mathcal{C}$ then $A \subset B$ or $B \subset A$ or $A \cap B = \emptyset$. Thus the set $\mathcal{C}$ can be represented as a tree, and each branch represents a cluster. This approach is useful if we know there is structure in our data but do not know how many clusters exist---if we can find an appropriate threshold for density, we can discover the structure. Unlike other clustering methods, this approach does not necessarily require specifying a number of clusters $K$ in advance---though some algorithms do incorporate $K$, we do not consider them in this thesis.
-
 \begin{figure}[h]
 \centering 
 \begin{subfigure}{.5\columnwidth}
@@ -210,9 +202,17 @@ By varying the threshold $\lambda$, level sets $L_{\lambda}$ become nested withi
     \caption{}
     \label{fig:tree}
 \end{subfigure}
-\caption[Density clustering]{\textbf{Density clustering.} \textbf{(a)} Clusters corresponding to $L_{t} = \{x : p(x) > t\}$. \textbf{(b)} The cluster tree. }
+\caption[Density clustering]{\textbf{Density clustering.} A density function $p$. \textbf{(a)} Density clusters corresponding to $L_{t}~=~\{x:~p(x)~>~t\}$. \textbf{(b)} The density tree. }
 \label{fig:density_clustering}
 \end{figure}
+
+% this density lambda is set to 1/epsilon
+
+Density clustering finds sets of data with a high density of points; a formal outline can be found in Wasserman's review of TDA\citep{wasserman_topological_2018}. Briefly, assume we observe a sample $X_{1}, \dots , X_{n}$ from some distribution $P$ with density $p$ where $X_{i} \in \mathcal{X} \subseteq \mathbb{R}^d$. For any $\lambda \ge 0$, we define the upper level set $L_{\lambda} = \{x: p(x) > \lambda \}$. The density clusters at level $\lambda$ are denoted by $\mathcal{C}_{\lambda}$ and are the connected components of $L_{\lambda}$. The set of all density clusters is:
+
+$$ \mathcal{C} = \bigcup_{\lambda \ge 0} \mathcal{C}_{\lambda} $$
+
+By varying the threshold $\lambda$, level sets $L_{\lambda}$ become nested within each other; that is, if $A, B \in \mathcal{C}$ then $A \subset B$ or $B \subset A$ or $A \cap B = \emptyset$. Thus the set $\mathcal{C}$ can be represented as a tree, and each branch represents a cluster. This approach is useful if we know there is structure in our data but do not know how many clusters exist---if we can find an appropriate threshold for density, we can discover the structure. Unlike other clustering methods, this approach does not necessarily require specifying a number of clusters $K$ in advance---though some algorithms do incorporate $K$, we do not consider them in this thesis.
 
 %\begin{figure}%
 %\centering
