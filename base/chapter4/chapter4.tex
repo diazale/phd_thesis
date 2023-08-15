@@ -294,7 +294,13 @@ We are grateful to the participants in each biobank who provided their genetic d
 \section{Materials and Methods}
 Our code is available at \url{https://github.com/diazale/topstrat}. We have provided command line tools to run Python implementations of UMAP and HDBSCAN($\hat{\epsilon}$).
 
-We used three datasets for this analysis: the 1000 Genomes project (1KGP), the UK biobank (UKB), and CARTaGENE (CaG). For the 1KGP we used $3,450$ genotypes using Affy 6.0 genotyping\citep{global_2015}. We generated the principal components using a Python script and have made the top PCs available in the repository to demonstrate the code. We used the genotype file \verb|ALL.wgs.nhgri_coriell_affy_6.20140825.genotypes_has_ped.vcf.gz| and population labels \verb|affy_samples.20141118.panel 20131219.populations.tsv|,  available at \url{http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/supporting/hd_genotype_chip/}.
+We used three datasets for this analysis: the 1000 Genomes project (1KGP), the UK biobank (UKB), and CARTaGENE (CaG). For the 1KGP we used $3,450$ genotypes using Affy 6.0 genotyping\citep{global_2015}. We generated the principal components using a Python script and have made the top PCs available in the repository to demonstrate the code. We used the genotype and population label files:
+\begin{itemize}
+\item \verb|ALL.wgs.nhgri_coriell_affy_6.20140825.genotypes_has_ped.vcf.gz| 
+\item \verb|affy_samples.20141118.panel 20131219.populations.tsv|
+\end{itemize}
+
+available at \url{http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/supporting/hd_genotype_chip/}.
 
 For the UKB, we limited our analyses to the $488,377$ individuals with genotype data. We used the UKB's top 40 pre-computed PCs (Data-Field 22009), blood cell counts (Data-Fields 30000, 30010, 30120, 30130, 30140, 30150, 30160), lung function measures (Data-Fields 3062, 3063), age (Data-Field 21003), sex (Data-Field 31), standing height (Data-Field 50), weight (Data-Field 21002), BMI (Data-Field 21001), smoking status (Data-Field 20116), country of birth (Data-Fields 1647, 20115), and ethnic group/background (Data-Field 21000). Ethnic group/background is a hierarchical item in which participants are prompted to select from a pre-populated list of options for Ethnic Group (e.g. ``White'') and, if available, a secondary option for Ethnic Background (e.g. ``British''). Phenotypes used in analyses were normalized with respect to variables $sex$, $age$, and $age^2$. Access to the UKB can be granted at 
 \url{https://www.ukbiobank.ac.uk/scientists-3/genetic-data/}.
