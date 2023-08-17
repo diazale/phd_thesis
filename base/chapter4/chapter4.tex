@@ -330,9 +330,7 @@ We calculated pairwise $F_{ST}$ for UKB clusters using PLINK\citep{purcell_plink
 Visualizations and statistical analyses were done in R (3.5.3)\citep{r_2018}. We used ggplot2\citep{wickham_2016} for graphics and ggwordcloud for word clouds, and stargazer\citep{Hlavac2018-fy} to generate tables.
 
 For phenotype smoothing, we removed the effects of the top $40$ PCs using linear regression, working with the residuals. For phenotype $p$ and individuals $i=1 \dots I$, we use the model:
-
 $$ y_{p,i} = \beta_{p,0} + \sum_{j=1}^{40}\beta_{p,j}PC_{j,i} + \epsilon_{p,i},  \epsilon_{p,i} \sim N(0,\sigma^2_{p}) $$
-
 We visualize the data in Figure~\ref{fig:smoothed_phenos} with the values $ e_{p,i} = y_{p,i} - (\hat{\beta_{p,0}} + \sum_{j=1}^{40}\hat{\beta_{p,j}}PC_{j,i}) $
 
 
